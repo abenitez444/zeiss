@@ -69,20 +69,33 @@
             <i class="fa fa-unlock-alt"></i>
             <span>Roles</span></a>
         </li>
-      @endcan
-      @canany(['isAdmin','isManager'])
-        <li class="nav-item">
-          <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Usuarios</span></a>
-            <div id="collapseUsers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="{{ route('users.index') }}">Sistema</a>
-                    <a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>
-                    <a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Usuarios</span></a>
+                <div id="collapseUsers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('users.index') }}">Sistema</a>
+                        <a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>
+                        <a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
+      @endcan
+      @canany(['isManager'])
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Usuarios</span></a>
+                <div id="collapseUsers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>
+                        <a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>
+                    </div>
+                </div>
+            </li>
+      @endcanany
+      @canany(['isAdmin','isManager'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('productos.index') }}">
               <i class="fas fa-fw fa-table"></i>
