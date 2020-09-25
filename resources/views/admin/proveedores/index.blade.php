@@ -10,7 +10,7 @@
                 <h2>Gestión de proveedores</h2>
             </div>
             <div class="col-md-6">
-                <a href="{{ route('providers.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">Crear nuevo cliente</a>
+                <a href="{{ route('providers.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">Crear nuevo proveedor</a>
             </div>
         </div>
 
