@@ -67,6 +67,12 @@
                                         <a href="{{ url('/admin/facturas/complemento-pago/'.$cat->id) }}" class="btn btn-warning btn-circle btn-sm" title="Subir Complemento de Pago"><i class="fas fa-upload"></i> </a>
                                 	    <a href="" data-target="#modal-delete-{{$cat->id}}" title="Eliminar" data-toggle="modal"  class="btn btn-danger btn-circle btn-sm" ><i class="fas fa-trash-alt"></i></a>
                                 @endcan
+                                @can('isCliente')
+                                    <a href="{{ url('/admin/facturas/complemento-pago/'.$cat->id) }}" class="btn btn-warning btn-circle btn-sm" title="Descargar Factura PDF"><i class="fas fa-file-pdf"></i> </a>
+                                    <a href="{{ url('/admin/facturas/complemento-pago/'.$cat->id) }}" class="btn btn-warning btn-circle btn-sm" title="Descargar factura XML"><i class="fas fa-file-code"></i> </a>
+                                    <a href="{{ url('/admin/facturas/complemento-pago/'.$cat->id) }}" class="btn btn-warning btn-circle btn-sm" title="Descargar ZIP"><i class="fas fa-file-contract"></i> </a>
+                                    <a href="{{ url('/admin/facturas/complemento-pago/'.$cat->id) }}" class="btn btn-warning btn-circle btn-sm" title="Descargar Complementos de Pago"><i class="fas fa-download"></i> </a>
+                                @endcan
 
 							</td>
 						</tr>
