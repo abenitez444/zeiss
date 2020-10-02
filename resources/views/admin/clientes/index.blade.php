@@ -50,10 +50,10 @@
                     <td>{{$user->nombrerol}}</td>
                     <td>
                         <a href="{{ route('clients.show', $user->idd) }}" class="btn btn-info btn-circle btn-sm" ><i class="fa fa-eye"></i></a>
-                        <!--a href="/clientes/{{ $user->idd }}/edit" class="btn btn-warning btn-circle btn-sm"><i class="fa fa-edit"></i></a>
+                        <a href="{{ route('clients.edit', $user->idd) }}" class="btn btn-warning btn-circle btn-sm"><i class="fa fa-edit"></i></a>
                         @can('isAdmin')
                         <a href="#" data-toggle="modal" class="btn btn-danger btn-circle btn-sm" data-target="#deleteModal" data-userid="{{ $user->idd }}"><i class="fas fa-trash-alt"></i></a>
-                        @endcan-->
+                        @endcan
                     </td>
                 </tr>
                 @endforeach
@@ -77,7 +77,7 @@
                     @method('DELETE')
                     @csrf
                     {{-- <input type="hidden" id="user_id" name="user_id" value=""> --}}
-                    <a class="btn btn-primary" style="color: #ffffff;" onclick="$(this).closest('form').submit();">Delete</a>
+                    <a class="btn btn-primary" style="color: #ffffff;" onclick="$(this).closest('form').submit();">Eliminar</a>
                 </form>
                 </div>
             </div>

@@ -31,7 +31,7 @@
                     </span>
                 @enderror
               </div>
-              
+
               <hr>
 
               <div class="form-label-group">
@@ -43,7 +43,7 @@
                     </span>
                 @enderror
               </div>
-              
+
               <div class="form-label-group">
                 <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Password" name="password_confirmation" required autocomplete="new-password">
                 <label for="inputConfirmPassword">Confirm password</label>
@@ -51,7 +51,7 @@
 
               <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
               <a class="d-block text-center mt-2 small" href="#">Sign In</a>
-              <hr class="my-4">        
+              <hr class="my-4">
             </form>
           </div>
         </div>

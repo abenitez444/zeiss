@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Hash;
 class ProviderController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -115,29 +125,15 @@ class ProviderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  integer  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(int $id)
     {
-        echo $user;
-        $roles = Role::get();
-        $userRole = $user->roles->first();
-        /*if($userRole != null){
-            $rolePermissions = $userRole->allRolePermissions;
-        }else{
-            $rolePermissions = null;
-        }*/
-        //$userPermissions = $user->permissions;
-
-        // dd($rolePermission);
+        $provider = Provider::with('user')->where('user_id', $id)->get();
 
         return view('admin.proveedores.edit', [
-            'user'=>$user,
-            'roles'=>$roles,
-            'userRole'=>$userRole,
-            //'rolePermissions'=>$rolePermissions,
-            //'userPermissions'=>$userPermissions
+            'user'=>$provider[0]
         ]);
     }
 
@@ -145,18 +141,26 @@ class ProviderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, int $id)
     {
-
         //validate the fields
         $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
+            'name' => 'required|string|max:191',
+            'email' => 'required|email|max:191',
+            'rfc' => 'required|max:191',
+            'phone' => 'required',
+            'credit_days' => 'required',
+            'payment_method' => 'required',
+            'way_to_pay' => 'required',
             'password' => 'confirmed',
         ]);
+
+        $provider = Provider::with('user')->where('user_id', $id)->get();
+        $provider = $provider[0];
+        $user = $provider->user;
 
         $user->name = $request->name;
         $user->email = $request->email;
@@ -166,36 +170,40 @@ class ProviderController extends Controller
         $user->save();
 
         $user->roles()->detach();
-        //$user->permissions()->detach();
 
         if($request->role != null){
             $user->roles()->attach($request->role);
             $user->save();
         }
 
-        /*if($request->permissions != null){
-            foreach ($request->permissions as $permission) {
-                $user->permissions()->attach($permission);
-                $user->save();
-            }
-        }*/
+        Provider::updateOrCreate(
+            ['user_id' => $id],
+            ['rfc' => $request->rfc,
+                'phone' => $request->phone,
+                'credit_days' => $request->credit_days,
+                'payment_method' => $request->payment_method,
+                'way_to_pay' => $request->way_to_pay,
+                'cfdi' => $request->cfdi,
+                'status' => $request->status,
+            ]
+        );
 
-        return redirect('/users');
+        return redirect()->route('providers.index');
 
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param  \App\Provider $client
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Provider $provider)
     {
-        $user->roles()->detach();
-        $user->permissions()->detach();
-        $user->delete();
+        $provider->user->roles()->detach();
+        $provider->user->permissions()->detach();
+        $provider->delete();
 
-        return redirect('/users');
+        return redirect()->route('providers.index');
     }
 }

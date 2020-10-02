@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\Hash;
 class ClientesController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -49,7 +59,7 @@ class ClientesController extends Controller
         }
 
         $roles = Role::all();
-        
+
         return view('admin.clientes.create', ['roles' => $roles]);
     }
 
@@ -80,7 +90,7 @@ class ClientesController extends Controller
             $user->save();
         }
 
-        /*if($request->permissions != null){            
+        /*if($request->permissions != null){
             foreach ($request->permissions as $permission) {
                 $user->permissions()->attach($permission);
                 $user->save();
@@ -104,8 +114,8 @@ class ClientesController extends Controller
             ->get();
 
         return view('admin.clientes.show', ['user'=>$user]);
-        
-        
+
+
     }
 
     /**
@@ -169,7 +179,7 @@ class ClientesController extends Controller
             $user->save();
         }
 
-        /*if($request->permissions != null){            
+        /*if($request->permissions != null){
             foreach ($request->permissions as $permission) {
                 $user->permissions()->attach($permission);
                 $user->save();

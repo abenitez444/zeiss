@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
+    protected $primaryKey = 'user_id';
+
     /**
      * The attributes that are mass assignable.
      *

@@ -9,6 +9,16 @@ use Illuminate\Http\Request;
 class RolesController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -39,7 +49,7 @@ class RolesController extends Controller
     public function store(Request $request)
     {
         //validate the role fields
-        
+
         $request->validate([
             'role_name' => 'required|max:255',
             'role_slug' => 'required|max:255'
@@ -65,7 +75,7 @@ class RolesController extends Controller
             $permissions->save();
             $role->permissions()->attach($permissions->id);
             $role->save();
-        }    
+        }
 
         return redirect('/roles');
 
@@ -116,7 +126,7 @@ class RolesController extends Controller
         $role->permissions()->detach();
 
         /*$listOfPermissions = explode(',', $request->roles_permissions);//create array from separated/coma permissions
-        
+
         foreach ($listOfPermissions as $permission) {
             $permissions = new Permission();
             $permissions->name = $permission;
@@ -136,7 +146,7 @@ class RolesController extends Controller
             $permissions->save();
             $role->permissions()->attach($permissions->id);
             $role->save();
-        }    
+        }
 
         return redirect('/roles');
     }

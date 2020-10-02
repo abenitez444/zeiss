@@ -15,7 +15,7 @@ class PostsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth']);
     }
 
     /**
@@ -23,7 +23,7 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() 
+    public function index()
     {
 
         if(!\Auth::user()->hasRole('admin') && !\Auth::user()->hasRole('manager') && !\Auth::user()->hasRole('content-editor') ){
@@ -45,7 +45,7 @@ class PostsController extends Controller
     public function create()
     {
         $this->authorize('create', Post::class);
-        //call the view admin.posts.create 
+        //call the view admin.posts.create
         return view('admin.posts.create');
     }
 
@@ -192,10 +192,10 @@ class PostsController extends Controller
      */
     public function destroy(Post $post, Request $request)
     {
-        
+
         //find the post
         $post = Post::find($request->post_id);
-        
+
         $this->authorize('delete', $post);
 
         $oldImage = public_path() . '/storage/images/posts_images/'. $post->image_url;

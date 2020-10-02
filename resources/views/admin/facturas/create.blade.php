@@ -7,7 +7,7 @@
 
 
 	<h1>
-		Nueva Factura
+		Cargar Facturas
 	</h1>
 
 
@@ -22,14 +22,14 @@
 				</ul>
 			</div>
 			@endif
-			
+
 			<form action="{{ route('facturas.store') }}" method="POST"  enctype="multipart/form-data">
-				
+
 				<input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
-				
+
 				<div class="form-group">
 					<label for="imagen">Archivo de factura</label>
-                    <input type="file" name="uploadfile" required>
+                    <input type="file" name="uploadfile[]" multiple required>
 				</div>
 				<input type="hidden" name="user_id" value="{{ Auth::user()->id }}" >
 				<div class="form-group">
@@ -39,6 +39,17 @@
 					<a href="{{ route('facturas.index') }}" class="btn btn-danger" >Cancelar</a>
 				</div>
 			</form>
+
+                @if ($message = Session::get('info'))
+                    <div class="alert alert-info alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <ul>
+                            @foreach ($message as $msg)
+                                <li><strong>{{ $msg }}</strong></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
 		</div>
 	</div>

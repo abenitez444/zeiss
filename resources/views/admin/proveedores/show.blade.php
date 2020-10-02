@@ -11,7 +11,7 @@
             <div class="card-body">
                 <h5 class="card-title">Rol</h5>
                 <p class="card-text">
-                    Cliente
+                    Proveedor
                 </p>
             </div>
             <div class="card-body">

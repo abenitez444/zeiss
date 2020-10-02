@@ -15,7 +15,7 @@
         @if( Auth::user()->hasRole('admin') || Auth::user()->hasRole('proveedor') || Auth::user()->hasRole('cliente') || Auth::user()->hasRole('manager')  )
 		    <div class="col-md-6">
                 <a href="{{ route('facturas.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
-					Ingresar factura</a>
+					Cargar facturas</a>
             </div>
 		@endif
 

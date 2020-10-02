@@ -19,7 +19,7 @@
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fas fa-table"></i>
-                Tabla clientes</div>
+                Tabla proveedores</div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -50,10 +50,10 @@
                                 <td>{{$user->nombrerol}}</td>
                                 <td>
                                     <a href="{{ route('providers.show', $user->idd) }}" class="btn btn-info btn-circle btn-sm" ><i class="fa fa-eye"></i></a>
-                                <!--a href="/clientes/{{ $user->idd }}/edit" class="btn btn-warning btn-circle btn-sm"><i class="fa fa-edit"></i></a>
-                        @can('isAdmin')
-                                    <a href="#" data-toggle="modal" class="btn btn-danger btn-circle btn-sm" data-target="#deleteModal" data-userid="{{ $user->idd }}"><i class="fas fa-trash-alt"></i></a>
-                        @endcan-->
+                                    <a href="{{ route('providers.edit', $user->idd) }}" class="btn btn-warning btn-circle btn-sm"><i class="fa fa-edit"></i></a>
+                                    @can('isAdmin')
+                                        <a href="#" data-toggle="modal" class="btn btn-danger btn-circle btn-sm" data-target="#deleteModal" data-userid="{{ $user->idd }}"><i class="fas fa-trash-alt"></i></a>
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach
@@ -65,19 +65,19 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">¿Estás seguro de que quieres eliminar el cliente?</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">¿Estás seguro de que quieres eliminar el proveedor?</h5>
                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
                             </div>
-                            <div class="modal-body">Seleccione "eliminar" si realmente desea eliminar este cliente.</div>
+                            <div class="modal-body">Seleccione "eliminar" si realmente desea eliminar este proveedor.</div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
                                 <form method="POST" action="">
                                     @method('DELETE')
                                     @csrf
                                     {{-- <input type="hidden" id="user_id" name="user_id" value=""> --}}
-                                    <a class="btn btn-primary" style="color: #ffffff;" onclick="$(this).closest('form').submit();">Delete</a>
+                                    <a class="btn btn-primary" style="color: #ffffff;" onclick="$(this).closest('form').submit();">Eliminar</a>
                                 </form>
                             </div>
                         </div>

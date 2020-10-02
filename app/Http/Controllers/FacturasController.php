@@ -2,23 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use App\Factura;
+use App\Provider;
 use App\User;
 
+use File;
+use Croppa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use DB;
+use VIPSoft\Unzip\Unzip;
 
 class FacturasController extends Controller
 {
+    public $folder = '\carpetafacturas';
     /**
-     * Display a listing of the resource.
+     * Create a new controller instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth']);
     }
 
     public function index()
@@ -57,33 +63,213 @@ class FacturasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        request()->validate([
+            'uploadfile' => 'required'
+        ]);
 
+        $path = public_path($this->folder);
+        if(!File::exists($path)) {
+            File::makeDirectory($path);
+        };
 
-        $entrada = $request->all();
-        $entrada['numero_factura'] = 12;
+        $errormsg_file = array();
 
-        if($request->hasFile('uploadfile')){
-            $archivo = $request->file('uploadfile');
-            $photo = $archivo->getClientOriginalName();
-            $archivo->move('carpetafacturas', $photo);
-            $entrada['nombre_factura'] = $photo;
+        if($request->hasfile('uploadfile')) {
+            foreach($request->file('uploadfile') as $file)
+            {
+                $name_file = $file->getClientOriginalName();
+                $file_name = pathinfo($name_file, PATHINFO_FILENAME);
+                $extension_file = $file->getClientOriginalExtension();
+                $factura = $request->all();
+                $user_id = $request->user_id;
+
+                if(in_array($extension_file,['zip'])){
+                    $xml_type = false;
+                    $xml_body = false;
+                    $usr_exist = true;
+                    $file->move('carpetafacturas', $name_file);
+
+                    $unzipper  = new Unzip();
+                    $filenames = $unzipper->extract($path."\\".$name_file, public_path('carpetafacturas/'));
+
+                    foreach ($filenames as $filename) {
+                        if (strpos($filename, "xml")){
+                            $xml_type = true;
+
+                            $xmlFile = public_path()."/carpetafacturas/".$filename;
+
+                            $xml = new \XMLReader();
+                            $xml->open($xmlFile);
+
+                            try {
+                                $xml_body = true;
+                                while ($xml->read()) {
+                                    if ($xml->nodeType == \XMLReader::ELEMENT) {
+                                        if ($xml->name == 'cfdi:Comprobante') {
+                                            if($xml->hasAttributes) {
+                                                $factura['numero_factura'] = $xml->getAttribute( "Folio");
+                                                $factura['total_cost'] = $xml->getAttribute( "Total");
+                                                $factura['nombre_factura'] = $name_file;
+                                                $factura['estado'] = 1;
+                                            }
+                                            else {
+                                                $xml_body = false;
+                                            }
+                                        }
+                                        elseif ($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor'){
+                                            if($xml->hasAttributes) {
+                                                if($xml->getAttribute( "Rfc") != 'CZV9204036N2'){
+                                                    if ($xml->name == 'cfdi:Emisor'){
+                                                        $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                                    }
+                                                    else {
+                                                        $user = Client::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                                    }
+
+                                                    if(!empty($user)){
+                                                        $user_id = $user->user->id;
+                                                    }
+                                                    else
+                                                        $usr_exist = false;
+                                                }
+                                            }
+                                            else {
+                                                $xml_body = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (\Exception $e) {
+                                $xml_body = false;
+                                $errormsg_file[] = $name_file." - ". $e->getMessage();
+                            }
+
+                            $xml->close();
+                        }
+                    }
+
+                    if(!$xml_type){
+                        $errormsg_file[] = $name_file." - El comprimido debe contener el archivo xml";
+                        unlink($path."\\".$file_name.'.xml');
+                        unlink($path."\\".$file_name.'.pdf');
+                        unlink($path."\\".$file_name.'.zip');
+                    }
+                    elseif (!$xml_body){
+                        $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
+                        unlink($path."\\".$file_name.'.xml');
+                        unlink($path."\\".$file_name.'.pdf');
+                        unlink($path."\\".$file_name.'.zip');
+                    }
+                    elseif (!$usr_exist){
+                        $errormsg_file[] = $name_file." - El cliente o proveedor asociado no se encuentra en el sistema";
+                        unlink($path."\\".$file_name.'.xml');
+                        unlink($path."\\".$file_name.'.pdf');
+                        unlink($path."\\".$file_name.'.zip');
+                    }
+                    else {
+                        $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                        $idFactura = Factura::create($factura);
+                        DB::table('_users_facturas')->insert(
+                            ['user_id' => $user_id, 'factura_id' => $idFactura->id, 'created_at' => NOW(), 'updated_at' => NOW()]
+                        );
+                    }
+                }
+                elseif ($extension_file == 'xml'){
+                    $xml_body = false;
+                    $usr_exist = true;
+
+                    $file->move('carpetafacturas', $name_file);
+
+                    $xmlFile = public_path()."/carpetafacturas/".$name_file;
+
+                    $xml = new \XMLReader();
+                    $xml->open($xmlFile);
+
+                    try {
+                        $xml_body = true;
+                        while ($xml->read()) {
+                            if ($xml->nodeType == \XMLReader::ELEMENT) {
+                                if ($xml->name == 'cfdi:Comprobante') {
+                                    if($xml->hasAttributes) {
+                                        $factura['numero_factura'] = $xml->getAttribute( "Folio");
+                                        $factura['total_cost'] = $xml->getAttribute( "Total");
+                                        $factura['nombre_factura'] = $name_file;
+                                        $factura['estado'] = 1;
+                                    }
+                                    else {
+                                        $xml_body = false;
+                                    }
+                                }
+                                elseif ($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor'){
+                                    if($xml->hasAttributes) {
+                                        if($xml->getAttribute( "Rfc") != 'CZV9204036N2'){
+                                            if ($xml->name == 'cfdi:Emisor'){
+                                                $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                            }
+                                            else {
+                                                $user = Client::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                            }
+
+                                            if(!empty($user)){
+                                                $user_id = $user->user->id;
+                                            }
+                                            else
+                                                $usr_exist = false;
+                                        }
+                                    }
+                                    else {
+                                        $xml_body = false;
+                                    }
+                                }
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        $xml_body = false;
+                        $errormsg_file[] = $name_file." - ". $e->getMessage();
+                    }
+
+                    $xml->close();
+
+                    if (!$xml_body){
+                        $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
+                        unlink($path."\\".$name_file);
+                    }
+                    elseif (!$usr_exist){
+                        $errormsg_file[] = $name_file." - El cliente o proveedor asociado no se encuentra en el sistema";
+                        unlink($path."\\".$name_file);
+                    }
+                    else {
+                        $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                        $idFactura = Factura::create($factura);
+                        DB::table('_users_facturas')->insert(
+                            ['user_id' => $user_id, 'factura_id' => $idFactura->id, 'created_at' => NOW(), 'updated_at' => NOW()]
+                        );
+                    }
+                }
+                elseif ($extension_file == 'pdf'){
+                    $factura['numero_factura'] = 12;
+                    $factura['total_cost'] = 2000;
+                    $factura['nombre_factura'] = $name_file;
+                    $factura['estado'] = 1;
+
+                    $file->move('carpetafacturas', $name_file);
+
+                    $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                    $idFactura = Factura::create($factura);
+                    DB::table('_users_facturas')->insert(
+                        ['user_id' => $user_id, 'factura_id' => $idFactura->id, 'created_at' => NOW(), 'updated_at' => NOW()]
+                    );
+                }
+                else {
+                    $errormsg_file[] = $name_file." - El archivo debe ser de formato: pdf, xml  o zip";
+                }
+            }
         }
 
-        $entrada['total_cost'] = 2000;
-
-        $entrada['estado'] = 1;
-
-        $idFactura = Factura::create($entrada);
-
-        //$last_valor = Factura::latest('id')->first();
-        //DB::query('insert into _users_facturas (user_id, factura_id) values ($request->user_id, $last_valor)')->get();
-
-        DB::table('_users_facturas')->insert(
-            ['user_id' => $request->user_id, 'factura_id' => $idFactura->id, 'created_at' => NOW(), 'updated_at' => NOW()]
-        );
-
-        return redirect()->route('facturas.index');
+        return back()->with('info',$errormsg_file);
     }
 
     /**
