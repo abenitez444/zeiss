@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Complement;
 use App\Factura;
 use App\Provider;
 use App\User;
@@ -12,6 +13,7 @@ use Croppa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use DB;
+use Illuminate\Support\Facades\URL;
 use VIPSoft\Unzip\Unzip;
 
 class FacturasController extends Controller
@@ -332,5 +334,76 @@ class FacturasController extends Controller
         $factura->estado = 'cancelado';
         $factura->update();
         return redirect()->route('facturas.index');
+    }
+
+    public function receiveComplement($facturaId)
+    {
+        $factura = Factura::find($facturaId);
+        $toDownload = false;
+
+        if ($factura) {
+            return view('admin.facturas.upload_complement')
+                ->with('factura', $factura);
+        }else{
+            return redirect(URL::previous())->with('error', "Esta Factura no existe.");
+        }
+    }
+
+    public function postReceiveComplement(Request $request, $facturaId){
+        request()->validate([
+            'uploadfile' => 'required'
+        ]);
+
+        $path = public_path($this->folder);
+        if(!File::exists($path)) {
+            File::makeDirectory($path);
+        };
+
+        $errormsg_file = array();
+
+        if($request->hasfile('uploadfile')) {
+            foreach($request->file('uploadfile') as $file)
+            {
+                $name_file = $file->getClientOriginalName();
+                $extension_file = $file->getClientOriginalExtension();
+                $complement = $request->all();
+
+                if(in_array($extension_file,['zip'])){
+                    $file->move('carpetafacturas', $name_file);
+
+                    $complement['name'] = $name_file;
+                    $complement['factura_id'] = $facturaId;
+
+                    $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                    Complement::create($complement);
+                }
+                elseif ($extension_file == 'xml'){
+                    $file->move('carpetafacturas', $name_file);
+
+                    $complement['name'] = $name_file;
+                    $complement['factura_id'] = $facturaId;
+
+                    $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                    Complement::create($complement);
+                }
+                elseif ($extension_file == 'pdf'){
+                    $file->move('carpetafacturas', $name_file);
+
+                    $complement['name'] = $name_file;
+                    $complement['factura_id'] = $facturaId;
+
+                    $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                    Complement::create($complement);
+                }
+                else {
+                    $errormsg_file[] = $name_file." - El archivo debe ser de formato: pdf, xml  o zip";
+                }
+            }
+        }
+
+        return back()->with('info',$errormsg_file);
     }
 }

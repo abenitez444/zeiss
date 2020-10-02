@@ -57,6 +57,8 @@ Route::group(['prefix' => 'admin'], function() {
     /* --------------------  Facturas  ----------------------- */
 
     Route::resource('facturas', 'FacturasController')->middleware('role:admin,manager,proveedor,cliente');
+    Route::get('/facturas/complemento-pago/{id}', 'FacturasController@receiveComplement')->middleware('role:admin,manager,proveedor,cliente');
+    Route::post('/facturas/complemento-pago/{id}', 'FacturasController@postReceiveComplement')->middleware('role:admin,manager,proveedor,cliente');
 
     /* -------------------------------------------------------- */
 

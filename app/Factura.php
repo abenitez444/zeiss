@@ -17,4 +17,9 @@ class Factura extends Model
     {
         return $this->belongsToMany(User::class, '_users_facturas');
     }
+
+    public function complements()
+    {
+        return $this->belongsToMany(Complement::class, 'complements');
+    }
 }
