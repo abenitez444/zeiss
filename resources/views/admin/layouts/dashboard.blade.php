@@ -23,6 +23,8 @@
     <!-- Custom styles for this template -->
   <link rel="stylesheet" href="{{ asset('css/admin/sb-admin-2.min.css') }}">
 
+  <link href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet">
+
   @yield('css_role_page')
 
 </head>
@@ -357,6 +359,8 @@
   <script src="{{ asset('/js/chart-area-demo.js') }}"></script>
   <script src="{{ asset('/js/chart-pie-demo.js') }}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+
+  <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 
 
   @yield('js_post_page')

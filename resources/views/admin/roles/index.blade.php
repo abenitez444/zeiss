@@ -21,7 +21,7 @@
         Tabla roles</div>
     <div class="card-body">
         <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered" id="listRole" width="100%" cellspacing="0">
             <thead>
             <tr>
                 <th>Id</th>
@@ -99,6 +99,15 @@
 @section('js_role_page')
 
 <script>
+    $(document).ready( function () {
+        $('#listRole').DataTable({
+            language: {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },
+            responsive: true
+        });
+    });
+
     $('#deleteModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         var role_id = button.data('roleid')

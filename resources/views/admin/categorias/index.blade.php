@@ -7,72 +7,87 @@
 
 
 
-	<div class="row py-lg-2">
-		<div class="col-md-6">
+    <div class="row py-lg-2">
+        <div class="col-md-6">
             <h2>Gestión de categorias</h2>
         </div>
         @if( Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager')  )
             <div class="col-md-6">
                 <a href="{{ route('categorias.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
-					Crear Categoría
-				</a>
+                    Crear Categoría
+                </a>
             </div>
-		@endif
-	</div>
+        @endif
+    </div>
 
-	<div   class="card shadow mb-4">
-		<div class="card-header py-3">
+    <div   class="card shadow mb-4">
+        <div class="card-header py-3">
             <i class="fas fa-table"></i>
             Data de productos</div>
 
-		<div class="card-body">
-			<div class="table-responsive">
-				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-				<thead>
-				<tr>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="listCategory" width="100%" cellspacing="0">
+                <thead>
+                <tr>
                     <th>Id</th>
-					<th>Nombre</th>
-					<th>Descripción</th>
-					<th>Estado</th>
-					<th>Herramientas</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Herramientas</th>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
                     <th>Id</th>
-					<th>Nombre</th>
-					<th>Descripción</th>
-					<th>Estado</th>
-					<th>Herramientas</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Herramientas</th>
                 </tr>
                 </tfoot>
-					<tbody>
-						@foreach($categorias as $cat)
-						<tr>
-							<td>{{ $cat->id }}</td>
-							<td>{{ $cat->nombre }}</td>
-							<td>{{ $cat->descripcion }}</td>
-							<td>{{ $cat->estado }}</td>
-							<td>
-								<a href="{{ route('categorias.edit', $cat->id) }}" class="btn btn-warning btn-circle btn-sm" title="Editar"><i class="fa fa-edit"></i>
-								</a>
-								@can('isAdmin')
-								<a href="" data-target="#modal-delete-{{$cat->id}}" title="Eliminar" data-toggle="modal" class="btn btn-danger btn-circle btn-sm" ><i class="fas fa-trash-alt"></i>
-								</a>
-								@endcan
-							</td>
-						</tr>
+                    <tbody>
+                        @foreach($categorias as $cat)
+                        <tr>
+                            <td>{{ $cat->id }}</td>
+                            <td>{{ $cat->nombre }}</td>
+                            <td>{{ $cat->descripcion }}</td>
+                            <td>{{ $cat->estado }}</td>
+                            <td>
+                                <a href="{{ route('categorias.edit', $cat->id) }}" class="btn btn-warning btn-circle btn-sm" title="Editar"><i class="fa fa-edit"></i>
+                                </a>
+                                @can('isAdmin')
+                                <a href="" data-target="#modal-delete-{{$cat->id}}" title="Eliminar" data-toggle="modal" class="btn btn-danger btn-circle btn-sm" ><i class="fas fa-trash-alt"></i>
+                                </a>
+                                @endcan
+                            </td>
+                        </tr>
 
-						@include('admin.categorias.modal')
+                        @include('admin.categorias.modal')
 
-						@endforeach
-					</tbody>
-				</table>
-			</div>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 
 </div>
+
+@section('js_user_page')
+
+    <script>
+        $(document).ready( function () {
+            $('#listCategory').DataTable({
+                language: {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+                responsive: true
+            });
+        });
+    </script>
+
+@endsection
 
 @endsection

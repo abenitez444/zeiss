@@ -11,6 +11,8 @@ use App\User;
 use File;
 use Croppa;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use DB;
 use Illuminate\Support\Facades\URL;
@@ -31,18 +33,14 @@ class FacturasController extends Controller
 
     public function index()
     {
-        //
-            //$facturas = DB::select('select * from facturas order by id desc');
+        $user = Auth::user();
 
-            //$categorias = Categoria::where('condicion','=','1')
-              //  ->orderBy('id', 'DESC')
-                //->paginate(5);
-
-        $facturas = DB::select('select * from facturas order by id desc');
-
+        if($user->id == 1)
+            $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id order by facturas.id desc');
+        else
+            $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id where user_id = '.$user->id.' order by facturas.id desc');
 
         return view('admin.facturas.index', ['facturas'=>$facturas]);
-
 
     }
 
@@ -92,9 +90,24 @@ class FacturasController extends Controller
                     $file->move('carpetafacturas', $name_file);
 
                     $unzipper  = new Unzip();
-                    $filenames = $unzipper->extract($path."\\".$name_file, public_path('carpetafacturas/'));
+                    $filenames = $unzipper->extract(public_path('carpetafacturas/').$name_file, public_path('carpetafacturas/'));
 
                     foreach ($filenames as $filename) {
+
+                        // if (!strpos($filename, "xml") || !strpos($filename, "pdf")){
+                        //     $subpath = public_path('carpetafacturas/'.$filename);
+                        //     if(file_exists($subpath)) {
+                        //         $dir = opendir($subpath);
+
+                        //         while(($sub_file = readdir($dir)) !== false){
+                        //             if(strpos($sub_file, '.') !== 0){
+                        //                 copy($subpath.'/'.$sub_file, public_path('carpetafacturas/').$sub_file);
+                        //             }
+                        //         }
+                        //     }
+
+                        //     unlink($subpath);
+                        // }
                         if (strpos($filename, "xml")){
                             $xml_type = true;
 
@@ -152,21 +165,15 @@ class FacturasController extends Controller
 
                     if(!$xml_type){
                         $errormsg_file[] = $name_file." - El comprimido debe contener el archivo xml";
-                        unlink($path."\\".$file_name.'.xml');
-                        unlink($path."\\".$file_name.'.pdf');
-                        unlink($path."\\".$file_name.'.zip');
+                        $this->deleteDocument($path, $file_name);
                     }
                     elseif (!$xml_body){
                         $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
-                        unlink($path."\\".$file_name.'.xml');
-                        unlink($path."\\".$file_name.'.pdf');
-                        unlink($path."\\".$file_name.'.zip');
+                        $this->deleteDocument($path, $file_name);
                     }
                     elseif (!$usr_exist){
                         $errormsg_file[] = $name_file." - El cliente o proveedor asociado no se encuentra en el sistema";
-                        unlink($path."\\".$file_name.'.xml');
-                        unlink($path."\\".$file_name.'.pdf');
-                        unlink($path."\\".$file_name.'.zip');
+                        $this->deleteDocument($path, $file_name);
                     }
                     else {
                         $errormsg_file[] = $name_file." - Cargado correctamente";
@@ -329,7 +336,21 @@ class FacturasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $factura = Factura::findOrFail($id);
+
+        $factura->delete();
+
+        return redirect()->route('facturas.index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Factura  $factura
+     * @return \Illuminate\Http\Response
+     */
+    public function cancel($id)
+    {
         $factura = Factura::findOrFail($id);
         $factura->estado = 'cancelado';
         $factura->update();
@@ -405,5 +426,85 @@ class FacturasController extends Controller
         }
 
         return back()->with('info',$errormsg_file);
+    }
+
+    public function downloadDocument($facturaId, $ext){
+        $factura = Factura::find($facturaId);
+
+        if ($factura){
+            $file_name = $factura->nombre_factura;
+            $name_file = pathinfo($file_name, PATHINFO_FILENAME);
+
+            if (empty($file_name)){
+                return redirect(URL::previous())->with('error', "No se encontró un archivo para este tipo o factura.");
+            }
+
+            $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
+
+            if(is_file($path)){
+                return response()->download($path);
+            }
+            else {
+                return redirect(URL::previous())->with('error', "No se encontró un archivo para este tipo o factura.");
+            }
+        }
+        else{
+            return redirect(response::back());
+        }
+    }
+
+    public function viewComplement($facturaId)
+    {
+        $user = Auth::user();
+
+        $facturas = DB::select('select complements.id, facturas.numero_factura, complements.name, facturas.total_cost, facturas.estado  from facturas left join _users_facturas on _users_facturas.factura_id = facturas.id left join complements on complements.factura_id = facturas.id where user_id = '.$user->id.' and complements.factura_id = '.$facturaId.' order by facturas.id desc');
+
+        return view('admin.facturas.complements', ['facturas'=>$facturas]);
+
+    }
+
+    public function downloadComplement($complementId){
+        $complement = Complement::find($complementId);
+
+        if ($complement){
+            $file_name = $complement->name;
+
+            if (empty($file_name)){
+                return redirect(URL::previous())->with('error', "No se encontró un archivo para este complemento.");
+            }
+
+            $path = public_path('carpetafacturas/').$file_name;
+
+            if(is_file($path)){
+                return response()->download($path);
+            }
+            else {
+                return redirect(URL::previous())->with('error', "No se encontró un archivo para este complemento.");
+            }
+        }
+        else{
+            return redirect(response::back());
+        }
+    }
+
+    public function deleteDocument($path, $file_name){
+        if(file_exists(public_path('carpetafacturas/').$file_name.'.xml'))
+            unlink(public_path('carpetafacturas/').$file_name.'.xml');
+        elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
+            unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.xml');
+        }
+        if(file_exists(public_path('carpetafacturas/').$file_name.'.pdf'))
+            unlink(public_path('carpetafacturas/').$file_name.'.pdf');
+        elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
+            unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.pdf');
+        }
+        if(file_exists(public_path('carpetafacturas/').$file_name.'.zip'))
+            unlink(public_path('carpetafacturas/').$file_name.'.zip');
+        elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
+            unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.zip');
+        }
+
+        if (file_exists(public_path('carpetafacturas/').$file_name))
+            rmdir(public_path('carpetafacturas/').$file_name);
     }
 }

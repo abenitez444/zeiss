@@ -22,7 +22,7 @@
                 Tabla usuarios</div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="listUser" width="100%" cellspacing="0">
                         <thead>
                         <tr>
                             <th>Id</th>
@@ -119,6 +119,15 @@
     <script src="/js/admin/demo/chart-area-demo.js"></script>
 
     <script>
+        $(document).ready( function () {
+            $('#listUser').DataTable({
+                language: {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+                responsive: true
+            });
+        });
+
         $('#deleteModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
             var user_id = button.data('userid')
