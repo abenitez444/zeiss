@@ -93,73 +93,60 @@ class FacturasController extends Controller
                     $filenames = $unzipper->extract(public_path('carpetafacturas/').$name_file, public_path('carpetafacturas/'));
 
                     foreach ($filenames as $filename) {
+                        if(strpos($filename, "__MACOSX/") === false){
+                            if (strpos($filename, "xml")){
+                                $xml_type = true;
 
-                        // if (!strpos($filename, "xml") || !strpos($filename, "pdf")){
-                        //     $subpath = public_path('carpetafacturas/'.$filename);
-                        //     if(file_exists($subpath)) {
-                        //         $dir = opendir($subpath);
+                                $xmlFile = public_path()."/carpetafacturas/".$filename;
 
-                        //         while(($sub_file = readdir($dir)) !== false){
-                        //             if(strpos($sub_file, '.') !== 0){
-                        //                 copy($subpath.'/'.$sub_file, public_path('carpetafacturas/').$sub_file);
-                        //             }
-                        //         }
-                        //     }
+                                $xml = new \XMLReader();
+                                $xml->open($xmlFile);
 
-                        //     unlink($subpath);
-                        // }
-                        if (strpos($filename, "xml")){
-                            $xml_type = true;
-
-                            $xmlFile = public_path()."/carpetafacturas/".$filename;
-
-                            $xml = new \XMLReader();
-                            $xml->open($xmlFile);
-
-                            try {
-                                $xml_body = true;
-                                while ($xml->read()) {
-                                    if ($xml->nodeType == \XMLReader::ELEMENT) {
-                                        if ($xml->name == 'cfdi:Comprobante') {
-                                            if($xml->hasAttributes) {
-                                                $factura['numero_factura'] = $xml->getAttribute( "Folio");
-                                                $factura['total_cost'] = $xml->getAttribute( "Total");
-                                                $factura['nombre_factura'] = $name_file;
-                                                $factura['estado'] = 1;
-                                            }
-                                            else {
-                                                $xml_body = false;
-                                            }
-                                        }
-                                        elseif ($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor'){
-                                            if($xml->hasAttributes) {
-                                                if($xml->getAttribute( "Rfc") != 'CZV9204036N2'){
-                                                    if ($xml->name == 'cfdi:Emisor'){
-                                                        $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
-                                                    }
-                                                    else {
-                                                        $user = Client::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
-                                                    }
-
-                                                    if(!empty($user)){
-                                                        $user_id = $user->user->id;
-                                                    }
-                                                    else
-                                                        $usr_exist = false;
+                                try {
+                                    $xml_body = true;
+                                    while ($xml->read()) {
+                                        if ($xml->nodeType == \XMLReader::ELEMENT) {
+                                            if ($xml->name == 'cfdi:Comprobante') {
+                                                if($xml->hasAttributes) {
+                                                    $factura['numero_factura'] = $xml->getAttribute( "Folio");
+                                                    $factura['total_cost'] = $xml->getAttribute( "Total");
+                                                    $factura['nombre_factura'] = $name_file;
+                                                    $factura['estado'] = 1;
+                                                }
+                                                else {
+                                                    $xml_body = false;
                                                 }
                                             }
-                                            else {
-                                                $xml_body = false;
+                                            elseif ($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor'){
+                                                if($xml->hasAttributes) {
+                                                    if($xml->getAttribute( "Rfc") != 'CZV9204036N2'){
+                                                        if ($xml->name == 'cfdi:Emisor'){
+                                                            $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                                        }
+                                                        else {
+                                                            $user = Client::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                                        }
+
+                                                        if(!empty($user)){
+                                                            $user_id = $user->user->id;
+                                                        }
+                                                        else
+                                                            $usr_exist = false;
+                                                    }
+                                                }
+                                                else {
+                                                    $xml_body = false;
+                                                }
                                             }
                                         }
                                     }
+                                } catch (\Exception $e) {
+                                    $xml_body = false;
+                                    $errormsg_file[] = $name_file." - ". $e->getMessage();
                                 }
-                            } catch (\Exception $e) {
-                                $xml_body = false;
-                                $errormsg_file[] = $name_file." - ". $e->getMessage();
-                            }
 
-                            $xml->close();
+                                $xml->close();
+                            }
                         }
                     }
 
