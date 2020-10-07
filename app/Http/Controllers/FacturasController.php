@@ -444,7 +444,12 @@ class FacturasController extends Controller
     {
         $user = Auth::user();
 
-        $facturas = DB::select('select complements.id, facturas.numero_factura, complements.name, facturas.total_cost, facturas.estado  from facturas left join _users_facturas on _users_facturas.factura_id = facturas.id left join complements on complements.factura_id = facturas.id where user_id = '.$user->id.' and complements.factura_id = '.$facturaId.' order by facturas.id desc');
+        if($user->id == 1){
+            $facturas = DB::select('select complements.id, facturas.numero_factura, complements.name, facturas.total_cost, facturas.estado  from facturas left join complements on complements.factura_id = facturas.id where complements.factura_id = '.$facturaId.' order by facturas.id desc');
+        }
+        else {
+            $facturas = DB::select('select complements.id, facturas.numero_factura, complements.name, facturas.total_cost, facturas.estado  from facturas left join _users_facturas on _users_facturas.factura_id = facturas.id left join complements on complements.factura_id = facturas.id where user_id = '.$user->id.' and complements.factura_id = '.$facturaId.' order by facturas.id desc');
+        }
 
         return view('admin.facturas.complements', ['facturas'=>$facturas]);
 
@@ -460,7 +465,11 @@ class FacturasController extends Controller
                 return redirect(URL::previous())->with('error', "No se encontró un archivo para este complemento.");
             }
 
-            $path = public_path('carpetafacturas/').$file_name;
+            if(file_exists(public_path('carpetafacturas/').$name_file.'.'.$ext))
+                $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
+            elseif (file_exists(public_path('carpetafacturas/').$name_file)) {
+                $path = public_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
+            }
 
             if(is_file($path)){
                 return response()->download($path);
