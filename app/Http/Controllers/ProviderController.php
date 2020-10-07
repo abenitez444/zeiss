@@ -202,6 +202,7 @@ class ProviderController extends Controller
     {
         $provider->user->roles()->detach();
         $provider->user->permissions()->detach();
+        $provider->user->delete();
         $provider->delete();
 
         return redirect()->route('providers.index');

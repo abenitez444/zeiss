@@ -201,6 +201,7 @@ class ClientController extends Controller
     {
         $client->user->roles()->detach();
         $client->user->permissions()->detach();
+        $client->user->delete();
         $client->delete();
 
         return redirect()->route('clients.index');

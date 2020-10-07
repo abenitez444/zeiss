@@ -35,7 +35,7 @@ class FacturasController extends Controller
     {
         $user = Auth::user();
 
-        if($user->id == 1)
+        if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') )
             $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id order by facturas.id desc');
         else
             $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id where user_id = '.$user->id.' order by facturas.id desc');
@@ -432,6 +432,7 @@ class FacturasController extends Controller
 
     public function downloadDocument($facturaId, $ext){
         $factura = Factura::find($facturaId);
+        $path = "";
 
         if ($factura){
             $file_name = $factura->nombre_factura;
@@ -463,7 +464,7 @@ class FacturasController extends Controller
     {
         $user = Auth::user();
 
-        if($user->id == 1){
+        if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') ){
             $facturas = DB::select('select complements.id, facturas.numero_factura, complements.name, facturas.total_cost, facturas.estado  from facturas left join complements on complements.factura_id = facturas.id where complements.factura_id = '.$facturaId.' order by facturas.id desc');
         }
         else {
