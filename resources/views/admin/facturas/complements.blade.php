@@ -59,8 +59,7 @@
 
                                 <!--a href="{{ route('facturas.show', $cat->id) }}" class="btn btn-info btn-circle btn-sm"><i class="fa fa-eye"></i></a-->
                                     @can('isAdmin')
-                                        {{--									<a href="{{ route('facturas.edit', $cat->id) }}" title="Editar" class="btn btn-warning btn-circle btn-sm"><i class="fa fa-edit"></i></a>--}}
-                                        <a href="{{ url('/admin/facturas/complemento-pago/'.$cat->id) }}" class="btn btn-warning btn-circle btn-sm" title="Subir Complemento de Pago"><i class="fas fa-upload"></i> </a>
+                                        <a href="{{ url('/admin/complements/imprimir/'.$cat->id) }}" class="btn btn-info btn-circle btn-sm" title="Descargar Complemento"><i class="fas fa-file-pdf"></i> </a>
                                         <a href="" data-target="#modal-delete-{{$cat->id}}" title="Eliminar" data-toggle="modal"  class="btn btn-danger btn-circle btn-sm" ><i class="fas fa-trash-alt"></i></a>
                                     @endcan
                                     @can('isCliente')
@@ -70,7 +69,7 @@
                                     @endcan
                                 </td>
                             </tr>
-                            {{--						@include('admin.facturas.modal')--}}
+                            @include('admin.facturas.complement-modal')
                         @endforeach
                         </tbody>
                     </table>

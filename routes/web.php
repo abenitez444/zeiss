@@ -57,13 +57,14 @@ Route::group(['prefix' => 'admin'], function() {
     /* --------------------  Facturas  ----------------------- */
 
     Route::resource('facturas', 'FacturasController')->middleware('role:admin,manager,proveedor,cliente');
-    Route::get('/facturas/complemento-pago/{id}', 'FacturasController@receiveComplement')->middleware('role:admin,manager,proveedor,cliente');
-    Route::post('/facturas/complemento-pago/{id}', 'FacturasController@postReceiveComplement')->middleware('role:admin,manager,proveedor,cliente');
+    Route::get('/facturas/complemento-pago/{id}', 'FacturasController@receiveComplement')->middleware('role:admin,manager');
+    Route::post('/facturas/complemento-pago/{id}', 'FacturasController@postReceiveComplement')->middleware('role:admin,manager');
     Route::get('/facturas/complementos-pago/{id}', 'FacturasController@viewComplement')->middleware('role:admin,manager,proveedor,cliente');
     Route::get('/facturas/imprimir/{id}/{ext}', 'FacturasController@downloadDocument')->middleware('role:admin,manager,proveedor,cliente');
-    Route::get('/complements/imprimir/{id}', 'FacturasController@downloadComplement')->middleware('role:admin,manager,proveedor,cliente');
+    Route::post('/facturas/cancel/{id}', 'FacturasController@cancel')->middleware('role:admin,manager');
 
-    Route::post('/facturas/cancel/{id}', 'FacturasController@cancel')->middleware('role:admin,manager,proveedor,cliente');
+    Route::get('/complements/imprimir/{id}', 'FacturasController@downloadComplement')->middleware('role:admin,manager,proveedor,cliente');
+    Route::post('/complements/delete/{id}', 'FacturasController@deleteComplement')->middleware('role:admin,manager');
 
     /* -------------------------------------------------------- */
 

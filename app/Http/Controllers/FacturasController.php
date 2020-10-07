@@ -498,18 +498,30 @@ class FacturasController extends Controller
         }
     }
 
+    public function deleteComplement($id)
+    {
+        $complement = Complement::findOrFail($id);
+
+        if (file_exists(public_path('carpetafacturas/').$complement->name))
+            unlink(public_path('carpetafacturas/').$complement->name);
+
+        $complement->delete();
+
+        return redirect()->route('facturas.index');
+    }
+
     public function deleteDocument($path, $file_name){
         if(file_exists(public_path('carpetafacturas/').$file_name.'.xml'))
             unlink(public_path('carpetafacturas/').$file_name.'.xml');
         elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
             unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.xml');
         }
-        if(file_exists(public_path('carpetafacturas/').$file_name.'.pdf')) 
+        if(file_exists(public_path('carpetafacturas/').$file_name.'.pdf'))
             unlink(public_path('carpetafacturas/').$file_name.'.pdf');
         elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
             unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.pdf');
         }
-        if(file_exists(public_path('carpetafacturas/').$file_name.'.zip')) 
+        if(file_exists(public_path('carpetafacturas/').$file_name.'.zip'))
             unlink(public_path('carpetafacturas/').$file_name.'.zip');
         elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
             unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.zip');
