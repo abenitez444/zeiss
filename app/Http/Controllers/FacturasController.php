@@ -93,6 +93,21 @@ class FacturasController extends Controller
                     $filenames = $unzipper->extract(public_path('carpetafacturas/').$name_file, public_path('carpetafacturas/'));
 
                     foreach ($filenames as $filename) {
+
+                        // if (!strpos($filename, "xml") || !strpos($filename, "pdf")){
+                        //     $subpath = public_path('carpetafacturas/'.$filename);
+                        //     if(file_exists($subpath)) {
+                        //         $dir = opendir($subpath);
+
+                        //         while(($sub_file = readdir($dir)) !== false){
+                        //             if(strpos($sub_file, '.') !== 0){
+                        //                 copy($subpath.'/'.$sub_file, public_path('carpetafacturas/').$sub_file);
+                        //             }
+                        //         }
+                        //     }
+
+                        //     unlink($subpath);
+                        // }
                         if(strpos($filename, "__MACOSX/") === false){
                             if (strpos($filename, "xml")){
                                 $xml_type = true;
@@ -229,11 +244,11 @@ class FacturasController extends Controller
 
                     if (!$xml_body){
                         $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
-                        unlink($path."\\".$name_file);
+                        unlink(public_path('carpetafacturas/').$name_file);
                     }
                     elseif (!$usr_exist){
                         $errormsg_file[] = $name_file." - El cliente o proveedor asociado no se encuentra en el sistema";
-                        unlink($path."\\".$name_file);
+                        unlink(public_path('carpetafacturas/').$name_file);
                     }
                     else {
                         $errormsg_file[] = $name_file." - Cargado correctamente";
@@ -426,7 +441,11 @@ class FacturasController extends Controller
                 return redirect(URL::previous())->with('error', "No se encontró un archivo para este tipo o factura.");
             }
 
-            $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
+            if(file_exists(public_path('carpetafacturas/').$name_file.'.'.$ext))
+                $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
+            elseif (file_exists(public_path('carpetafacturas/').$name_file)) {
+                $path = public_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
+            }
 
             if(is_file($path)){
                 return response()->download($path);
@@ -465,11 +484,7 @@ class FacturasController extends Controller
                 return redirect(URL::previous())->with('error', "No se encontró un archivo para este complemento.");
             }
 
-            if(file_exists(public_path('carpetafacturas/').$name_file.'.'.$ext))
-                $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
-            elseif (file_exists(public_path('carpetafacturas/').$name_file)) {
-                $path = public_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
-            }
+            $path = public_path('carpetafacturas/').$file_name;
 
             if(is_file($path)){
                 return response()->download($path);
@@ -489,12 +504,12 @@ class FacturasController extends Controller
         elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
             unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.xml');
         }
-        if(file_exists(public_path('carpetafacturas/').$file_name.'.pdf'))
+        if(file_exists(public_path('carpetafacturas/').$file_name.'.pdf')) 
             unlink(public_path('carpetafacturas/').$file_name.'.pdf');
         elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
             unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.pdf');
         }
-        if(file_exists(public_path('carpetafacturas/').$file_name.'.zip'))
+        if(file_exists(public_path('carpetafacturas/').$file_name.'.zip')) 
             unlink(public_path('carpetafacturas/').$file_name.'.zip');
         elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
             unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.zip');
