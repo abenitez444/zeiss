@@ -41,7 +41,7 @@
                     <th>Nombre factura</th>
                     <th>Costo Total</th>
                     <th>Estado</th>
-                    @if( Auth::user()->hasRole('admin') )
+                    @canany(['isAdmin','isManager'])
                     <th>Usuario Asociado</th>
                     @endif
                     <th>Herramientas</th>
@@ -54,9 +54,9 @@
                     <th>Nombre factura</th>
                     <th>Costo Total</th>
                     <th>Estado</th>
-                    @can(['isAdmin','isManager'])
+                    @canany(['isAdmin','isManager'])
                     <th>Usuario Asociado</th>
-                    @endcan
+                    @endcanany
                     <th>Herramientas</th>
                 </tr>
                 </tfoot>
@@ -68,9 +68,9 @@
                             <td>{{ $cat->nombre_factura }}</td>
                             <td>{{ $cat->total_cost }}</td>
                             <td>{{ $cat->estado }}</td>
-                            @if( Auth::user()->hasRole('admin') )
+                            @canany(['isAdmin','isManager'])
                             <td>{{ $cat->name }}</td>
-                            @endif
+                            @endcanany
                             <td>
 
 {{--                                <a href="{{ route('facturas.show', $cat->factura_id) }}" class="btn btn-info btn-circle btn-sm"><i class="fa fa-eye"></i></a>--}}
