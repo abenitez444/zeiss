@@ -81,12 +81,16 @@ class FacturasController extends Controller
                 $file_name = pathinfo($name_file, PATHINFO_FILENAME);
                 $extension_file = $file->getClientOriginalExtension();
                 $factura = $request->all();
-                $user_id = $request->user_id;
+                if(Auth::user()->hasRole('proveedor'))
+                    $user_id = Auth::user()->id;
+                else
+                    $user_id = $request->user_id;
 
                 if(in_array($extension_file,['zip'])){
                     $xml_type = false;
                     $xml_body = false;
                     $usr_exist = true;
+                    $provider_not = false;
                     $file->move('carpetafacturas', $name_file);
 
                     $unzipper  = new Unzip();
@@ -94,20 +98,6 @@ class FacturasController extends Controller
 
                     foreach ($filenames as $filename) {
 
-                        // if (!strpos($filename, "xml") || !strpos($filename, "pdf")){
-                        //     $subpath = public_path('carpetafacturas/'.$filename);
-                        //     if(file_exists($subpath)) {
-                        //         $dir = opendir($subpath);
-
-                        //         while(($sub_file = readdir($dir)) !== false){
-                        //             if(strpos($sub_file, '.') !== 0){
-                        //                 copy($subpath.'/'.$sub_file, public_path('carpetafacturas/').$sub_file);
-                        //             }
-                        //         }
-                        //     }
-
-                        //     unlink($subpath);
-                        // }
                         if(strpos($filename, "__MACOSX/") === false){
                             if (strpos($filename, "xml")){
                                 $xml_type = true;
@@ -132,7 +122,22 @@ class FacturasController extends Controller
                                                     $xml_body = false;
                                                 }
                                             }
-                                            elseif ($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor'){
+                                            elseif (Auth::user()->hasRole('proveedor') && $xml->name == 'cfdi:Emisor'){
+                                                if($xml->hasAttributes) {
+                                                    $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                                    if(!empty($user)){
+                                                        if($xml->getAttribute( "Rfc") != $user->rfc){
+                                                            $provider_not = true;
+                                                        }
+                                                    }
+                                                    else
+                                                        $usr_exist = false;
+                                                }
+                                                else {
+                                                    $xml_body = false;
+                                                }
+                                            }
+                                            elseif (($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor') && !Auth::user()->hasRole('proveedor') ){
                                                 if($xml->hasAttributes) {
                                                     if($xml->getAttribute( "Rfc") != 'CZV9204036N2'){
                                                         if ($xml->name == 'cfdi:Emisor'){
@@ -177,6 +182,10 @@ class FacturasController extends Controller
                         $errormsg_file[] = $name_file." - El cliente o proveedor asociado no se encuentra en el sistema";
                         $this->deleteDocument($path, $file_name);
                     }
+                    elseif ($provider_not){
+                        $errormsg_file[] = $name_file." - El proveedor asociado a la factura no es el mismo que carga";
+                        $this->deleteDocument($path, $file_name);
+                    }
                     else {
                         $errormsg_file[] = $name_file." - Cargado correctamente";
 
@@ -189,6 +198,7 @@ class FacturasController extends Controller
                 elseif ($extension_file == 'xml'){
                     $xml_body = false;
                     $usr_exist = true;
+                    $provider_not = false;
 
                     $file->move('carpetafacturas', $name_file);
 
@@ -212,7 +222,22 @@ class FacturasController extends Controller
                                         $xml_body = false;
                                     }
                                 }
-                                elseif ($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor'){
+                                elseif (Auth::user()->hasRole('proveedor') && $xml->name == 'cfdi:Emisor'){
+                                    if($xml->hasAttributes) {
+                                        $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                        if(!empty($user)){
+                                            if($xml->getAttribute( "Rfc") != $user->rfc){
+                                                $provider_not = true;
+                                            }
+                                        }
+                                        else
+                                            $usr_exist = false;
+                                    }
+                                    else {
+                                        $xml_body = false;
+                                    }
+                                }
+                                elseif (($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor') && !Auth::user()->hasRole('proveedor')){
                                     if($xml->hasAttributes) {
                                         if($xml->getAttribute( "Rfc") != 'CZV9204036N2'){
                                             if ($xml->name == 'cfdi:Emisor'){
@@ -249,6 +274,10 @@ class FacturasController extends Controller
                     elseif (!$usr_exist){
                         $errormsg_file[] = $name_file." - El cliente o proveedor asociado no se encuentra en el sistema";
                         unlink(public_path('carpetafacturas/').$name_file);
+                    }
+                    elseif ($provider_not){
+                        $errormsg_file[] = $name_file." - El proveedor asociado a la factura no es el mismo que carga";
+                        $this->deleteDocument($path, $file_name);
                     }
                     else {
                         $errormsg_file[] = $name_file." - Cargado correctamente";
