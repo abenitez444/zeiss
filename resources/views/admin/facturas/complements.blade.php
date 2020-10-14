@@ -67,6 +67,10 @@
                                         {{--                                    <a href="{{ url('/admin/complements/imprimir/'.$cat->id.'/xml') }}" class="btn btn-primary btn-circle btn-sm" title="Descargar Complemento XML"><i class="fas fa-file-code"></i> </a>--}}
                                         {{--                                    <a href="{{ url('/admin/complements/imprimir/'.$cat->id.'/zip') }}" class="btn btn-success btn-circle btn-sm" title="Descargar Complemento ZIP"><i class="fas fa-file-contract"></i> </a>--}}
                                     @endcan
+                                    @can('isProveedor')
+                                        <a href="{{ url('/admin/complements/imprimir/'.$cat->id) }}" class="btn btn-info btn-circle btn-sm" title="Descargar Complemento"><i class="fas fa-file-pdf"></i> </a>
+                                        <a href="" data-target="#modal-delete-{{$cat->id}}" title="Eliminar" data-toggle="modal"  class="btn btn-danger btn-circle btn-sm" ><i class="fas fa-trash-alt"></i></a>
+                                    @endcan
                                 </td>
                             </tr>
                             @include('admin.facturas.complement-modal')
