@@ -14,7 +14,7 @@ class Provider extends Model
      * @var array
      */
     protected $fillable = [
-        'rfc', 'phone', 'credit_days', 'payment_method', 'way_to_pay', 'cfdi', 'status', 'user_id'
+        'rfc', 'phone', 'contact', 'credit_terms', 'payment_promise_date', 'cfdi', 'deadline_for_complement', 'user_id'
     ];
 
     /**

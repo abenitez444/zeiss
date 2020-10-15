@@ -53,23 +53,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="credit_days">Dias de Credito</label>
-                        <input type="number" name="credit_days" class="form-control" id="credit_days" placeholder="Dias de Credito..." required min="0" value="{{ old('credit_days') }}">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="payment_method">Metodo de Pago</label>
-                        <input type="text" name="payment_method" class="form-control" placeholder="Metodo de Pago..." id="payment_method" required value="{{ old('payment_method') }}">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="way_to_pay">Forma de Pago</label>
-                        <input type="text" name="way_to_pay" class="form-control" id="way_to_pay" placeholder="Forma de Pago..." required value="{{ old('way_to_pay') }}">
+                        <label for="contact">Contacto</label>
+                        <input type="text" name="contact" class="form-control" id="contact" placeholder="Contacto..." required value="{{ old('contact') }}">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -86,11 +71,23 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="status">Status</label>
-                        <select class="form-control" name="status" id="status">
-                            <option value="1">Activo</option>
-                            <option value="0">Detenido por credito</option>
-                        </select>
+                        <label for="credit_terms">Términos de crédito</label>
+                        <textarea name="credit_terms" class="form-control" id="credit_terms" placeholder="Términos de crédito..." required>{{ old('way_to_pay') }}</textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="payment_promise_date">Fecha promesa de pago</label>
+                        <input type="date" name="payment_promise_date" class="form-control" placeholder="AAAA-MM-DD" id="payment_promise_date" required value="{{ old('payment_promise_date') }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="deadline_for_complement">Fecha limite para enviar el complemento de pago</label>
+                        <input type="date" name="deadline_for_complement" class="form-control" placeholder="AAAA-MM-DD" id="deadline_for_complement" required value="{{ old('deadline_for_complement') }}">
                     </div>
                 </div>
                 <div class="col-md-6">

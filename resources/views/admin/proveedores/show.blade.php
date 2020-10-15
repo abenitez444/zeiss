@@ -17,31 +17,39 @@
             <div class="card-body">
                 <h5 class="card-title">Datos</h5>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p class="card-text">
                             RFC - {{ $user[0]->rfc }}
                         </p>
                         <p class="card-text">
-                            Metodo de Pago - {{ $user[0]->payment_method }}
+                            Contacto - {{ $user[0]->contact }}
                         </p>
                         <p class="card-text">
-                            Status - {{ $user[0]->status ? "Activo" : "Detenido por credito" }}
+                            Fecha promesa de pago - {{ $user[0]->payment_promise_date }}
                         </p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p class="card-text">
                             Teléfono - {{ $user[0]->phone }}
                         </p>
                         <p class="card-text">
-                            Forma de Pago - {{ $user[0]->way_to_pay }}
+                            Uso de CFDi - {{ $user[0]->cfdi }}
                         </p>
                     </div>
-                    <div class="col-md-4">
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
                         <p class="card-text">
-                            Dias de Credito - {{ $user[0]->credit_days }}
+                            Fecha limite para enviar el complemento de pago - {{ $user[0]->deadline_for_complement }}
                         </p>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
                         <p class="card-text">
-                            Uso de CFDi - {{ $user[0]->cfdi }}
+                            Términos de crédito <br> {{ $user[0]->credit_terms }}
                         </p>
                     </div>
                 </div>

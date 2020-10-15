@@ -32,7 +32,7 @@ Route::group(['prefix' => 'admin'], function() {
 
     Route::resource('clients', 'ClientController')->middleware('role:admin,manager');
 
-    Route::resource('providers', 'ProviderController')->middleware('role:admin,manager');
+    Route::resource('providers', 'ProviderController')->middleware('role:admin,manager,proveedor');
 
     /* -------------------------------------------------------- */
 

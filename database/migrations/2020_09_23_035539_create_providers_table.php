@@ -17,11 +17,11 @@ class CreateProvidersTable extends Migration
             $table->engine = 'InnoDB';
             $table->string('rfc');
             $table->string('phone');
-            $table->smallInteger('credit_days');
-            $table->string('payment_method');
-            $table->string('way_to_pay');
+            $table->string('contact');
+            $table->text('credit_terms');
+            $table->date('payment_promise_date');
             $table->string('cfdi');
-            $table->boolean('status');
+            $table->date('deadline_for_complement');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

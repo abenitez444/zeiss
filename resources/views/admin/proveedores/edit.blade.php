@@ -25,13 +25,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="name">Nombre o Razon social</label>
-                        <input type="text" name="name" autocomplete="off" class="form-control" id="name" placeholder="Nombre..." value="{{ $user->user->name }}" required>
+                        <input type="text" name="name" autocomplete="off" class="form-control" id="name" placeholder="Nombre..." value="{{ $user->user->name }}" required @can('isProveedor') readonly @endcan>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="email">Correo</label>
-                        <input type="email" name="email" autocomplete="off" class="form-control" id="email" placeholder="Correo..." value="{{ $user->user->email }}" required>
+                        <input type="email" name="email" autocomplete="off" class="form-control" id="email" placeholder="Correo..." value="{{ $user->user->email }}" required >
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="rfc">RFC</label>
-                        <input type="text" name="rfc" autocomplete="off" class="form-control" id="rfc" placeholder="RFC..." value="{{ $user->rfc }}" required>
+                        <input type="text" name="rfc" autocomplete="off" class="form-control" id="rfc" placeholder="RFC..." value="{{ $user->rfc }}" required @can('isProveedor') readonly @endcan>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -54,32 +54,21 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="credit_days">Dias de Credito</label>
-                        <input type="number" name="credit_days" class="form-control" id="credit_days" placeholder="Dias de Credito..." required min="0" value="{{ $user->credit_days }}">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="payment_method">Metodo de Pago</label>
-                        <input type="text" name="payment_method" class="form-control" placeholder="Metodo de Pago..." id="payment_method" required value="{{ $user->payment_method }}">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="way_to_pay">Forma de Pago</label>
-                        <input type="text" name="way_to_pay" class="form-control" id="way_to_pay" placeholder="Forma de Pago..." required value="{{ $user->way_to_pay }}">
+                        <label for="contact">Contacto</label>
+                        <input type="text" name="contact" class="form-control" id="contact" placeholder="Contacto..." required value="{{ $user->contact }}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="cfdi">Uso de CFDi</label>
-                        <select class="form-control" name="cfdi" id="cfdi">
-                            <option value="Gastos general" {{ $user->cfdi == "Gastos general" ? "selected" : ""}}>Gastos general</option>
-                            <option value="Compra materias primas" {{ $user->cfdi == "Compra materias primas" ? "selected" : ""}}>Compra materias primas</option>
-                        </select>
+                        @can('isProveedor')
+                            <input type="text" name="cfdi" class="form-control" id="cfdi" required value="{{ $user->cfdi }}" readonly>
+                        @else
+                            <select class="form-control" name="cfdi" id="cfdi">
+                                <option value="Gastos general" {{ $user->cfdi == "Gastos general" ? "selected" : ""}}>Gastos general</option>
+                                <option value="Compra materias primas" {{ $user->cfdi == "Compra materias primas" ? "selected" : ""}}>Compra materias primas</option>
+                            </select>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -87,11 +76,23 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="status">Status</label>
-                        <select class="form-control" name="status" id="status">
-                            <option value="1" {{ $user->status ? "selected" : ""}}>Activo</option>
-                            <option value="0" {{ !$user->status ? "selected" : ""}}>Detenido por credito</option>
-                        </select>
+                        <label for="credit_terms">Términos de crédito</label>
+                        <textarea name="credit_terms" class="form-control" id="credit_terms" placeholder="Términos de crédito..." required @can('isProveedor') readonly @endcan>{{ $user->credit_terms }}</textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="payment_promise_date">Fecha promesa de pago</label>
+                        <input type="date" name="payment_promise_date" class="form-control" placeholder="AAAA-MM-DD" id="payment_promise_date" required value="{{ $user->payment_promise_date }}" @can('isProveedor') readonly @endcan>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="deadline_for_complement">Fecha limite para enviar el complemento de pago</label>
+                        <input type="date" name="deadline_for_complement" class="form-control" placeholder="AAAA-MM-DD" id="deadline_for_complement" required value="{{ $user->deadline_for_complement }}" @can('isProveedor') readonly @endcan>
                     </div>
                 </div>
                 <div class="col-md-6">

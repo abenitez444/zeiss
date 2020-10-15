@@ -9,6 +9,7 @@ use App\User;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class ProviderController extends Controller
 {
@@ -76,9 +77,10 @@ class ProviderController extends Controller
             'email' => 'required|unique:users|email|max:191',
             'rfc' => 'required|max:191',
             'phone' => 'required',
-            'credit_days' => 'required',
-            'payment_method' => 'required',
-            'way_to_pay' => 'required',
+            'contact' => 'required|string|max:191',
+            'credit_terms' => 'required',
+            'payment_promise_date' => 'required',
+            'deadline_for_complement' => 'required',
             'password' => 'required|between:8,191|confirmed',
             'password_confirmation' => 'required'
         ]);
@@ -97,11 +99,11 @@ class ProviderController extends Controller
         $provider = new Provider();
         $provider->rfc = $request->rfc;
         $provider->phone = $request->phone;
-        $provider->credit_days = $request->credit_days;
-        $provider->payment_method = $request->payment_method;
-        $provider->way_to_pay = $request->way_to_pay;
+        $provider->contact = $request->contact;
+        $provider->credit_terms = $request->credit_terms;
+        $provider->payment_promise_date = $request->payment_promise_date;
         $provider->cfdi = $request->cfdi;
-        $provider->status = $request->status;
+        $provider->deadline_for_complement = $request->deadline_for_complement;
         $provider->user_id = $user->id;
 
         $provider->save();
@@ -152,9 +154,10 @@ class ProviderController extends Controller
             'email' => 'required|email|max:191',
             'rfc' => 'required|max:191',
             'phone' => 'required',
-            'credit_days' => 'required',
-            'payment_method' => 'required',
-            'way_to_pay' => 'required',
+            'contact' => 'required|string|max:191',
+            'credit_terms' => 'required',
+            'payment_promise_date' => 'required',
+            'deadline_for_complement' => 'required',
             'password' => 'confirmed',
         ]);
 
@@ -180,15 +183,18 @@ class ProviderController extends Controller
             ['user_id' => $id],
             ['rfc' => $request->rfc,
                 'phone' => $request->phone,
-                'credit_days' => $request->credit_days,
-                'payment_method' => $request->payment_method,
-                'way_to_pay' => $request->way_to_pay,
+                'contact' => $request->contact,
+                'credit_terms' => $request->credit_terms,
+                'payment_promise_date' => $request->payment_promise_date,
                 'cfdi' => $request->cfdi,
-                'status' => $request->status,
+                'deadline_for_complement' => $request->deadline_for_complement,
             ]
         );
 
-        return redirect()->route('providers.index');
+        if(Auth::user()->hasRole('proveedor'))
+            return redirect()->route('home');
+        else
+            return redirect()->route('providers.index');
 
     }
 
