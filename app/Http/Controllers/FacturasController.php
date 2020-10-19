@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use DB;
 use Illuminate\Support\Facades\URL;
 use VIPSoft\Unzip\Unzip;
@@ -475,6 +476,9 @@ class FacturasController extends Controller
                 $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
             elseif (file_exists(public_path('carpetafacturas/').$name_file)) {
                 $path = public_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
+            }
+            elseif(Storage::disk('sftp-facturas')->exists($name_file.'.'.$ext)){
+                return Storage::disk('sftp-facturas')->download($name_file.'.'.$ext);
             }
 
             if(is_file($path)){

@@ -1,59 +1,52 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
-use Illuminate\Http\Request;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 use App\Factura;
 use App\Provider;
 use App\Client;
 
-class AdminController extends Controller
+class GetFilesS3 extends Command
 {
     /**
-     * Create a new controller instance.
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'get-files-s3';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Obtiene los archivos de las Facturas, Complementos de Pago y Ordenes del bucket S3';
+
+    /**
+     * Create a new command instance.
      *
      * @return void
      */
     public function __construct()
     {
-        $this->middleware(['auth']);
+        parent::__construct();
     }
 
-    public function index()
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
     {
-
-    	$facturas = DB::select('select count(*) id FROM facturas');
-    	$productos = DB::select('select count(*) id FROM productos');
-        $users = DB::select('select count(*) id FROM users');
-            //$categorias = Categoria::where('condicion','=','1')
-              //  ->orderBy('id', 'DESC')
-                //->paginate(5);
-
-            return view('admin.index', [
-                'facturas'=>$facturas,
-                'productos'=>$productos,
-                'users'=>$users,
-            ]);
-
-        //return view('admin.index');
-        /*if(!\Auth::user()->hasRole('administrador') && !\Auth::user()->hasRole('manager') ){
-            return redirect('/users');
-        }else{
-            return redirect('/facturas');
-        }*/
-
-    }
-
-    public function getFilesS3(){
-
         $files_s3 = Storage::disk('sftp-facturas')->allFiles();
 
         foreach ($files_s3 as $file){
             if(strpos($file,"xml")){
-
                 $exists = Factura::where('nombre_factura', $file)->first();
 
                 if(empty($exists)){

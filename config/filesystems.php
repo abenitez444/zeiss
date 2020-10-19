@@ -64,6 +64,30 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'sftp-facturas' => [
+            'driver' => 'sftp',
+            'host' => 's-8f4585c8425a4603a.server.transfer.us-east-2.amazonaws.com',
+            'username' => 'carl-zeiss-user-facturas',
+            'port' => 22,
+            'privateKey' => base_path('private-key.ppk'),
+        ],
+
+        'sftp-complementos' => [
+            'driver' => 'sftp',
+            'host' => 's-8f4585c8425a4603a.server.transfer.us-east-2.amazonaws.com',
+            'username' => 'carl-zeiss-user-complementos',
+            'port' => 22,
+            'privateKey' => base_path('private-key.ppk'),
+        ],
+
+        'sftp-ordenes' => [
+            'driver' => 'sftp',
+            'host' => 's-8f4585c8425a4603a.server.transfer.us-east-2.amazonaws.com',
+            'username' => 'carl-zeiss-user-sftp',
+            'port' => 22,
+            'privateKey' => base_path('private-key.ppk'),
+        ],
+
     ],
 
 ];
