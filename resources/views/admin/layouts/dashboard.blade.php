@@ -25,6 +25,8 @@
 
   <link href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet">
 
+  <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+
   @yield('css_role_page')
 
 </head>
@@ -66,11 +68,11 @@
 
       <!-- Sidebar -->
       @can('isAdmin')
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('roles.index') }}">
-            <i class="fa fa-unlock-alt"></i>
-            <span>Roles</span></a>
-        </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{{ route('roles.index') }}">
+                <i class="fa fa-unlock-alt"></i>
+                <span>Roles</span></a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
                     <i class="fas fa-fw fa-table"></i>
@@ -80,6 +82,17 @@
                         <a class="collapse-item" href="{{ route('users.index') }}">Sistema</a>
                         <a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>
                         <a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseInvoice" aria-expanded="true" aria-controls="collapseInvoice">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                    <span>Facturas</span></a>
+                <div id="collapseInvoice" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('facturas.clientes') }}">Clientes</a>
+                        <a class="collapse-item" href="{{ route('facturas.proveedores') }}">Proveedores</a>
                     </div>
                 </div>
             </li>
@@ -93,6 +106,17 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>
                         <a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseInvoice" aria-expanded="true" aria-controls="collapseInvoice">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                    <span>Facturas</span></a>
+                <div id="collapseInvoice" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('facturas.clientes') }}">Clientes</a>
+                        <a class="collapse-item" href="{{ route('facturas.proveedores') }}">Proveedores</a>
                     </div>
                 </div>
             </li>
@@ -110,7 +134,7 @@
         </li>
       @endcanany
 
-      @canany(['isAdmin','isManager','isProveedor','isCliente'])
+      @canany(['isManager','isProveedor','isCliente'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('facturas.index') }}">
               <i class="fas fa-fw fa-table"></i>
@@ -363,6 +387,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
 
   <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
 
   @yield('js_post_page')

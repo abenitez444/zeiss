@@ -66,6 +66,9 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('/complements/imprimir/{id}', 'FacturasController@downloadComplement')->middleware('role:admin,manager,proveedor,cliente');
     Route::post('/complements/delete/{id}', 'FacturasController@deleteComplement')->middleware('role:admin,manager,proveedor');
 
+    Route::get('facturas/clientes/1', 'FacturasController@getInvoicesClients')->middleware('role:admin,manager')->name('facturas.clientes');
+    Route::get('facturas/proveedores/1', 'FacturasController@getInvoicesProviders')->middleware('role:admin,manager')->name('facturas.proveedores');
+
     /* -------------------------------------------------------- */
 
     /* --------------------  Puntos  ----------------------- */

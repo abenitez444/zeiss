@@ -1,5 +1,5 @@
 <div class="modal fade" id="modal-change-{{$cat->factura_id}}">
-	<form action="{{ url('/admin/facturas/cancel/'.$cat->factura_id) }}" method="POST">
+    <form action="{{ url('/admin/facturas/cancel/'.$cat->factura_id) }}" method="POST">
 		{{ csrf_field() }}
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -7,12 +7,18 @@
 					<!--button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden>x</span>
 					</button-->
-					<h4 class="modal-title">Desactivar Factura</h4>
+                    {{--  <h4 class="modal-title">Desactivar Factura</h4>  --}}
+                    <h4 class="modal-title">Cambiar Estado de Factura</h4>
 				</div>
 				<div class="modal-body">
-					<p>
+                    <select class="form-control" id="estado" name="estado">
+                        <option value="1">Pagado</option>
+                        <option value="2">Pendiente</option>
+                        <option value="3">Cancelado</option>
+                    </select>
+					{{--  <p>
 						Confirme si desea desactivar: <strong>{{ $cat->nombre_factura }}</strong>
-					</p>
+					</p>  --}}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">

@@ -20,7 +20,7 @@ class CreateFacturasTable extends Migration
             $table->integer('numero_factura');
             $table->string('nombre_factura', 128);
             $table->float('total_cost', 8, 2);
-            $table->enum('estado', ['pendiente', 'cancelado']);
+            $table->enum('estado', ['pagado','pendiente', 'cancelado']);
 
             $table->timestamps();
         });

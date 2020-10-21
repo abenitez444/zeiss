@@ -41,8 +41,22 @@ class FacturasController extends Controller
         else
             $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id where user_id = '.$user->id.' order by facturas.id desc');
 
-        return view('admin.facturas.index', ['facturas'=>$facturas]);
+        return view('admin.facturas.index', ['facturas'=>$facturas,'load_invoice'=>true]);
 
+    }
+
+    public function getInvoicesClients()
+    {
+        $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id left join users_roles on users_roles.user_id = users.id where users_roles.role_id = 3 order by facturas.id desc');
+
+        return view('admin.facturas.index', ['facturas'=>$facturas,'load_invoice'=>true]);
+    }
+
+    public function getInvoicesProviders()
+    {
+        $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id left join users_roles on users_roles.user_id = users.id where users_roles.role_id = 2 order by facturas.id desc');
+
+        return view('admin.facturas.index', ['facturas'=>$facturas,'load_invoice'=>false]);
     }
 
     /**
@@ -117,7 +131,7 @@ class FacturasController extends Controller
                                                     $factura['numero_factura'] = $xml->getAttribute( "Folio");
                                                     $factura['total_cost'] = $xml->getAttribute( "Total");
                                                     $factura['nombre_factura'] = $name_file;
-                                                    $factura['estado'] = 1;
+                                                    $factura['estado'] = 2;
                                                 }
                                                 else {
                                                     $xml_body = false;
@@ -217,7 +231,7 @@ class FacturasController extends Controller
                                         $factura['numero_factura'] = $xml->getAttribute( "Folio");
                                         $factura['total_cost'] = $xml->getAttribute( "Total");
                                         $factura['nombre_factura'] = $name_file;
-                                        $factura['estado'] = 1;
+                                        $factura['estado'] = 2;
                                     }
                                     else {
                                         $xml_body = false;
@@ -293,7 +307,7 @@ class FacturasController extends Controller
                     $factura['numero_factura'] = 12;
                     $factura['total_cost'] = 2000;
                     $factura['nombre_factura'] = $name_file;
-                    $factura['estado'] = 1;
+                    $factura['estado'] = 2;
 
                     $file->move('carpetafacturas', $name_file);
 
@@ -381,12 +395,14 @@ class FacturasController extends Controller
      * @param  \App\Factura  $factura
      * @return \Illuminate\Http\Response
      */
-    public function cancel($id)
+    public function cancel(Request $request, $id)
     {
         $factura = Factura::findOrFail($id);
-        $factura->estado = 'cancelado';
-        $factura->update();
-        return redirect()->route('facturas.index');
+        $data = $request->all();
+
+        $factura->fill($data)->save();
+
+        return redirect(URL::previous());
     }
 
     public function receiveComplement($facturaId)
