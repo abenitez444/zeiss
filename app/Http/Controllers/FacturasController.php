@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Complement;
 use App\Factura;
+use App\Payment;
 use App\Provider;
 use App\User;
 
@@ -579,5 +580,68 @@ class FacturasController extends Controller
 
         if (file_exists(public_path('carpetafacturas/').$file_name))
             rmdir(public_path('carpetafacturas/').$file_name);
+    }
+
+    public function setPaymentInvoice(Request $request)
+    {
+        $amount = 0;
+        $referencia = "";
+        $signature = "";
+
+        foreach ($request->ids as $id){
+            $invoice = Factura::findOrFail($id);
+
+            $amount += number_format($invoice->total_cost,2,".",",");
+            $referencia .= "F".$id;
+        }
+
+        $string = $referencia.$amount."1809";
+
+        $signature = hash_hmac('sha256', $string, "Sc4On=U=A6Xbg0aZz5Yd");
+
+        return view('admin.facturas.payment_invoice', ['amount'=>$amount, 'referencia'=>$referencia, 'signature'=>$signature]);
+    }
+
+    public function getPaymentInvoice(Request $request)
+    {
+        $payment['codigo'] = $request->codigo;
+        $payment['mensaje'] = $request->mensaje;
+        $payment['autorizacion'] = $request->autorizacion;
+        $payment['referencia'] = $request->referencia;
+        $payment['importe'] = $request->importe;
+        $payment['mediopago'] = $request->mediopago;
+        $payment['financiado'] = $request->financiado;
+        $payment['plazos'] = $request->plazos;
+        $payment['s_transm'] = $request->s_transm;
+        $payment['hash'] = $request->hash;
+        $payment['tarjetahabiente'] = $request->tarjetahabiente;
+        $payment['cveTipoPago'] = $request->cveTipoPago;
+        $payment['signature'] = $request->signature;
+
+        $idPayment = Payment::create($payment);
+
+        $facturas = explode('F', $request->referencia);
+
+        $pago = false;
+
+        foreach ($facturas as $idFactura){
+            if(!empty($idFactura)){
+                DB::table('payments_facturas')->insert(
+                    ['payment_id' => $idPayment->id, 'factura_id' => $idFactura, 'created_at' => NOW(), 'updated_at' => NOW()]
+                );
+            }
+
+            if($request->codigo == "0"){
+                $pago = true;
+            }
+            else {
+                $pago = false;
+            }
+        }
+
+        if($pago)
+            return redirect()->route('facturas.index')->with('error', "El pago se realizo correctamente, numero de autorizacion: ". $request->autorizacion);
+        else
+            return redirect()->route('facturas.index')->with('error', "Tuvimos un problema con su pago");
     }
 }

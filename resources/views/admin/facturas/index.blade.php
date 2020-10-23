@@ -17,19 +17,22 @@
                 </div>
             @endif
         @endif
-        {{--  @if( Auth::user()->hasRole('cliente')  )
+        @if( Auth::user()->hasRole('cliente')  )
             <div class="col-md-6">
                 <div class="row">
                     <div class="col-md-5">
-                        <p><b> Cantidad de Facturas: </b></p>
-                        <p><b> Monto a Pagar: </b></p>
+                        <p><b> Cantidad de Facturas: </b><span id="count">0</span></p>
+                        <p><b> Monto a Pagar: </b><span id="amount">0.00</span></p>
                     </div>
                     <div class="col-md-7">
-                        <button class="btn btn-primary btn-md float-md-right" id="pay_invoice">Pagar en linea</button>
+                    <form action="{{ route('facturas.payment') }}" method="post" id="form">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                            <button class="btn btn-primary btn-md float-md-right" id="pay_invoice">Pagar en linea</button>
+                        </form>
                     </div>
                 </div>
             </div>
-        @endif  --}}
+        @endif
     </div>
 
     @if (session('error'))
@@ -51,9 +54,9 @@
                 <table class="table table-bordered" id="listInvoice" width="100%" cellspacing="0">
                 <thead>
                 <tr>
-                    {{--  @can('isCliente')
+                    @can('isCliente')
                     <th></th>
-                    @endcan  --}}
+                    @endcan
                     <th>Id</th>
                     <th># Factura</th>
                     <th>Nombre factura</th>
@@ -67,9 +70,9 @@
                 </thead>
                 <tfoot>
                 <tr>
-                    {{--  @can('isCliente')
+                    @can('isCliente')
                     <th></th>
-                    @endcan  --}}
+                    @endcan
                     <th>Id</th>
                     <th># Factura</th>
                     <th>Nombre factura</th>
@@ -82,11 +85,11 @@
                 </tr>
                 </tfoot>
                     <tbody>
-                        @foreach($facturas as $cat)
+                        @foreach($facturas as $key => $cat)
                         <tr>
-                            {{--  @can('isCliente')
-                            <td></td>
-                            @endcan  --}}
+                            @can('isCliente')
+                            <td><input type="checkbox" id="{{ $key }}"></td>
+                            @endcan
                             <td>{{ $cat->factura_id }}</td>
                             <td>{{ $cat->numero_factura }}</td>
                             <td>{{ $cat->nombre_factura }}</td>
@@ -147,16 +150,46 @@
                 language: {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
-                responsive: true
+                responsive: true,
+                'order': [[1, 'desc']]
             });
 
-            // $('#pay_invoice').on('click', function (event) {
-            //     alert('Hello');
-            // });
+            $('#pay_invoice').on('click', function (event) {
+                event.preventDefault();
+                var count = 0;
 
-            // $('table > thead > tr > th > input[type=checkbox]').click(function() {
-            //     alert('seleccione facturas');
-            // });
+                $("input:checkbox:checked").each(function() {
+                    count ++;
+
+                    var data = table.row($(this).attr('id')).data();
+
+                    $('<input>', {
+                        type: 'hidden',
+                        value: data[1],
+                        name: 'ids[]'
+                    }).appendTo('#form');
+                });
+
+                if(count == 0)
+                    alert("No ha seleccionado ninguna factura");
+                else
+                    $("#form").submit();
+            });
+
+            $('input[type=checkbox]').on('change', function() {
+                var count = 0;
+                var amount = 0.00;
+
+                $("input:checkbox:checked").each(function() {
+                    count ++;
+                    var data = table.row($(this).attr('id')).data();
+
+                    amount += parseFloat(data[4]);
+                });
+
+                $("#count").html(count);
+                $("#amount").html(amount.toFixed(2));
+            });
         });
     </script>
 
