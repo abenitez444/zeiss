@@ -67,7 +67,7 @@
       <!-- Sidebar -->
       @can('isAdmin')
             <li class="nav-item">
-            <a class="nav-link" href="{{ route('roles.index') }}">
+                <a class="nav-link" href="{{ route('roles.index') }}">
                 <i class="fa fa-unlock-alt"></i>
                 <span>Roles</span></a>
             </li>
@@ -121,42 +121,47 @@
       @endcanany
       @canany(['isAdmin','isManager'])
         <li class="nav-item">
+            <a class="nav-link" href="{{ route('pagos.index') }}">
+            <i class="fa fa-check"></i>
+            <span>Pagos</span></a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="{{ route('productos.index') }}">
-              <i class="fas fa-fw fa-table"></i>
+              <i class="fas fa-fw fa-tablet-alt"></i>
               <span>Productos</span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('categorias.index') }}">
-              <i class="fas fa-fw fa-table"></i>
+              <i class="fas fa-fw fa-list"></i>
               <span>Categorias</span></a>
         </li>
-      @endcanany
-
-      @canany(['isManager','isProveedor','isCliente'])
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('facturas.index') }}">
-              <i class="fas fa-fw fa-table"></i>
-              <span>Facturas</span></a>
-        </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('puntos.index') }}">
-              <i class="fas fa-fw fa-table"></i>
+              <i class="fas fa-fw fa-project-diagram"></i>
               <span>Puntos</span></a>
         </li>
       @endcanany
 
-      <!--@canany(['isProveedor','isCliente'])
+      @canany(['isProveedor','isCliente'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('facturas.index') }}">
-              <i class="fas fa-fw fa-table"></i>
+              <i class="fas fa-fw fa-credit-card"></i>
               <span>Facturas</span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('puntos.index') }}">
-              <i class="fas fa-fw fa-table"></i>
+              <i class="fas fa-fw fa-project-diagram"></i>
               <span>Puntos</span></a>
         </li>
-      @endcanany-->
+      @endcanany
+
+      @canany(['isCliente'])
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('pagos.index') }}">
+            <i class="fa fa-check"></i>
+            <span>Pagos</span></a>
+        </li>
+      @endcanany
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

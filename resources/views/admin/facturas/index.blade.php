@@ -64,7 +64,7 @@
                     <th>Estado</th>
                     @canany(['isAdmin','isManager'])
                     <th>Usuario Asociado</th>
-                    @endif
+                    @endcanany
                     <th>Herramientas</th>
                 </tr>
                 </thead>
