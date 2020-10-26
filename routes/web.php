@@ -70,7 +70,7 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('facturas/proveedores/1', 'FacturasController@getInvoicesProviders')->middleware('role:admin,manager')->name('facturas.proveedores');
 
     Route::post('/facturas/pagar-facturas', 'FacturasController@setPaymentInvoice')->middleware('role:cliente')->name('facturas.payment');
-    Route::post('/facturas/comprobante-pago', 'FacturasController@getPaymentInvoice')->middleware('role:cliente')->name('facturas.payment.recive');
+    Route::post('/facturas/comprobante-pago', 'FacturasController@getPaymentInvoice')->name('facturas.payment.recive');
 
     /* -------------------------------------------------------- */
 

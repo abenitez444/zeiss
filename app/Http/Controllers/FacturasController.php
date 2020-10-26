@@ -30,7 +30,7 @@ class FacturasController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth']);
+        $this->middleware(['auth'], ['except' => 'getPaymentInvoice']);
     }
 
     public function index()
@@ -629,19 +629,25 @@ class FacturasController extends Controller
                 DB::table('payments_facturas')->insert(
                     ['payment_id' => $idPayment->id, 'factura_id' => $idFactura, 'created_at' => NOW(), 'updated_at' => NOW()]
                 );
-            }
 
-            if($request->codigo == "0"){
-                $pago = true;
-            }
-            else {
-                $pago = false;
+                if($request->codigo == "0"){
+                    $pago = true;
+
+                    $factura = Factura::findOrFail($idFactura);
+
+                    $factura->estado = 1;
+
+                    $factura->save();
+                }
+                else {
+                    $pago = false;
+                }
             }
         }
 
         if($pago)
-            return redirect()->route('facturas.index')->with('error', "El pago se realizo correctamente, numero de autorizacion: ". $request->autorizacion);
+            return redirect('/login')->with('error', "El pago se realizo correctamente, numero de autorizacion: ". $request->autorizacion);
         else
-            return redirect()->route('facturas.index')->with('error', "Tuvimos un problema con su pago");
+            return redirect('/login')->with('error', "Tuvimos un problema con su pago");
     }
 }
