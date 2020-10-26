@@ -84,6 +84,7 @@ Route::group(['prefix' => 'admin'], function() {
 
     Route::resource('pagos', 'PagosController')->middleware('role:admin,manager,cliente');
     Route::get('/pagos/facturas/{id}', 'PagosController@viewInvoice')->middleware('role:admin,manager,cliente');
+    Route::get('/pagos/validation/{id}', 'PagosController@validationPayment')->middleware('role:admin,manager')->name('pagos.validation');
 
     /* -------------------------------------------------------- */
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Factura;
 use App\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -109,5 +110,21 @@ class PagosController extends Controller
 
         return view('admin.pagos.view-invoice', ['facturas'=>$facturas, 'pago'=>$pago]);
 
+    }
+
+    public function validationPayment($id)
+    {
+        $facturas = DB::select('select facturas.id from facturas left join payments_facturas on payments_facturas.factura_id = facturas.id where payments_facturas.payment_id = '.$id);
+
+        foreach ($facturas as $factura){
+
+            $factura = Factura::findOrFail($factura->id);
+
+            $factura->estado = 4;
+
+            $factura->save();
+        }
+
+        return redirect()->route('facturas.clientes')->with('error', "Las facturas fueron actualizadas");
     }
 }

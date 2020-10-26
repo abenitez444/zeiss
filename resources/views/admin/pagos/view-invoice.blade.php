@@ -7,6 +7,13 @@
         <div class="col-md-6">
             <h2>Facturas de Pago #{{ $pago->referencia }}</h2>
         </div>
+
+        @if( Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager'))
+            <div class="col-md-6">
+                <a href="{{ route('pagos.validation', $pago->id) }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                    Validar Pago</a>
+            </div>
+        @endif
     </div>
 
     <div class="card shadow mb-4">

@@ -15,6 +15,7 @@
                         <option value="1">Pagado</option>
                         <option value="2">Pendiente</option>
                         <option value="3">Cancelado</option>
+                        <option value="4">Validado</option>
                     </select>
 					{{--  <p>
 						Confirme si desea desactivar: <strong>{{ $cat->nombre_factura }}</strong>

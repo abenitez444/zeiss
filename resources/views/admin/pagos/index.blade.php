@@ -57,6 +57,7 @@
                                 <td>
                                     @canany(['isAdmin','isManager'])
                                         <a href="{{ url('/admin/pagos/facturas/'.$pago->payment_id) }}" class="btn btn-warning btn-circle btn-sm" title="Ver Facturas"><i class="fas fa-eye"></i> </a>
+                                        <a href="" data-target="#modal-change-{{$pago->payment_id}}" title="Validar Pago" data-toggle="modal"  class="btn btn-primary btn-circle btn-sm" ><i class="fas fa-check-square"></i></a>
                                         <a href="" data-target="#modal-delete-{{$pago->payment_id}}" title="Eliminar" data-toggle="modal"  class="btn btn-danger btn-circle btn-sm" ><i class="fas fa-trash-alt"></i></a>
                                     @endcanany
                                     @can('isCliente')
