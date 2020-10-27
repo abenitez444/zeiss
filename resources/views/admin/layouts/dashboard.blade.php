@@ -126,6 +126,11 @@
             <span>Pagos</span></a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="{{ route('ordenes.index') }}">
+              <i class="fas fa-fw fa-calendar-times"></i>
+              <span>Follow the lens</span></a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="{{ route('productos.index') }}">
               <i class="fas fa-fw fa-tablet-alt"></i>
               <span>Productos</span></a>
