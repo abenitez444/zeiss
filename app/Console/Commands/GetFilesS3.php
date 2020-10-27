@@ -155,7 +155,7 @@ class GetFilesS3 extends Command
                     $xmlString = Storage::disk('sftp-ordenes')->get($file);
                     Storage::disk('local')->put($file,$xmlString);
 
-                    $xmlFile = storage_path('app')."\\".$file;
+                    $xmlFile = storage_path('app')."/".$file;
 
                     $xml = new \XMLReader();
                     $xml->open($xmlFile);
