@@ -42,7 +42,7 @@
                                 <td>{{ $order->order }}</td>
                                 <td>{{ $order->status }}</td>
                                 <td>{{ $order->client }}</td>
-                                <td>{{ date('d/m/Y', strtotime($pago->dateTime)) }}</td>
+                                <td>{{ $order->dateTime }}</td>
                             </tr>
                         @endforeach
                     </tbody>
