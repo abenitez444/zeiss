@@ -12,8 +12,16 @@
         @if( Auth::user()->hasRole('admin') || Auth::user()->hasRole('proveedor') || Auth::user()->hasRole('manager')  )
             @if ($load_invoice)
                 <div class="col-md-6">
-                    <a href="{{ route('facturas.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
-                        Cargar facturas</a>
+                    <div class="row offset-lg-3">
+                        <div class="col-md-6">
+                            <a href="{{ route('facturas.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                                Cargar facturas</a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{ route('complementos.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                                Cargar Complementos</a>
+                        </div>
+                    </div>
                 </div>
             @endif
         @endif

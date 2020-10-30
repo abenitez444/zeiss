@@ -83,6 +83,14 @@ class GetFilesS3 extends Command
                                         $xml_body = false;
                                     }
                                 }
+                                elseif($xml->name == 'tfd:TimbreFiscalDigital') {
+                                    if($xml->hasAttributes) {
+                                        $factura['IdDocumento'] = $xml->getAttribute( "UUID");
+                                    }
+                                    else {
+                                        $xml_body = false;
+                                    }
+                                }
                                 elseif (($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor')){
                                     if($xml->hasAttributes) {
                                         if($xml->getAttribute( "Rfc") != 'CZV9204036N2'){

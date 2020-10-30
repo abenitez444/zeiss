@@ -9,7 +9,7 @@ class Factura extends Model
 
 	//
     protected $fillable = [
-        'numero_factura', 'nombre_factura', 'total_cost', 'estado',
+        'numero_factura', 'nombre_factura', 'total_cost', 'estado', 'IdDocumento',
     ];
 
     //

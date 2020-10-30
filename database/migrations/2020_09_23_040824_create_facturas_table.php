@@ -18,6 +18,7 @@ class CreateFacturasTable extends Migration
             $table->bigIncrements('id');
 
             $table->integer('numero_factura');
+            $table->string('IdDocumento')->nullable();
             $table->string('nombre_factura', 128);
             $table->float('total_cost', 8, 2);
             $table->enum('estado', ['pagado','pendiente', 'cancelado', 'validado']);

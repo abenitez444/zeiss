@@ -138,6 +138,14 @@ class FacturasController extends Controller
                                                     $xml_body = false;
                                                 }
                                             }
+                                            elseif($xml->name == 'tfd:TimbreFiscalDigital') {
+                                                if($xml->hasAttributes) {
+                                                    $factura['IdDocumento'] = $xml->getAttribute( "UUID");
+                                                }
+                                                else {
+                                                    $xml_body = false;
+                                                }
+                                            }
                                             elseif (Auth::user()->hasRole('proveedor') && $xml->name == 'cfdi:Emisor'){
                                                 if($xml->hasAttributes) {
                                                     $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
@@ -233,6 +241,14 @@ class FacturasController extends Controller
                                         $factura['total_cost'] = $xml->getAttribute( "Total");
                                         $factura['nombre_factura'] = $name_file;
                                         $factura['estado'] = 2;
+                                    }
+                                    else {
+                                        $xml_body = false;
+                                    }
+                                }
+                                elseif($xml->name == 'tfd:TimbreFiscalDigital') {
+                                    if($xml->hasAttributes) {
+                                        $factura['IdDocumento'] = $xml->getAttribute( "UUID");
                                     }
                                     else {
                                         $xml_body = false;
@@ -649,5 +665,179 @@ class FacturasController extends Controller
             return redirect('/login')->with('error', "El pago se realizo correctamente, numero de autorizacion: ". $request->autorizacion);
         else
             return redirect('/login')->with('error', "Tuvimos un problema con su pago");
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createComplement()
+    {
+        //
+        return view('admin.facturas.complement-create');
+    }
+
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeComplement(Request $request)
+    {
+        request()->validate([
+            'uploadfile' => 'required'
+        ]);
+
+        $path = public_path($this->folder);
+        if(!File::exists($path)) {
+            File::makeDirectory($path);
+        };
+
+        $errormsg_file = array();
+
+        if($request->hasfile('uploadfile')) {
+            foreach($request->file('uploadfile') as $file)
+            {
+                $name_file = $file->getClientOriginalName();
+                $file_name = pathinfo($name_file, PATHINFO_FILENAME);
+                $extension_file = $file->getClientOriginalExtension();
+                $complemento = array();
+                $factura = array();
+
+                if(in_array($extension_file,['zip'])){
+                    $xml_type = false;
+                    $xml_body = false;
+                    $invoice_exist = true;
+                    $file->move('carpetafacturas', $name_file);
+
+                    $unzipper  = new Unzip();
+                    $filenames = $unzipper->extract(public_path('carpetafacturas/').$name_file, public_path('carpetafacturas/'));
+
+                    foreach ($filenames as $filename) {
+                        if(strpos($filename, "__MACOSX/") === false){
+                            if (strpos($filename, "xml")){
+                                $xml_type = true;
+
+                                $xmlFile = public_path()."/carpetafacturas/".$filename;
+
+                                $xml = new \XMLReader();
+                                $xml->open($xmlFile);
+
+                                try {
+                                    $xml_body = true;
+                                    while ($xml->read()) {
+                                        if ($xml->nodeType == \XMLReader::ELEMENT) {
+                                            if ($xml->name == 'pago10:DoctoRelacionado') {
+                                                if($xml->hasAttributes) {
+                                                    $factura = Factura::where('IdDocumento', $xml->getAttribute("IdDocumento"))->first();
+                                                    if(!empty($factura)){
+                                                        $complemento['name'] = $name_file;
+                                                        $complemento['factura_id'] = $factura->id;
+
+                                                        $errormsg_file[] = $name_file." - Cargado correctamente para la factura #". $factura->numero_factura;
+
+                                                        Complement::create($complemento);
+                                                    }
+                                                    else{
+                                                        $invoice_exist = false;
+
+                                                        $errormsg_file[] = $name_file." - La factura asociada #". $factura->numero_factura." no se encuentra en el sistema";
+                                                        unlink(public_path('carpetafacturas/').$name_file);
+                                                    }
+                                                }
+                                                else {
+                                                    $xml_body = false;
+
+                                                    $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
+                                                    unlink(public_path('carpetafacturas/').$name_file);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } catch (\Exception $e) {
+                                    $xml_body = false;
+                                    $errormsg_file[] = $name_file." - ". $e->getMessage();
+                                }
+
+                                $xml->close();
+                            }
+                        }
+                    }
+
+                    if(!$xml_type){
+                        $errormsg_file[] = $name_file." - El comprimido debe contener el archivo xml";
+                        $this->deleteDocument($path, $file_name);
+                    }
+                }
+                elseif ($extension_file == 'xml'){
+                    $xml_body = false;
+                    $invoice_exist = true;
+
+                    $file->move('carpetafacturas', $name_file);
+
+                    $xmlFile = public_path()."/carpetafacturas/".$name_file;
+
+                    $xml = new \XMLReader();
+                    $xml->open($xmlFile);
+
+                    try {
+                        $xml_body = true;
+                        while ($xml->read()) {
+                            if ($xml->nodeType == \XMLReader::ELEMENT) {
+                                if ($xml->name == 'pago10:DoctoRelacionado') {
+                                    if($xml->hasAttributes) {
+                                        $factura = Factura::where('IdDocumento', $xml->getAttribute("IdDocumento"))->first();
+                                        if(!empty($factura)){
+                                            $complemento['name'] = $name_file;
+                                            $complemento['factura_id'] = $factura->id;
+
+                                            $errormsg_file[] = $name_file." - Cargado correctamente para la factura #". $factura->numero_factura;
+
+                                            Complement::create($complemento);
+
+                                            if(file_exists(public_path('carpetafacturas/').$file_name.'.pdf')){
+                                                $complemento['name'] = $file_name.'.pdf';
+                                                $complemento['factura_id'] = $factura->id;
+
+                                                Complement::create($complemento);
+
+                                                $errormsg_file[] = $file_name.".pdf - Cargado correctamente para la factura #". $factura->numero_factura;
+                                            }
+                                        }
+                                        else{
+                                            $invoice_exist = false;
+
+                                            $errormsg_file[] = $name_file." - La factura asociada #". $factura->numero_factura." no se encuentra en el sistema";
+                                            unlink(public_path('carpetafacturas/').$name_file);
+                                        }
+                                    }
+                                    else {
+                                        $xml_body = false;
+
+                                        $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
+                                        unlink(public_path('carpetafacturas/').$name_file);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        $xml_body = false;
+                        $errormsg_file[] = $name_file." - ". $e->getMessage();
+                    }
+
+                    $xml->close();
+                }
+                elseif ($extension_file == 'pdf'){
+                    $file->move('carpetafacturas', $name_file);
+                }
+                else {
+                    $errormsg_file[] = $name_file." - El archivo debe ser de formato: pdf, xml  o zip";
+                }
+            }
+        }
+
+        return back()->with('info',$errormsg_file);
     }
 }

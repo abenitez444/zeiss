@@ -72,6 +72,9 @@ Route::group(['prefix' => 'admin'], function() {
     Route::post('/facturas/pagar-facturas', 'FacturasController@setPaymentInvoice')->middleware('role:cliente')->name('facturas.payment');
     Route::post('/facturas/comprobante-pago', 'FacturasController@getPaymentInvoice')->name('facturas.payment.recive');
 
+    Route::get('/complements/create', 'FacturasController@createComplement')->middleware('role:admin,manager,proveedor')->name('complementos.create');
+    Route::post('/complements/store', 'FacturasController@storeComplement')->middleware('role:admin,manager,proveedor')->name('complementos.store');
+
     /* -------------------------------------------------------- */
 
     /* --------------------  Puntos  ----------------------- */
