@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Factura;
 use App\Provider;
 use App\Client;
+use App\Complement;
 use App\Order;
 
 class GetFilesS3 extends Command
@@ -46,6 +47,7 @@ class GetFilesS3 extends Command
     {
         $this->getFacturas();
         $this->getOrdenes();
+        $this->getComponentes();
     }
 
     public function getFacturas(){
@@ -139,6 +141,83 @@ class GetFilesS3 extends Command
                             ['user_id' => $user_id, 'factura_id' => $idFactura->id, 'created_at' => NOW(), 'updated_at' => NOW()]
                         );
                     }
+
+                    unlink($xmlFile);
+                }
+            }
+        }
+    }
+
+    public function getComponentes(){
+        $files_s3 = Storage::disk('sftp-complementos')->allFiles();
+
+        foreach ($files_s3 as $file){
+            if(strpos($file,"xml")){
+                $exists = Complement::where('name', $file)->first();
+
+                if(empty($exists)){
+                    $complemento = array();
+                    $factura = array();
+                    $xml_body = false;
+                    $invoice_exist = true;
+                    $file_name = pathinfo($file, PATHINFO_FILENAME);
+                    $xmlString = Storage::disk('sftp-complementos')->get($file);
+                    Storage::disk('local')->put($file,$xmlString);
+
+                    $xmlFile = storage_path('app')."/".$file;
+
+                    $xml = new \XMLReader();
+                    $xml->open($xmlFile);
+
+                    try {
+                        $xml_body = true;
+                        while ($xml->read()) {
+                            if ($xml->nodeType == \XMLReader::ELEMENT) {
+                                if ($xml->name == 'pago10:DoctoRelacionado') {
+                                    if($xml->hasAttributes) {
+                                        $factura = Factura::where('IdDocumento', $xml->getAttribute("IdDocumento"))->first();
+                                        if(!empty($factura)){
+                                            $complemento['name'] = $file;
+                                            $complemento['factura_id'] = $factura->id;
+
+                                            $errormsg_file[] = $file." - Cargado correctamente para la factura #". $factura->numero_factura;
+                                            Log::error('error in Commands@getComplements: '.$errormsg_file);
+
+                                            Complement::create($complemento);
+
+                                            if(Storage::disk('sftp-facturas')->exists($file_name.'.pdf')){
+                                                $complemento['name'] = $file_name.'.pdf';
+                                                $complemento['factura_id'] = $factura->id;
+
+                                                Complement::create($complemento);
+
+                                                $errormsg_file[] = $file_name.".pdf - Cargado correctamente para la factura #". $factura->numero_factura;
+                                                Log::error('error in Commands@getComplements: '.$errormsg_file);
+                                            }
+                                        }
+                                        else{
+                                            $invoice_exist = false;
+
+                                            $errormsg_file[] = $file." - La factura asociada #". $xml->getAttribute("IdDocumento")." no se encuentra en el sistema";
+                                            Log::error('error in Commands@getComplements: '.$errormsg_file);
+                                        }
+                                    }
+                                    else {
+                                        $xml_body = false;
+
+                                        $errormsg_file[] = $file." - Error leyendo el xml o error en la estructura del xml";
+                                        Log::error('error in Commands@getComplements: '.$errormsg_file);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        $xml_body = false;
+                        $errormsg_file = $file." - ". $e->getMessage();
+                        Log::error('error in Commands@getComplements: '.$errormsg_file);
+                    }
+
+                    $xml->close();
 
                     unlink($xmlFile);
                 }

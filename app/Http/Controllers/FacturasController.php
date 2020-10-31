@@ -743,7 +743,7 @@ class FacturasController extends Controller
                                                     else{
                                                         $invoice_exist = false;
 
-                                                        $errormsg_file[] = $name_file." - La factura asociada #". $factura->numero_factura." no se encuentra en el sistema";
+                                                        $errormsg_file[] = $name_file." - La factura asociada #". $xml->getAttribute("IdDocumento")." no se encuentra en el sistema";
                                                         unlink(public_path('carpetafacturas/').$name_file);
                                                     }
                                                 }
@@ -809,7 +809,7 @@ class FacturasController extends Controller
                                         else{
                                             $invoice_exist = false;
 
-                                            $errormsg_file[] = $name_file." - La factura asociada #". $factura->numero_factura." no se encuentra en el sistema";
+                                            $errormsg_file[] = $name_file." - La factura asociada #". $xml->getAttribute("IdDocumento")." no se encuentra en el sistema";
                                             unlink(public_path('carpetafacturas/').$name_file);
                                         }
                                     }
