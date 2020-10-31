@@ -79,7 +79,7 @@ class GetFilesS3 extends Command
                                         $factura['numero_factura'] = $xml->getAttribute( "Folio");
                                         $factura['total_cost'] = $xml->getAttribute( "Total");
                                         $factura['nombre_factura'] = $file;
-                                        $factura['estado'] = 1;
+                                        $factura['estado'] = 2;
                                     }
                                     else {
                                         $xml_body = false;
@@ -180,32 +180,32 @@ class GetFilesS3 extends Command
                                             $complemento['name'] = $file;
                                             $complemento['factura_id'] = $factura->id;
 
-                                            $errormsg_file[] = $file." - Cargado correctamente para la factura #". $factura->numero_factura;
+                                            $errormsg_file = $file." - Cargado correctamente para la factura #". $factura->numero_factura;
                                             Log::error('error in Commands@getComplements: '.$errormsg_file);
 
                                             Complement::create($complemento);
 
-                                            if(Storage::disk('sftp-facturas')->exists($file_name.'.pdf')){
+                                            if(Storage::disk('sftp-complementos')->exists($file_name.'.pdf')){
                                                 $complemento['name'] = $file_name.'.pdf';
                                                 $complemento['factura_id'] = $factura->id;
 
                                                 Complement::create($complemento);
 
-                                                $errormsg_file[] = $file_name.".pdf - Cargado correctamente para la factura #". $factura->numero_factura;
+                                                $errormsg_file = $file_name.".pdf - Cargado correctamente para la factura #". $factura->numero_factura;
                                                 Log::error('error in Commands@getComplements: '.$errormsg_file);
                                             }
                                         }
                                         else{
                                             $invoice_exist = false;
 
-                                            $errormsg_file[] = $file." - La factura asociada #". $xml->getAttribute("IdDocumento")." no se encuentra en el sistema";
+                                            $errormsg_file = $file." - La factura asociada #". $xml->getAttribute("IdDocumento")." no se encuentra en el sistema";
                                             Log::error('error in Commands@getComplements: '.$errormsg_file);
                                         }
                                     }
                                     else {
                                         $xml_body = false;
 
-                                        $errormsg_file[] = $file." - Error leyendo el xml o error en la estructura del xml";
+                                        $errormsg_file = $file." - Error leyendo el xml o error en la estructura del xml";
                                         Log::error('error in Commands@getComplements: '.$errormsg_file);
                                     }
                                 }
