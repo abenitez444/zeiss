@@ -19,6 +19,8 @@ class Categoria extends Model
 
     ];
 
+    protected $guarded = [];
+
     //
     public function producto()
     {

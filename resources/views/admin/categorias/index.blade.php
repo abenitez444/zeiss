@@ -5,20 +5,35 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
-
-
     <div class="row py-lg-2">
         <div class="col-md-6">
             <h2>Gestión de categorias</h2>
         </div>
         @if( Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager')  )
             <div class="col-md-6">
-                <a href="{{ route('categorias.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
-                    Crear Categoría
-                </a>
+                <div class="row offset-lg-3">
+                    <div class="col-md-8">
+                        <a href="{{ route('categorias.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                            Crear Categoría
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{{ route('categorias.csv') }}"" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                            Cargar CSV</a>
+                    </div>
+                </div>
             </div>
         @endif
     </div>
+
+    @if (session('info'))
+        <div class="alert alert-info alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <ul>
+                <li><strong>{{ session('info') }}</strong></li>
+            </ul>
+        </div>
+    @endif
 
     <div   class="card shadow mb-4">
         <div class="card-header py-3">

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Categoria;
 use Illuminate\Http\Request;
 use DB;
-
+use App\Imports\CategoriasImport;
 
 class CategoriasController extends Controller
 {
@@ -133,5 +133,15 @@ class CategoriasController extends Controller
         $articulo->estado = 'inactivo';
         $articulo->update();
         return redirect()->route('categorias.index');
+    }
+
+    public function getCsv(){
+        return view('admin.categorias.csv');
+    }
+
+    public function setCsv(){
+        (new CategoriasImport)->import(request()->file('uploadfile'));
+
+        return redirect()->route('categorias.index')->with('info', 'Archivo importado correctamente');
     }
 }

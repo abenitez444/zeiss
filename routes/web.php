@@ -52,6 +52,9 @@ Route::group(['prefix' => 'admin'], function() {
 
     Route::resource('categorias', 'CategoriasController')->middleware('role:admin,manager');
 
+    Route::get('/categorias/csv/1', 'CategoriasController@getCsv')->middleware('role:admin,manager')->name('categorias.csv');
+    Route::post('/categorias/update-csv/1', 'CategoriasController@setCsv')->middleware('role:admin,manager')->name('categorias.csv.update');
+
     /* -------------------------------------------------------- */
 
     /* --------------------  Facturas  ----------------------- */

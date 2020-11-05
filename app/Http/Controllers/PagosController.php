@@ -25,9 +25,9 @@ class PagosController extends Controller
         $user = Auth::user();
 
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') )
-            $pagos = DB::select('select * from payments left join payments_facturas on payment_id = payments.id left join _users_facturas on _users_facturas.factura_id = payments_facturas.factura_id left join users on users.id = _users_facturas.user_id order by payments.created_at desc');
+            $pagos = DB::select('select payments.*, users.name from payments left join payments_facturas on payment_id = payments.id left join _users_facturas on _users_facturas.factura_id = payments_facturas.factura_id left join users on users.id = _users_facturas.user_id order by payments.created_at desc');
         else
-            $pagos = DB::select('select * from payments left join payments_facturas on payment_id = payments.id left join _users_facturas on _users_facturas.factura_id = payments_facturas.factura_id where user_id = '.$user->id.' order by payments.created_at desc');
+            $pagos = DB::select('select payments.* from payments left join payments_facturas on payment_id = payments.id left join _users_facturas on _users_facturas.factura_id = payments_facturas.factura_id where user_id = '.$user->id.' order by payments.created_at desc');
 
         return view('admin.pagos.index', ['pagos'=>$pagos]);
     }

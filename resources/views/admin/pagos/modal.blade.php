@@ -1,5 +1,5 @@
-<div class="modal fade" id="modal-delete-{{$pago->payment_id}}">
-	<form action="{{ route('pagos.destroy', $pago->payment_id) }}" method="POST">
+<div class="modal fade" id="modal-delete-{{$pago->id}}">
+	<form action="{{ route('pagos.destroy', $pago->id) }}" method="POST">
 		{{ method_field('DELETE') }}
 		{{ csrf_field() }}
 		<div class="modal-dialog">
@@ -26,8 +26,8 @@
 	</form>
 </div>
 
-<div class="modal fade" id="modal-change-{{$pago->payment_id}}">
-	<form action="{{ route('pagos.validation', $pago->payment_id) }}" method="GET">
+<div class="modal fade" id="modal-change-{{$pago->id}}">
+	<form action="{{ route('pagos.validation', $pago->id) }}" method="GET">
 		{{ csrf_field() }}
 		<div class="modal-dialog">
 			<div class="modal-content">
