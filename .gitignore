@@ -1,6 +1,8 @@
 /node_modules
 /public/hot
 /public/storage
+/public/imagenes
+/public/carpetafacturas
 /storage/*.key
 /vendor
 .env

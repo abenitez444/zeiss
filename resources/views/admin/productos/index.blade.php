@@ -17,11 +17,11 @@
                         <a href="{{ route('productos.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">Crear Producto</a>
                     </div>
                     <div class="col-md-3">
-                        <a href="{{ route('categorias.csv') }}"" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                        <a href="{{ route('productos.csv') }}"" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
                             Cargar CSV</a>
                     </div>
                     <div class="col-md-4">
-                        <a href="{{ route('categorias.csv') }}"" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                        <a href="{{ route('productos.images') }}"" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
                             Cargar Imagenes </a>
                     </div>
                 </div>

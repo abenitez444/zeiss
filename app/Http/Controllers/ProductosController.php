@@ -6,9 +6,12 @@ use App\Producto;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Input;
+use File;
 
 class ProductosController extends Controller
 {
+    public $folder = '\imagenes';
+
     /**
      * Create a new controller instance.
      *
@@ -132,5 +135,48 @@ class ProductosController extends Controller
         $articulo->estado = 'inactivo';
         $articulo->update();
         return redirect()->route('productos.index');
+    }
+
+    public function getCsv(){
+        return view('admin.productos.csv');
+    }
+
+    public function getImages(){
+        return view('admin.productos.images');
+    }
+
+    public function setImages(Request $request){
+        request()->validate([
+            'uploadfile' => 'required'
+        ]);
+
+        $path = public_path($this->folder);
+        if(!File::exists($path)) {
+            File::makeDirectory($path);
+        };
+
+        $errormsg_file = array();
+
+        if($request->hasfile('uploadfile')) {
+            foreach($request->file('uploadfile') as $file)
+            {
+                try {
+                    $name_file = $file->getClientOriginalName();
+
+                    $file->move('imagenes', $name_file);
+
+                    $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                    DB::table('productos_images')->insert(
+                        ['name' => $name_file, 'created_at' => NOW(), 'updated_at' => NOW()]
+                    );
+
+                } catch (\Exception $e) {
+                    $errormsg_file[] = $name_file." - Error al subir esta imagen, por favor verifique que su nombre no se repita";
+                }
+            }
+        }
+
+        return back()->with('info',$errormsg_file);
     }
 }
