@@ -30,8 +30,7 @@ class ProductosController extends Controller
 
         $productos = DB::table('productos as a')
             ->join('categorias as c', 'a.categorias_id', '=', 'c.id')
-            ->join('puntos as d', 'a.puntos_id', '=', 'd.id')
-            ->select('a.id', 'a.nombre', 'a.codigo', 'a.stock', 'a.descripcion', 'a.imagen', 'a.estado', 'c.nombre as categorias', 'd.puntos as puntos')
+            ->select('a.id', 'a.nombre', 'a.codigo', 'a.stock', 'a.descripcion', 'a.estado', 'c.nombre as categorias', 'a.puntos as puntos')
             ->orderBy('a.id', 'DESC')
             ->paginate(10000);
 
@@ -49,9 +48,8 @@ class ProductosController extends Controller
     {
         //
         $categorias = DB::table('categorias')->where('estado', '=', 'activo')->get();
-        $puntos = DB::table('puntos')->where('estado', '=', 'activo')->get();
 
-        return view('admin.productos.create',['categorias' => $categorias, 'puntos' => $puntos]);
+        return view('admin.productos.create',['categorias' => $categorias]);
     }
 
     /**
@@ -62,16 +60,7 @@ class ProductosController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $entrada = $request->all();
-        if($request->hasFile('uploadfile')){
-            $archivo = $request->file('uploadfile');
-            $photo = $archivo->getClientOriginalName();
-            $archivo->move('imagenes', $photo);
-            $entrada['imagen'] = $photo;
-        }
-
-        $entrada['estado'] = 1;
 
         Producto::create($entrada);
 
@@ -124,16 +113,6 @@ class ProductosController extends Controller
         //
         $articulo = Producto::findOrFail($id);
         $entrada = $request->all();
-
-        if($request->hasFile('uploadfile')){
-            $archivo = $request->file('uploadfile');
-            $photo = $archivo->getClientOriginalName();
-            $archivo->move('imagenes', $photo);
-            $entrada['imagen'] = $photo;
-        }
-
-
-        $entrada['estado'] = 'activo';
 
         $articulo->fill($entrada)->save();
 

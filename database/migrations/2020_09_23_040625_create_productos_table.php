@@ -19,13 +19,12 @@ class CreateProductosTable extends Migration
 
             //unsigned() no permite num negativos
             $table->BigInteger('categorias_id')->unsigned();
-            $table->BigInteger('puntos_id')->unsigned();
+            $table->smallInteger('puntos');
 
             $table->string('codigo', 128)->nullable();
             $table->string('nombre', 128);
             $table->integer('stock');
             $table->text('descripcion');
-            $table->string('imagen', 128)->nullable();
             //$table->boolean('estado');
             $table->enum('estado', ['activo', 'inactivo']);
 
@@ -36,11 +35,6 @@ class CreateProductosTable extends Migration
             $table->foreign('categorias_id')->references('id')->on('categorias')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-
-            $table->foreign('puntos_id')->references('id')->on('puntos')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-
         });
     }
 

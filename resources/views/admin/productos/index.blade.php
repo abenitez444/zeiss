@@ -10,9 +10,21 @@
         <div class="col-md-6">
             <h2>Gestión de productos</h2>
         </div>
-             @if( Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager')  )
+        @if( Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager')  )
             <div class="col-md-6">
-                <a href="{{ route('productos.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">Crear nuevo producto</a>
+                <div class="row">
+                    <div class="col-md-5">
+                        <a href="{{ route('productos.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">Crear Producto</a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ route('categorias.csv') }}"" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                            Cargar CSV</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{{ route('categorias.csv') }}"" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                            Cargar Imagenes </a>
+                    </div>
+                </div>
             </div>
         @endif
     </div>
@@ -33,9 +45,8 @@
                     <th>Código</th>
                     <th>Stock</th>
                     <th>Categoría</th>
-                    <th>Punto</th>
+                    <th>Puntos</th>
                     <th>Descripción</th>
-                    <th>Imágen</th>
                     <th>Estado</th>
                     <th>Herramientas</th>
                 </tr>
@@ -47,9 +58,8 @@
                     <th>Código</th>
                     <th>Stock</th>
                     <th>Categoría</th>
-                    <th>Punto</th>
+                    <th>Puntos</th>
                     <th>Descripción</th>
-                    <th>Imágen</th>
                     <th>Estado</th>
                     <th>Herramientas</th>
                 </tr>
@@ -64,9 +74,6 @@
                                 <td>{{ $art->categorias }}</td>
                                 <td>{{ $art->puntos }}</td>
                                 <td>{{ $art->descripcion }}</td>
-                                <td>
-                                    <img src="{{ asset('imagenes/'.$art->imagen) }}" alt="{{ $art->nombre }}" height="50" width="50" class="img-thumbnail">
-                                </td>
                                 <td>{{ $art->estado }}</td>
                                 <td>
                                     <!--a href="{{ route('productos.show', $art->id) }}" class="btn btn-info btn-circle btn-sm"><i class="fa fa-eye"></i></a-->

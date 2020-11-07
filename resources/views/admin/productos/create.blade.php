@@ -34,13 +34,13 @@
 					</div>
 					<div class="form-group">
 						<label for="stock">Stock</label>
-						<input type="text" name="stock" class="form-control" placeholder="Stock" value="{{ old('stock') }}" required>
+						<input type="number" min="0" name="stock" class="form-control" placeholder="Stock" value="{{ old('stock') }}" required>
 					</div>
-				</div> 
+				</div>
 
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="id_categoria">Categoría</label>
+						<label for="categorias_id">Categoría</label>
 						<select name="categorias_id" class="form-control">
 							@foreach($categorias as $cat)
 								<option value="{{ $cat->id }}">{{ $cat->nombre }}</option>
@@ -49,12 +49,8 @@
 					</div>
 
 					<div class="form-group">
-						<label for="id_punto">Puntos</label>
-						<select name="puntos_id" class="form-control">
-							@foreach($puntos as $cat)
-								<option value="{{ $cat->id }}">{{ $cat->puntos }}</option>
-							@endforeach
-						</select>
+						<label for="puntos">Puntos</label>
+						<input type="number" min="0" name="puntos" class="form-control" placeholder="Puntos" value="{{ old('puntos') }}" required>
 					</div>
 
 					<div class="form-group">
@@ -63,8 +59,11 @@
 					</div>
 
 					<div class="form-group">
-						<label for="imagen">Imágen</label>
-                        <input type="file" name="uploadfile">
+						<label for="estado">Estado</label>
+						<select name="estado" class="form-control">
+                            <option value="1">Activo</option>
+                            <option value="2">Inactivo</option>
+						</select>
 					</div>
 				</div>
 

@@ -38,7 +38,7 @@
 					</div>
 					<div class="form-group">
 						<label for="stock">Stock</label>
-						<input type="text" name="stock" class="form-control" value="{{ $articulo->stock }}" required>
+						<input type="number" min="0" name="stock" class="form-control" value="{{ $articulo->stock }}" required>
 					</div>
 				</div>
 
@@ -60,23 +60,9 @@
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="id_punto">Punto</label>
-						<select name="puntos_id" class="form-control">
-							@foreach($puntos as $cat)
-								@if($cat->id == $articulo->puntos_id)
-									<option value="{{ $cat->id }}" selected>
-										{{ $cat->puntos }}
-									</option>
-								@else
-									<option value="{{ $cat->id }}">
-										{{ $cat->puntos }}
-									</option>
-								@endif
-							@endforeach
-						</select>
+						<label for="puntos">Puntos</label>
+						<input type="number" min="0" name="puntos" class="form-control" value="{{ $articulo->puntos }}" required>
 					</div>
-
-
 
 					<div class="form-group">
 						<label for="descripcion">Descripción</label>
@@ -84,12 +70,12 @@
 						value="{{ $articulo->descripcion }}" required>
 					</div>
 
-					<div class="form-group">
-						<label for="imagen">Imágen</label>
-						<input type="file" name="uploadfile">
-						@if($articulo->imagen != "")
-						<img src="{{ asset('imagenes/'.$articulo->imagen) }}" alt="$articulo->nombre" height="100" width="100">
-						@endif
+                    <div class="form-group">
+						<label for="estado">Estado</label>
+						<select name="estado" class="form-control">
+                            <option value="1" {{ $articulo->estado == "activo" ? "selected" : ""}}>Activo</option>
+                            <option value="2" {{ $articulo->estado == "inactivo" ? "selected" : ""}}>Inactivo</option>
+						</select>
 					</div>
 				</div>
 
