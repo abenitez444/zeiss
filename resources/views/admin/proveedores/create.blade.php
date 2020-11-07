@@ -72,7 +72,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="credit_terms">Términos de crédito</label>
-                        <textarea name="credit_terms" class="form-control" id="credit_terms" placeholder="Términos de crédito..." required>{{ old('way_to_pay') }}</textarea>
+                        <select class="form-control" name="credit_terms" id="credit_terms">
+                            <option value="0">0 dias</option>
+                            <option value="5">5 dias</option>
+                            <option value="10">10 dias</option>
+                            <option value="15">15 dias</option>
+                            <option value="30">30 dias</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">

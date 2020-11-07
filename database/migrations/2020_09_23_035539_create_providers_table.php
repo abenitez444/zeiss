@@ -18,7 +18,7 @@ class CreateProvidersTable extends Migration
             $table->string('rfc');
             $table->string('phone');
             $table->string('contact');
-            $table->text('credit_terms');
+            $table->smallInteger('credit_terms');
             $table->date('payment_promise_date');
             $table->string('cfdi');
             $table->date('deadline_for_complement');

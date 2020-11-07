@@ -49,7 +49,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <p class="card-text">
-                            Términos de crédito <br> {{ $user[0]->credit_terms }}
+                            Términos de crédito - {{ $user[0]->credit_terms }} dias
                         </p>
                     </div>
                 </div>

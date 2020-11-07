@@ -77,7 +77,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="credit_terms">Términos de crédito</label>
-                        <textarea name="credit_terms" class="form-control" id="credit_terms" placeholder="Términos de crédito..." required @can('isProveedor') readonly @endcan>{{ $user->credit_terms }}</textarea>
+                        <select class="form-control" name="credit_terms" id="credit_terms">
+                            <option value="0" {{ $user->credit_terms == 0 ? "selected" : ""}}>0 dias</option>
+                            <option value="5" {{ $user->credit_terms == 5 ? "selected" : ""}}>5 dias</option>
+                            <option value="10" {{ $user->credit_terms == 10 ? "selected" : ""}}>10 dias</option>
+                            <option value="15" {{ $user->credit_terms == 15 ? "selected" : ""}}>15 dias</option>
+                            <option value="30" {{ $user->credit_terms == 30 ? "selected" : ""}}>30 dias</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">
