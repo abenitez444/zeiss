@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProductosImport;
 use App\Producto;
 use Illuminate\Http\Request;
 use DB;
@@ -141,6 +142,16 @@ class ProductosController extends Controller
         return view('admin.productos.csv');
     }
 
+    public function setCsv(){
+        try {
+            (new ProductosImport)->import(request()->file('uploadfile'));
+
+            return redirect()->route('productos.index')->with('info', 'Archivo importado correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('productos.index')->with('info', 'Ha ocurrido un error importando, revise que los codigo de productos sean diferentes, existan todos los datos para cada uno o que existan todas las categorias usadas');
+        }
+    }
+
     public function getImages(){
         return view('admin.productos.images');
     }
@@ -163,13 +174,13 @@ class ProductosController extends Controller
                 try {
                     $name_file = $file->getClientOriginalName();
 
-                    $file->move('imagenes', $name_file);
-
-                    $errormsg_file[] = $name_file." - Cargado correctamente";
-
                     DB::table('productos_images')->insert(
                         ['name' => $name_file, 'created_at' => NOW(), 'updated_at' => NOW()]
                     );
+
+                    $file->move('imagenes', $name_file);
+
+                    $errormsg_file[] = $name_file." - Cargado correctamente";
 
                 } catch (\Exception $e) {
                     $errormsg_file[] = $name_file." - Error al subir esta imagen, por favor verifique que su nombre no se repita";

@@ -5,9 +5,8 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 	<h1>
-		Cargar Categorias
+		Cargar Productos
 	</h1>
-
 
 	<div class="row">
 		<div class="col-md-6 col-xs-12">
@@ -21,19 +20,19 @@
 			</div>
 			@endif
 
-			<form action="{{ route('categorias.csv.update') }}" method="POST"  enctype="multipart/form-data">
+			<form action="{{ route('productos.csv.update') }}" method="POST"  enctype="multipart/form-data">
 
 				<input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
 
 				<div class="form-group">
-					<label for="imagen">Archivo CSV de categorias</label>
+					<label for="imagen">Archivo CSV de productos</label>
                     <input type="file" name="uploadfile" required accept=".csv">
 				</div>
 				<div class="form-group">
 					<button class="btn btn-primary" type="submit">
 						Guardar
 					</button>
-					<a href="{{ route('categorias.index') }}" class="btn btn-danger" >Cancelar</a>
+					<a href="{{ route('productos.index') }}" class="btn btn-danger" >Cancelar</a>
 				</div>
 			</form>
 

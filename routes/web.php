@@ -47,7 +47,7 @@ Route::group(['prefix' => 'admin'], function() {
     Route::resource('productos', 'ProductosController')->middleware('role:admin,manager');
 
     Route::get('/productos/csv/1', 'ProductosController@getCsv')->middleware('role:admin,manager')->name('productos.csv');
-    //Route::post('/categorias/update-csv/1', 'CategoriasController@setCsv')->middleware('role:admin,manager')->name('categorias.csv.update');
+    Route::post('/productos/update-csv/1', 'ProductosController@setCsv')->middleware('role:admin,manager')->name('productos.csv.update');
 
     Route::get('/productos/images/1', 'ProductosController@getImages')->middleware('role:admin,manager')->name('productos.images');
     Route::post('/productos/update-images/1', 'ProductosController@setImages')->middleware('role:admin,manager')->name('productos.images.update');

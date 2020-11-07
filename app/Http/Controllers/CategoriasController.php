@@ -140,8 +140,12 @@ class CategoriasController extends Controller
     }
 
     public function setCsv(){
-        (new CategoriasImport)->import(request()->file('uploadfile'));
+        try {
+            (new CategoriasImport)->import(request()->file('uploadfile'));
 
-        return redirect()->route('categorias.index')->with('info', 'Archivo importado correctamente');
+            return redirect()->route('categorias.index')->with('info', 'Archivo importado correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('categorias.index')->with('info', 'Ha ocurrido un error importando, revise que existan todos los datos para cada uno y que los estados sean activo o inactivo');
+        }
     }
 }

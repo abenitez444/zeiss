@@ -11,6 +11,8 @@ class Producto extends Model
         'categorias_id', 'puntos', 'codigo', 'nombre', 'stock', 'descripcion', 'estado',
     ];
 
+    protected $guarded = [];
+
     public function categoria()
     {
         return $this->belongsToMany(Categoria::class, 'categorias');
