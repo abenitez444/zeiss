@@ -19,9 +19,7 @@ class CreateProvidersTable extends Migration
             $table->string('phone');
             $table->string('contact');
             $table->smallInteger('credit_terms');
-            $table->date('payment_promise_date');
             $table->string('cfdi');
-            $table->date('deadline_for_complement');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

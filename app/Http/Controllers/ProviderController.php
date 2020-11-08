@@ -79,8 +79,6 @@ class ProviderController extends Controller
             'phone' => 'required',
             'contact' => 'required|string|max:191',
             'credit_terms' => 'required',
-            'payment_promise_date' => 'required',
-            'deadline_for_complement' => 'required',
             'password' => 'required|between:8,191|confirmed',
             'password_confirmation' => 'required'
         ]);
@@ -101,9 +99,7 @@ class ProviderController extends Controller
         $provider->phone = $request->phone;
         $provider->contact = $request->contact;
         $provider->credit_terms = $request->credit_terms;
-        $provider->payment_promise_date = $request->payment_promise_date;
         $provider->cfdi = $request->cfdi;
-        $provider->deadline_for_complement = $request->deadline_for_complement;
         $provider->user_id = $user->id;
 
         $provider->save();
@@ -156,8 +152,6 @@ class ProviderController extends Controller
             'phone' => 'required',
             'contact' => 'required|string|max:191',
             'credit_terms' => 'required',
-            'payment_promise_date' => 'required',
-            'deadline_for_complement' => 'required',
             'password' => 'confirmed',
         ]);
 
@@ -185,9 +179,7 @@ class ProviderController extends Controller
                 'phone' => $request->phone,
                 'contact' => $request->contact,
                 'credit_terms' => $request->credit_terms,
-                'payment_promise_date' => $request->payment_promise_date,
                 'cfdi' => $request->cfdi,
-                'deadline_for_complement' => $request->deadline_for_complement,
             ]
         );
 

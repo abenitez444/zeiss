@@ -22,6 +22,8 @@ class CreateFacturasTable extends Migration
             $table->string('nombre_factura', 128);
             $table->float('total_cost', 8, 2);
             $table->enum('estado', ['pagado','pendiente', 'cancelado', 'validado']);
+            $table->date('payment_promise_date')->nullable();
+            $table->date('deadline_for_complement')->nullable();
 
             $table->timestamps();
         });

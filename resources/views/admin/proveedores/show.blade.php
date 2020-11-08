@@ -24,8 +24,11 @@
                         <p class="card-text">
                             Contacto - {{ $user[0]->contact }}
                         </p>
-                        <p class="card-text">
+                        {{--  <p class="card-text">
                             Fecha promesa de pago - {{ $user[0]->payment_promise_date }}
+                        </p>  --}}
+                        <p class="card-text">
+                            Términos de crédito - {{ $user[0]->credit_terms }} dias
                         </p>
                     </div>
                     <div class="col-md-6">
@@ -38,21 +41,21 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">
+                {{--  <div class="row">
                     <div class="col-md-6">
                         <p class="card-text">
                             Fecha limite para enviar el complemento de pago - {{ $user[0]->deadline_for_complement }}
                         </p>
                     </div>
                 </div>
-                <br>
-                <div class="row">
+                <br>  --}}
+                {{--  <div class="row">
                     <div class="col-md-12">
                         <p class="card-text">
                             Términos de crédito - {{ $user[0]->credit_terms }} dias
                         </p>
                     </div>
-                </div>
+                </div>  --}}
                 <div class="card-footer">
                 <!--a href="{{ url()->previous() }}" class="btn btn-primary">Volver</a-->
                     <a href="{{ route('providers.index') }}" class="btn btn-primary" >Volver</a>

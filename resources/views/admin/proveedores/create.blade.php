@@ -83,27 +83,27 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="payment_promise_date">Fecha promesa de pago</label>
-                        <input type="date" name="payment_promise_date" class="form-control" placeholder="AAAA-MM-DD" id="payment_promise_date" required value="{{ old('payment_promise_date') }}">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="deadline_for_complement">Fecha limite para enviar el complemento de pago</label>
-                        <input type="date" name="deadline_for_complement" class="form-control" placeholder="AAAA-MM-DD" id="deadline_for_complement" required value="{{ old('deadline_for_complement') }}">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
                         <label for="role">Rol</label>
                         <select class="role form-control" name="role" id="role">
                             <option data-role-id="2" data-role-slug="proveedor" value="2">Proveedor</option>
                         </select>
                     </div>
                 </div>
+            </div>
+
+            <div class="row">
+                {{-- <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="payment_promise_date">Fecha promesa de pago</label>
+                        <input type="date" name="payment_promise_date" class="form-control" placeholder="AAAA-MM-DD" id="payment_promise_date" required value="{{ old('payment_promise_date') }}">
+                    </div>
+                </div> --}}
+                {{-- <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="deadline_for_complement">Fecha limite para enviar el complemento de pago</label>
+                        <input type="date" name="deadline_for_complement" class="form-control" placeholder="AAAA-MM-DD" id="deadline_for_complement" required value="{{ old('deadline_for_complement') }}">
+                    </div>
+                </div> --}}
             </div>
 
             <div class="row">
