@@ -97,8 +97,13 @@ class FacturasController extends Controller
                 $file_name = pathinfo($name_file, PATHINFO_FILENAME);
                 $extension_file = $file->getClientOriginalExtension();
                 $factura = $request->all();
-                if(Auth::user()->hasRole('proveedor'))
+                if(Auth::user()->hasRole('proveedor')){
                     $user_id = Auth::user()->id;
+                    $provider = Provider::with('user')->where('user_id', $user_id)->first();
+                    $factura['payment_promise_date'] = date("Y-m-d", strtotime(date('Y-m-d')."+ ".$provider->credit_terms." days"));
+                    if(date('D', strtotime($factura['payment_promise_date'])) != 'Mon')
+                        $factura['payment_promise_date'] = date("Y-m-d", strtotime('next Monday '.$factura['payment_promise_date']));
+                }
                 else
                     $user_id = $request->user_id;
 

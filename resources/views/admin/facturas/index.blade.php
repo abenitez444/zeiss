@@ -70,6 +70,14 @@
                     <th>Nombre factura</th>
                     <th>Costo Total</th>
                     <th>Estado</th>
+                    @if (!$load_invoice)
+                        @canany(['isAdmin','isManager'])
+                        <th>Fecha promesa de pago</th>
+                        @endcanany
+                    @endif
+                    @can('isProveedor')
+                    <th>Fecha promesa de pago</th>
+                    @endcan
                     @canany(['isAdmin','isManager'])
                     <th>Usuario Asociado</th>
                     @endcanany
@@ -86,6 +94,14 @@
                     <th>Nombre factura</th>
                     <th>Costo Total</th>
                     <th>Estado</th>
+                    @if (!$load_invoice)
+                        @canany(['isAdmin','isManager'])
+                        <th>Fecha promesa de pago</th>
+                        @endcanany
+                    @endif
+                    @can('isProveedor')
+                    <th>Fecha promesa de pago</th>
+                    @endcan
                     @canany(['isAdmin','isManager'])
                     <th>Usuario Asociado</th>
                     @endcanany
@@ -103,6 +119,14 @@
                             <td>{{ $cat->nombre_factura }}</td>
                             <td>{{ $cat->total_cost }}</td>
                             <td>{{ $cat->estado }}</td>
+                            @if (!$load_invoice)
+                                @canany(['isAdmin','isManager'])
+                                <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
+                                @endcanany
+                            @endif
+                            @can('isProveedor')
+                            <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
+                            @endcan
                             @canany(['isAdmin','isManager'])
                             <td>{{ $cat->name }}</td>
                             @endcanany
