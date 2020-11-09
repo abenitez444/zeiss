@@ -11,7 +11,7 @@ class Punto extends Model
 
     protected $primaryKey = 'id'; //Atributo primaryKey de la tabla categoria
 
-    
+
     protected $fillable = [
         'puntos', 'estado'
     ];
@@ -21,10 +21,15 @@ class Punto extends Model
         return $this->belongsToMany(User::class, '_users_puntos');
     }
 
-    public function producto()
+    public function factura()
     {
-        return $this->belongsToMany(Producto::class, 'productos');
-		//Una Categoria puede tener muchos artículos
-        //return $this->hasMany(Articulo::class);
+        return $this->belongsToMany(Factura::class, '_users_puntos');
     }
+
+    // public function producto()
+    // {
+    //     return $this->belongsToMany(Producto::class, 'productos');
+	// 	//Una Categoria puede tener muchos artículos
+    //     //return $this->hasMany(Articulo::class);
+    // }
 }

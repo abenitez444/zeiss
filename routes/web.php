@@ -90,6 +90,9 @@ Route::group(['prefix' => 'admin'], function() {
 
     Route::resource('puntos', 'PuntosController')->middleware('role:admin,manager,proveedor,cliente');
 
+    Route::get('/puntos/csv/1', 'PuntosController@getCsv')->middleware('role:admin,manager')->name('puntos.csv');
+    //Route::post('/productos/update-csv/1', 'ProductosController@setCsv')->middleware('role:admin,manager')->name('productos.csv.update');
+
     /* -------------------------------------------------------- */
 
     /* --------------------  Pagos  ----------------------- */

@@ -25,16 +25,11 @@ class PuntosController extends Controller
      */
     public function index()
     {
-        //
-        $puntos = DB::select('select * from puntos order by id desc');
+        $puntos = Punto::with('user')->with('factura')->get();
 
-            //$categorias = Categoria::where('condicion','=','1')
-              //  ->orderBy('id', 'DESC')
-                //->paginate(5);
-
-            return view('admin.puntos.index', [
-                'puntos'=>$puntos,
-            ]);
+        return view('admin.puntos.index', [
+            'puntos'=>$puntos,
+        ]);
     }
 
     /**
@@ -44,8 +39,9 @@ class PuntosController extends Controller
      */
     public function create()
     {
-        //
-        return view('admin.puntos.create');
+        $facturas = DB::select('select facturas.id, facturas.numero_factura, users.name from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id left join users_roles on users_roles.user_id = users.id where users_roles.role_id = 3 order by facturas.id desc');
+
+        return view('admin.puntos.create', ['facturas'=>$facturas,'load_invoice'=>true]);
     }
 
     /**
@@ -87,9 +83,12 @@ class PuntosController extends Controller
      */
     public function edit($id)
     {
-        //
-        $punto = Punto::findOrFail($id);
-        return view('admin.puntos.edit', ['punto'=>$punto]);
+        $facturas = DB::select('select facturas.id, facturas.numero_factura, users.name from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id left join users_roles on users_roles.user_id = users.id where users_roles.role_id = 3 order by facturas.id desc');
+
+        $punto = Punto::with('user')->with('factura')->findOrFail($id);
+        //$punto = Punto::findOrFail($id);
+
+        return view('admin.puntos.edit', ['punto'=>$punto,'facturas'=>$facturas]);
     }
 
     /**
@@ -128,5 +127,19 @@ class PuntosController extends Controller
         $punto->update();
         return redirect()->route('puntos.index');
 
+    }
+
+    public function getCsv(){
+        return view('admin.puntos.csv');
+    }
+
+    public function setCsv(){
+        try {
+            (new CategoriasImport)->import(request()->file('uploadfile'));
+
+            return redirect()->route('categorias.index')->with('info', 'Archivo importado correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('categorias.index')->with('info', 'Ha ocurrido un error importando, revise que existan todos los datos para cada uno y que los estados sean activo o inactivo');
+        }
     }
 }
