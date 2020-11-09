@@ -73,10 +73,12 @@
                     @if (!$load_invoice)
                         @canany(['isAdmin','isManager'])
                         <th>Fecha promesa de pago</th>
+                        <th>Fecha limite para enviar el complemento de pago</th>
                         @endcanany
                     @endif
                     @can('isProveedor')
                     <th>Fecha promesa de pago</th>
+                    <th>Fecha limite para enviar el complemento de pago</th>
                     @endcan
                     @canany(['isAdmin','isManager'])
                     <th>Usuario Asociado</th>
@@ -97,10 +99,12 @@
                     @if (!$load_invoice)
                         @canany(['isAdmin','isManager'])
                         <th>Fecha promesa de pago</th>
+                        <th>Fecha limite para enviar el complemento de pago</th>
                         @endcanany
                     @endif
                     @can('isProveedor')
                     <th>Fecha promesa de pago</th>
+                    <th>Fecha limite para enviar el complemento de pago</th>
                     @endcan
                     @canany(['isAdmin','isManager'])
                     <th>Usuario Asociado</th>
@@ -122,10 +126,12 @@
                             @if (!$load_invoice)
                                 @canany(['isAdmin','isManager'])
                                 <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
+                                <td>{{ (!empty($cat->deadline_for_complement)) ? date('d/m/Y', strtotime($cat->deadline_for_complement)) : "No definido" }}</td>
                                 @endcanany
                             @endif
                             @can('isProveedor')
                             <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
+                            <td>{{ (!empty($cat->deadline_for_complement)) ? date('d/m/Y', strtotime($cat->deadline_for_complement)) : "No definido" }}</td>
                             @endcan
                             @canany(['isAdmin','isManager'])
                             <td>{{ $cat->name }}</td>

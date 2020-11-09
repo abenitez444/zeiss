@@ -422,6 +422,13 @@ class FacturasController extends Controller
         $factura = Factura::findOrFail($id);
         $data = $request->all();
 
+        if($data['estado'] == 1){
+            $data['deadline_for_complement'] = date("Y-m-d", strtotime("first day of next month"));
+            $data['deadline_for_complement'] = date("Y-m-d", strtotime($data['deadline_for_complement']."+ 9 days"));
+        }
+        elseif (in_array($data['estado'], [2,3]))
+            $data['deadline_for_complement'] = null;
+
         $factura->fill($data)->save();
 
         return redirect(URL::previous());
