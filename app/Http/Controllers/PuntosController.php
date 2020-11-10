@@ -111,10 +111,15 @@ class PuntosController extends Controller
         $punto = Punto::findOrFail($id);
         $entrada = $request->all();
 
-
         $entrada['estado'] = 'activo';
 
+        $factura = Factura::with('user')->findOrFail($request->factura_id);
+
         $punto->fill($entrada)->save();
+
+        DB::table('_users_puntos')
+            ->where('punto_id',$punto->id)
+            ->update(['user_id' => $factura->user[0]->id, 'factura_id' => $request->factura_id, 'updated_at' => NOW()]);
 
         return redirect()->route('puntos.index');
 
