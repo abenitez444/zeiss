@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Factura;
 use App\Punto;
 use DB;
 use Illuminate\Http\Request;
@@ -52,12 +53,18 @@ class PuntosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
         $entrada = $request->all();
 
         $entrada['estado'] = 1;
 
-        Punto::create($entrada);
+        $factura = Factura::with('user')->findOrFail($request->factura_id);
+
+        $punto = Punto::create($entrada);
+
+        DB::table('_users_puntos')->insert(
+            ['user_id' => $factura->user[0]->id, 'punto_id' => $punto->id,'factura_id' => $request->factura_id, 'created_at' => NOW(), 'updated_at' => NOW()]
+        );
 
         return redirect()->route('puntos.index');
     }
