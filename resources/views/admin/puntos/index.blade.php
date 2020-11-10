@@ -25,9 +25,16 @@
                 </div>
             </div>
         @endif
-
-
     </div>
+
+    @if (session('info'))
+        <div class="alert alert-info alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <ul>
+                <li><strong>{{ session('info') }}</strong></li>
+            </ul>
+        </div>
+    @endif
 
     <div   class="card shadow mb-4">
         <div class="card-header py-3">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Factura;
+use App\Imports\PuntosImport;
 use App\Punto;
 use DB;
 use Illuminate\Http\Request;
@@ -147,11 +148,11 @@ class PuntosController extends Controller
 
     public function setCsv(){
         try {
-            (new CategoriasImport)->import(request()->file('uploadfile'));
+            (new PuntosImport)->import(request()->file('uploadfile'));
 
-            return redirect()->route('categorias.index')->with('info', 'Archivo importado correctamente');
+            return redirect()->route('puntos.index')->with('info', 'Archivo importado correctamente');
         } catch (\Exception $e) {
-            return redirect()->route('categorias.index')->with('info', 'Ha ocurrido un error importando, revise que existan todos los datos para cada uno y que los estados sean activo o inactivo');
+            return redirect()->route('puntos.index')->with('info', 'Ha ocurrido un error importando '.$e->getMessage());
         }
     }
 }

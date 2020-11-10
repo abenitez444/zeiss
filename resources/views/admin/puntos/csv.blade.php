@@ -21,7 +21,7 @@
 			</div>
 			@endif
 
-			<form action="{{ route('categorias.csv.update') }}" method="POST"  enctype="multipart/form-data">
+			<form action="{{ route('puntos.csv.update') }}" method="POST"  enctype="multipart/form-data">
 
 				<input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
 
