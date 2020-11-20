@@ -66,26 +66,29 @@ return [
 
         'sftp-facturas' => [
             'driver' => 'sftp',
-            'host' => 's-8f4585c8425a4603a.server.transfer.us-east-2.amazonaws.com',
-            'username' => 'carl-zeiss-user-facturas',
+            'host' => 'ec2-3-138-191-101.us-east-2.compute.amazonaws.com',
+            'username' => 'ubuntu',
             'port' => 22,
-            'privateKey' => base_path('private-key.ppk'),
+            'privateKey' => base_path('carl-zeiss-key.ppk'),
+            'root' => '/home/ubuntu/s3-bucket/facturas',
         ],
 
         'sftp-complementos' => [
             'driver' => 'sftp',
-            'host' => 's-8f4585c8425a4603a.server.transfer.us-east-2.amazonaws.com',
-            'username' => 'carl-zeiss-user-complementos',
+            'host' => 'ec2-3-138-191-101.us-east-2.compute.amazonaws.com',
+            'username' => 'ubuntu',
             'port' => 22,
-            'privateKey' => base_path('private-key.ppk'),
+            'privateKey' => base_path('carl-zeiss-key.ppk'),
+            'root' => '/home/ubuntu/s3-bucket/complementos',
         ],
 
         'sftp-ordenes' => [
             'driver' => 'sftp',
-            'host' => 's-8f4585c8425a4603a.server.transfer.us-east-2.amazonaws.com',
-            'username' => 'carl-zeiss-user-sftp',
+            'host' => 'ec2-3-138-191-101.us-east-2.compute.amazonaws.com',
+            'username' => 'ubuntu',
             'port' => 22,
-            'privateKey' => base_path('private-key.ppk'),
+            'privateKey' => base_path('carl-zeiss-key.ppk'),
+            'root' => '/home/ubuntu/s3-bucket/ordenes',
         ],
 
     ],
