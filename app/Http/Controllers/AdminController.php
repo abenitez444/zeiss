@@ -10,6 +10,7 @@ use App\Factura;
 use App\Provider;
 use App\Client;
 use App\Complement;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -25,25 +26,25 @@ class AdminController extends Controller
 
     public function index()
     {
-    	$facturas = DB::select('select count(*) id FROM facturas');
-    	$productos = DB::select('select count(*) id FROM productos');
-        $users = DB::select('select count(*) id FROM users');
-            //$categorias = Categoria::where('condicion','=','1')
-              //  ->orderBy('id', 'DESC')
-                //->paginate(5);
+        if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') ){
+            $facturas = DB::select('select count(*) id FROM facturas');
+            $productos = DB::select('select count(*) id FROM productos');
+            $users = DB::select('select count(*) id FROM users');
 
             return view('admin.index', [
                 'facturas'=>$facturas,
                 'productos'=>$productos,
                 'users'=>$users,
             ]);
-
-        //return view('admin.index');
-        /*if(!\Auth::user()->hasRole('administrador') && !\Auth::user()->hasRole('manager') ){
-            return redirect('/users');
         }else{
-            return redirect('/facturas');
-        }*/
+            $facturas = DB::select('select count(*) as cant from facturas left join _users_facturas on factura_id = facturas.id where user_id = '.Auth::user()->id);
+            $puntos = DB::select('select SUM(puntos) as cant from puntos left join _users_puntos on punto_id = puntos.id where user_id = '.Auth::user()->id);
+
+            return view('admin.index', [
+                'facturas'=> $facturas,
+                'puntos'=> $puntos
+            ]);
+        }
 
     }
 
