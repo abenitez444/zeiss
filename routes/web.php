@@ -113,6 +113,9 @@ Route::group(['prefix' => 'admin'], function() {
 
     Route::resource('operations', 'OperationsController')->middleware('role:admin,manager,cliente');
 
+    Route::get('/operations/productos/1', 'OperationsController@getProducts')->middleware('role:admin,manager,cliente')->name('operations.products');
+    //Route::post('/productos/update-images/1', 'ProductosController@setImages')->middleware('role:admin,manager')->name('productos.images.update');
+
     /* -------------------------------------------------------- */
 
     Route::resource('posts', 'PostsController');

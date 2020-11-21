@@ -98,4 +98,8 @@ class OperationsController extends Controller
     {
 
     }
+
+    public function getProducts(){
+        return view('admin.operations.products.index');
+    }
 }

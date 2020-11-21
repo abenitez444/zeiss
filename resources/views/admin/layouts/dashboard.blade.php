@@ -171,6 +171,11 @@
             <i class="fa fa-barcode"></i>
             <span>Productos Canjeados</span></a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('operations.products') }}">
+            <i class="fa fa-vr-cardboard"></i>
+            <span>Lista de Productos</span></a>
+        </li>
       @endcanany
 
       <!-- Divider -->
