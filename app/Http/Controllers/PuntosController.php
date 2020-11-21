@@ -7,6 +7,7 @@ use App\Imports\PuntosImport;
 use App\Punto;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PuntosController extends Controller
 {
@@ -27,11 +28,25 @@ class PuntosController extends Controller
      */
     public function index()
     {
-        $puntos = Punto::with('user')->with('factura')->get();
+        if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') ){
+            $puntos = Punto::with('user')->with('factura')->get();
 
-        return view('admin.puntos.index', [
-            'puntos'=>$puntos,
-        ]);
+            return view('admin.puntos.index', [
+                'puntos'=>$puntos,
+            ]);
+        }else{
+            $puntos_cant = DB::select('select ( ifnull(SUM(puntos.puntos), 0 ) - ifnull(SUM(operations.puntos), 0 ) ) as cant from puntos left join _users_puntos on punto_id = puntos.id left join operations on operations.user_id = _users_puntos.user_id where _users_puntos.user_id = '.Auth::user()->id);
+            $value = Auth::user()->id;
+            $puntos = Punto::with(['user', 'factura'])
+                    ->whereHas('user', function($q) use($value) {
+                    $q->where('users.id', $value);
+            })->get();
+
+            return view('admin.puntos.index', [
+                'puntos_cant'=> $puntos_cant,
+                'puntos'=> $puntos
+            ]);
+        }
     }
 
     /**

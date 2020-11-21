@@ -25,6 +25,15 @@
                 </div>
             </div>
         @endif
+        @if( Auth::user()->hasRole('cliente')  )
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="offset-lg-6 col-md-6">
+                        <p><b> Puntos Disponibles: </b><span>{{ $puntos_cant[0]->cant }}</span></p>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 
     @if (session('info'))
@@ -74,7 +83,9 @@
                             <td>{{ $cat->id }}</td>
                             <td>{{ $cat->puntos }}</td>
                             <td>{{ $cat->estado }}</td>
+                            @canany(['isAdmin','isManager'])
                             <td>{{ $cat->user[0]->name }}</td>
+                            @endcanany
                             <td>{{ $cat->factura[0]->numero_factura }}</td>
                             <td>
                                 @can('isAdmin')
