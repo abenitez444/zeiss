@@ -109,6 +109,12 @@ Route::group(['prefix' => 'admin'], function() {
 
     /* -------------------------------------------------------- */
 
+    /* --------------------  Operaciones  ----------------------- */
+
+    Route::resource('operations', 'OperationsController')->middleware('role:admin,manager,cliente');
+
+    /* -------------------------------------------------------- */
+
     Route::resource('posts', 'PostsController');
 });
 

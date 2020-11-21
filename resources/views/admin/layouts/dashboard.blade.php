@@ -153,18 +153,23 @@
               <i class="fas fa-fw fa-credit-card"></i>
               <span>Facturas</span></a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('puntos.index') }}">
-              <i class="fas fa-fw fa-project-diagram"></i>
-              <span>Puntos</span></a>
-        </li>
       @endcanany
 
       @canany(['isCliente'])
         <li class="nav-item">
+            <a class="nav-link" href="{{ route('puntos.index') }}">
+            <i class="fas fa-fw fa-project-diagram"></i>
+            <span>Puntos</span></a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="{{ route('pagos.index') }}">
             <i class="fa fa-check"></i>
             <span>Pagos</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('operations.index') }}">
+            <i class="fa fa-barcode"></i>
+            <span>Productos Canjeados</span></a>
         </li>
       @endcanany
 
