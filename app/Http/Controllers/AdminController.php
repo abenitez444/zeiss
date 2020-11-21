@@ -38,7 +38,7 @@ class AdminController extends Controller
             ]);
         }else{
             $facturas = DB::select('select count(*) as cant from facturas left join _users_facturas on factura_id = facturas.id where user_id = '.Auth::user()->id);
-            $puntos = DB::select('select ( ifnull(SUM(puntos.puntos), 0 ) - ifnull(SUM(operations.puntos), 0 ) ) as cant from puntos left join _users_puntos on punto_id = puntos.id left join operations on operations.user_id = _users_puntos.user_id where _users_puntos.user_id = '.Auth::user()->id);
+            $puntos = DB::select('select ( ifnull(SUM(puntos.puntos), 0 ) - ifnull(SUM(operations.puntos), 0 ) ) as cant from puntos left join _users_puntos on punto_id = puntos.id left join operations on operations.user_id = _users_puntos.user_id where puntos.estado = 1 and _users_puntos.user_id = '.Auth::user()->id);
 
             return view('admin.index', [
                 'facturas'=> $facturas,

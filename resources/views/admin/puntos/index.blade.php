@@ -61,6 +61,9 @@
                     @canany(['isAdmin','isManager'])
                     <th>Cliente</th>
                     @endcanany
+                    @can('isCliente')
+                    <th>Vigente hasta</th>
+                    @endcan
                     <th>Factura</th>
                     <th>Herramientas</th>
                 </tr>
@@ -73,6 +76,9 @@
                     @canany(['isAdmin','isManager'])
                     <th>Cliente</th>
                     @endcanany
+                    @can('isCliente')
+                    <th>Vigente hasta</th>
+                    @endcan
                     <th>Factura</th>
                     <th>Herramientas</th>
                 </tr>
@@ -86,6 +92,9 @@
                             @canany(['isAdmin','isManager'])
                             <td>{{ $cat->user[0]->name }}</td>
                             @endcanany
+                            @can('isCliente')
+                            <td>{{ (!empty($cat->created_at)) ? date('d/m/Y', strtotime($cat->created_at."+ 1 year") ) : "No definido" }}</td>
+                            @endcan
                             <td>{{ $cat->factura[0]->numero_factura }}</td>
                             <td>
                                 @can('isAdmin')
