@@ -172,7 +172,7 @@
             <span>Productos Canjeados</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('operations.products') }}">
+            <a class="nav-link" href="{{ route('operations.products', 0) }}">
             <i class="fa fa-vr-cardboard"></i>
             <span>Lista de Productos</span></a>
         </li>

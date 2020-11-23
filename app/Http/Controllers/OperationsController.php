@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Categoria;
 use App\Operation;
+use App\Producto;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,7 +101,27 @@ class OperationsController extends Controller
 
     }
 
-    public function getProducts(){
-        return view('admin.operations.products.index');
+    public function getProducts($idCategoria = null){
+        $imagenes = array();
+        $puntos_cant = DB::select('select ( ifnull(SUM(puntos.puntos), 0 ) - ifnull(SUM(operations.puntos), 0 ) ) as cant from puntos left join _users_puntos on punto_id = puntos.id left join operations on operations.user_id = _users_puntos.user_id where puntos.estado = 1 and _users_puntos.user_id = '.Auth::user()->id);
+        $categorias = Categoria::all();
+        if($idCategoria != 0){
+            $productos = Producto::where('categorias_id', $idCategoria)->get();
+        }
+        else
+            $productos = Producto::all();
+
+        foreach ($productos as $product){
+            $imagen = DB::select('select name from productos_images where name like "'.$product->codigo.'%" order by name desc limit 1');
+
+            if(!empty($imagen))
+                $imagenes[$product->id] = $imagen[0]->name;
+        }
+
+        return view('admin.operations.products.index',
+                    ['puntos_cant'=> $puntos_cant,
+                    'categorias' => $categorias,
+                    'productos' => $productos,
+                    'imagenes' => $imagenes]);
     }
 }
