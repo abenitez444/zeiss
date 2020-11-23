@@ -11,7 +11,7 @@
         <div class="container">
 
           <div class="row">
-            <form action="{{ route('facturas.payment') }}" method="post" id="form">
+            <form action="{{ route('operations.payment') }}" method="post" id="form">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
                 <button class="btn btn-primary btn-md float-md-right" id="pay_products">Canjear</button>
             </form>
@@ -21,7 +21,7 @@
 
             <div class="col-lg-3">
 
-              <h1 class="my-4">Puntos: {{ $puntos_cant[0]->cant }}</h1>
+              <h1 class="my-4">Puntos: <span id="count">{{ $puntos_cant }}</span></h1>
               <div class="list-group">
                 <a href="{{ route('operations.products', 0) }}" class="list-group-item">Todas</a>
                 @foreach ($categorias as $category)
@@ -75,7 +75,7 @@
                                 <p class="card-text">{{ $product->descripcion }}</p>
                                 </div>
                                 <div class="card-footer">
-                                <small class="text-muted">Seleccionar: <input type="checkbox" id="{{ $product->id }}"></small>
+                                <small class="text-muted">Seleccionar: <input type="checkbox" id="{{ $product->id }}" value="{{ $product->puntos }}"></small>
                                 </div>
                             </div>
                         </div>
@@ -93,4 +93,57 @@
         </div>
         <!-- /.container -->
 </div>
+@endsection
+
+@section('js_user_page')
+    <script>
+       $(document).ready( function () {
+
+            $('#pay_products').on('click', function (event) {
+                event.preventDefault();
+                var count = 0;
+                var count2 = 0;
+                var count3 = parseInt({{ $puntos_cant }});
+
+                $("input:checkbox:checked").each(function() {
+                    count ++;
+                    count2 += parseInt($(this).val());
+
+                    var data = $(this).attr('id');
+
+                    $('<input>', {
+                        type: 'hidden',
+                        value: data,
+                        name: 'ids[]'
+                    }).appendTo('#form');
+                });
+
+                if(count == 0)
+                    alert("No ha seleccionado ningun producto");
+                else if(count2 > count3){
+                    $("#count").html(0);
+                    alert("Ha seleccionado mas productos de los que puede canjear")
+                }
+                else
+                    $("#form").submit();
+            });
+
+            $('input[type=checkbox]').on('change', function() {
+                var count = parseInt({{ $puntos_cant }});
+                var amount = 0;
+
+                $("input:checkbox:checked").each(function() {
+                    amount += parseInt($(this).val());
+                });
+
+                if(amount > count){
+                    $("#count").html(0);
+                    alert("Ha seleccionado mas productos de los que puede canjear")
+                }
+                else
+                    $("#count").html(count - amount);
+            });
+        });
+    </script>
+
 @endsection

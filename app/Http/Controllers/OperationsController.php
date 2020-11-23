@@ -103,7 +103,9 @@ class OperationsController extends Controller
 
     public function getProducts($idCategoria = null){
         $imagenes = array();
-        $puntos_cant = DB::select('select ( ifnull(SUM(puntos.puntos), 0 ) - ifnull(SUM(operations.puntos), 0 ) ) as cant from puntos left join _users_puntos on punto_id = puntos.id left join operations on operations.user_id = _users_puntos.user_id where puntos.estado = 1 and _users_puntos.user_id = '.Auth::user()->id);
+        $puntos_total = DB::select('select ( ifnull(SUM(puntos.puntos), 0 )) as cant from puntos left join _users_puntos on punto_id = puntos.id where puntos.estado = 1 and _users_puntos.user_id = '.Auth::user()->id);
+        $puntos_operations = DB::select('select ( ifnull(SUM(operations.puntos), 0 )) as cant from operations where operations.user_id = '.Auth::user()->id);
+        $puntos_cant = $puntos_total[0]->cant - $puntos_operations[0]->cant;
         $categorias = Categoria::all();
         if($idCategoria != 0){
             $productos = Producto::where('categorias_id', $idCategoria)->get();
@@ -123,5 +125,20 @@ class OperationsController extends Controller
                     'categorias' => $categorias,
                     'productos' => $productos,
                     'imagenes' => $imagenes]);
+    }
+
+    public function setPayment(Request $request)
+    {
+        foreach ($request->ids as $id){
+            $product = Producto::findOrFail($id);
+
+            $operation = new Operation();
+            $operation->puntos = $product->puntos;
+            $operation->producto_id = $id;
+            $operation->user_id = Auth::user()->id;
+            $operation->save();
+        }
+
+        return redirect()->route('operations.index')->with('error', "Los puntos fueron canjeados correctamente");
     }
 }

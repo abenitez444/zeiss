@@ -9,6 +9,15 @@
         </div>
     </div>
 
+    @if (session('error'))
+        <div class="alert alert-info alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <ul>
+                <li><strong>{{ session('error') }}</strong></li>
+            </ul>
+        </div>
+    @endif
+
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <i class="fas fa-table"></i>
