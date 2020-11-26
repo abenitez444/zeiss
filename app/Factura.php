@@ -9,7 +9,7 @@ class Factura extends Model
 
 	//
     protected $fillable = [
-        'numero_factura', 'nombre_factura', 'total_cost', 'estado', 'IdDocumento', 'payment_promise_date', 'deadline_for_complement',
+        'numero_factura', 'nombre_factura', 'total_cost', 'estado', 'IdDocumento', 'NumParcialidad', 'payment_promise_date', 'deadline_for_complement',
     ];
 
     //

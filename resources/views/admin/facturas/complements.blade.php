@@ -32,6 +32,7 @@
                             <th>Id Complemento</th>
                             <th># Factura</th>
                             <th>Nombre Complemento</th>
+                            <th>No. de Parcialidad</th>
                             <th>Costo Total</th>
                             <th>Estado</th>
                             <th>Herramientas</th>
@@ -42,6 +43,7 @@
                             <th>Id Complemento</th>
                             <th># Factura</th>
                             <th>Nombre Complemento</th>
+                            <th>No. de Parcialidad</th>
                             <th>Costo Total</th>
                             <th>Estado</th>
                             <th>Herramientas</th>
@@ -53,6 +55,7 @@
                                 <td>{{ $cat->id }}</td>
                                 <td>{{ $cat->numero_factura }}</td>
                                 <td>{{ $cat->name }}</td>
+                                <td>{{ $cat->NumParcialidad }}</td>
                                 <td>{{ $cat->total_cost }}</td>
                                 <td>{{ $cat->estado }}</td>
                                 <td>

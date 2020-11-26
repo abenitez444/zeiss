@@ -185,6 +185,9 @@ class GetFilesS3 extends Command
 
                                             Complement::create($complemento);
 
+                                            $factura->NumParcialidad = $xml->getAttribute("NumParcialidad");
+                                            $factura->save();
+
                                             if(Storage::disk('sftp-complementos')->exists($file_name.'.pdf')){
                                                 $complemento['name'] = $file_name.'.pdf';
                                                 $complemento['factura_id'] = $factura->id;

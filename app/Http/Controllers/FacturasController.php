@@ -543,10 +543,10 @@ class FacturasController extends Controller
         $user = Auth::user();
 
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') ){
-            $facturas = DB::select('select complements.id, facturas.numero_factura, complements.name, facturas.total_cost, facturas.estado  from facturas left join complements on complements.factura_id = facturas.id where complements.factura_id = '.$facturaId.' order by facturas.id desc');
+            $facturas = DB::select('select complements.id, facturas.numero_factura, complements.name, facturas.total_cost, facturas.estado, facturas.NumParcialidad from facturas left join complements on complements.factura_id = facturas.id where complements.factura_id = '.$facturaId.' order by facturas.id desc');
         }
         else {
-            $facturas = DB::select('select complements.id, facturas.numero_factura, complements.name, facturas.total_cost, facturas.estado  from facturas left join _users_facturas on _users_facturas.factura_id = facturas.id left join complements on complements.factura_id = facturas.id where user_id = '.$user->id.' and complements.factura_id = '.$facturaId.' order by facturas.id desc');
+            $facturas = DB::select('select complements.id, facturas.numero_factura, complements.name, facturas.total_cost, facturas.estado, facturas.NumParcialidad from facturas left join _users_facturas on _users_facturas.factura_id = facturas.id left join complements on complements.factura_id = facturas.id where user_id = '.$user->id.' and complements.factura_id = '.$facturaId.' order by facturas.id desc');
         }
 
         return view('admin.facturas.complements', ['facturas'=>$facturas]);
@@ -751,6 +751,9 @@ class FacturasController extends Controller
                                                         $errormsg_file[] = $name_file." - Cargado correctamente para la factura #". $factura->numero_factura;
 
                                                         Complement::create($complemento);
+
+                                                        $factura->NumParcialidad = $xml->getAttribute("NumParcialidad");
+                                                        $factura->save();
                                                     }
                                                     else{
                                                         $invoice_exist = false;
@@ -808,6 +811,9 @@ class FacturasController extends Controller
                                             $errormsg_file[] = $name_file." - Cargado correctamente para la factura #". $factura->numero_factura;
 
                                             Complement::create($complemento);
+
+                                            $factura->NumParcialidad = $xml->getAttribute("NumParcialidad");
+                                            $factura->save();
 
                                             if(file_exists(public_path('carpetafacturas/').$file_name.'.pdf')){
                                                 $complemento['name'] = $file_name.'.pdf';
