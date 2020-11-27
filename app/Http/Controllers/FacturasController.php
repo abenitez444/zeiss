@@ -674,9 +674,9 @@ class FacturasController extends Controller
         }
 
         if($pago)
-            return redirect('/login')->with('error', "El pago se realizo correctamente, numero de autorizacion: ". $request->autorizacion);
+            return view('admin.facturas.comprobante-pago', ['error'=>"El pago se realizo correctamente, numero de autorizacion: ". $request->autorizacion, 'payment'=>$payment]);
         else
-            return redirect('/login')->with('error', "Tuvimos un problema con su pago");
+            return view('admin.facturas.comprobante-pago', ['error'=>"Tuvimos un problema con su pago", 'payment'=>$payment]);
     }
 
     /**
