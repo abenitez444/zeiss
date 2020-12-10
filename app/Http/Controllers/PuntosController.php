@@ -35,7 +35,11 @@ class PuntosController extends Controller
                 'puntos'=>$puntos,
             ]);
         }else{
-            $puntos_cant = DB::select('select ( ifnull(SUM(puntos.puntos), 0 ) - ifnull(SUM(operations.puntos), 0 ) ) as cant from puntos left join _users_puntos on punto_id = puntos.id left join operations on operations.user_id = _users_puntos.user_id where puntos.estado = 1 and _users_puntos.user_id = '.Auth::user()->id);
+            $puntos_total = DB::select('select ( ifnull(SUM(puntos.puntos), 0 )) as cant from puntos left join _users_puntos on punto_id = puntos.id where puntos.estado = 1 and _users_puntos.user_id = '.Auth::user()->id);
+            $puntos_operations = DB::select('select ( ifnull(SUM(operations.puntos), 0 )) as cant from operations where operations.user_id = '.Auth::user()->id);
+            $puntos_cant = $puntos_total[0]->cant - $puntos_operations[0]->cant;
+            $puntos_cant = ($puntos_cant < 0 ) ? 0 : $puntos_cant;
+
             $value = Auth::user()->id;
             $puntos = Punto::with(['user', 'factura'])
                     ->whereHas('user', function($q) use($value) {
