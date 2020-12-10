@@ -106,6 +106,15 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
+                <label for="cod_cliente">Codigo Cliente</label>
+                <input type="text" name="cod_cliente" class="form-control" id="cod_cliente" placeholder="Codigo Cliente...">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
                 <label for="password">Contraseña</label>
                 <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña..." required minlength="8">
             </div>

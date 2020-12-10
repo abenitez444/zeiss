@@ -22,6 +22,7 @@ class CreateClientsTable extends Migration
             $table->string('way_to_pay');
             $table->string('cfdi');
             $table->boolean('status');
+            $table->tinyText('cod_cliente');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

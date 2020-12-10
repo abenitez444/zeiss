@@ -101,6 +101,7 @@ class ClientController extends Controller
         $client->way_to_pay = $request->way_to_pay;
         $client->cfdi = $request->cfdi;
         $client->status = $request->status;
+        $client->cod_cliente = $request->cod_cliente;
         $client->user_id = $user->id;
 
         $client->save();
@@ -184,6 +185,7 @@ class ClientController extends Controller
                 'way_to_pay' => $request->way_to_pay,
                 'cfdi' => $request->cfdi,
                 'status' => $request->status,
+                'cod_cliente' => $request->cod_cliente,
                 ]
         );
 

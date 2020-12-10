@@ -35,6 +35,9 @@
                     <p class="card-text">
                         Forma de Pago - {{ $user[0]->way_to_pay }}
                     </p>
+                    <p class="card-text">
+                        Codigo Cliente - {{ $user[0]->cod_cliente }}
+                    </p>
                 </div>
                 <div class="col-md-4">
                     <p class="card-text">
