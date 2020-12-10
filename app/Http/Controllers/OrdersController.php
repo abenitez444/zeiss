@@ -7,6 +7,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class OrdersController extends Controller
 {
@@ -22,7 +23,10 @@ class OrdersController extends Controller
 
     public function index()
     {
-        $orders = Order::all();
+        if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') )
+            $orders = Order::all();
+        else
+            $orders = DB::select('select orders.* from orders left join clients on client = clients.cod_cliente where clients.user_id = '.Auth::user()->id.' order by orders.id desc');
 
         return view('admin.orders.index', ['orders'=>$orders]);
     }
