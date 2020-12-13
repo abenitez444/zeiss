@@ -21,18 +21,26 @@
                         <tr>
                             <th>Referencia</th>
                             <th>Orden de Venta</th>
-                            <th>Status</th>
+                            <th>Estatus</th>
                             <th>Cliente</th>
                             <th>Fecha</th>
+                            <th>Codigo Producto</th>
+                            <th>Revestimiento</th>
+                            <th>Color</th>
+                            <th>Montura</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Referencia</th>
                             <th>Orden de Venta</th>
-                            <th>Status</th>
+                            <th>Estatus</th>
                             <th>Cliente</th>
                             <th>Fecha</th>
+                            <th>Codigo Producto</th>
+                            <th>Revestimiento</th>
+                            <th>Color</th>
+                            <th>Montura</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -43,6 +51,10 @@
                                 <td>{{ $order->status }}</td>
                                 <td>{{ $order->client }}</td>
                                 <td>{{ $order->dateTime }}</td>
+                                <td>{{ $order->code }}</td>
+                                <td>{{ $order->coating }}</td>
+                                <td>{{ $order->color }}</td>
+                                <td>{{ $order->montage }}</td>
                             </tr>
                         @endforeach
                     </tbody>

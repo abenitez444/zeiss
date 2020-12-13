@@ -134,6 +134,14 @@ class OrdersController extends Controller
                                     $order['status'] = $element['value'];
                                 elseif($element['tag'] == 'Client')
                                     $order['client'] = $element['value'];
+                                elseif($element['tag'] == 'Code')
+                                    $order['code'] = $element['value'];
+                                elseif($element['tag'] == 'Montage')
+                                    $order['montage'] = $element['value'];
+                                elseif($element['tag'] == 'coating')
+                                    $order['coating'] = $element['value'];
+                                elseif($element['tag'] == 'Color')
+                                    $order['color'] = $element['value'];    
                                 else
                                     $xml_body = false;
                             }
