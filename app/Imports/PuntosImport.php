@@ -12,7 +12,7 @@ class PuntosImport implements WithChunkReading, WithBatchInserts, WithMultipleSh
     public function sheets(): array
     {
         return [
-            'Puntos' => new PuntosSheetImport(),
+            5 => new PuntosSheetImport(),
         ];
     }
 
