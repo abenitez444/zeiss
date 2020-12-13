@@ -23,11 +23,11 @@ class PuntosSheetImport implements ToCollection
                 $firstRowDone = true;
             }
             else {
-                $factura = Factura::with('user')->where("IdDocumento", $row[1])->first();
+                $factura = Factura::with('user')->where("IdDocumento", $row[2])->first();
 
                 if(!empty($factura)){
                     $punto = Punto::create([
-                        'puntos' => $row[8],
+                        'puntos' => $row[9],
                         'estado' => 1
                       ]);
 
