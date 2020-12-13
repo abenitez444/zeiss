@@ -27,7 +27,7 @@
 
 				<div class="form-group">
 					<label for="imagen">Archivo excel de puntos</label>
-                    <input type="file" name="uploadfile" required accept=".xlsx">
+                    <input type="file" name="uploadfile" required accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
 				</div>
 				<div class="form-group">
 					<button class="btn btn-primary" type="submit">
