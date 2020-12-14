@@ -89,7 +89,8 @@
                                         <!--button class="btn btn-info">Editar</button-->
                                     </a>
                                     @can('isAdmin')
-                                    <a href="" data-target="#modal-delete-{{$art->id}}" data-toggle="modal" title="Eliminar" class="btn btn-danger btn-circle btn-sm" ><i class="fas fa-trash-alt"></i>
+                                        <a href="" data-target="#modal-change-{{$art->id}}" title="Cambiar Estatus" data-toggle="modal"  class="btn btn-primary btn-circle btn-sm" ><i class="fas fa-cogs"></i></a>
+                                        <a href="" data-target="#modal-delete-{{$art->id}}" title="Eliminar" data-toggle="modal"  class="btn btn-danger btn-circle btn-sm" ><i class="fas fa-trash-alt"></i></a>
                                         <!--button class="btn btn-danger">Eliminar</button-->
                                     </a>
                                     @endcan

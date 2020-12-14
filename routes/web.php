@@ -52,6 +52,8 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('/productos/images/1', 'ProductosController@getImages')->middleware('role:admin,manager')->name('productos.images');
     Route::post('/productos/update-images/1', 'ProductosController@setImages')->middleware('role:admin,manager')->name('productos.images.update');
 
+    Route::post('/productos/change/{id}', 'ProductosController@change')->middleware('role:admin,manager');
+
     /* -------------------------------------------------------- */
 
     /* --------------------  Categorias  ----------------------- */

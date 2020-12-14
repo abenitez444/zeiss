@@ -131,10 +131,26 @@ class ProductosController extends Controller
      */
     public function destroy($id)
     {
+        $producto = Producto::findOrFail($id);
+
+        $producto->delete();
+
+        return redirect()->route('productos.index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Producto  $producto
+     * @return \Illuminate\Http\Response
+     */
+    public function change(Request $request, $id)
+    {
         //
-        $articulo = Producto::findOrFail($id);
-        $articulo->estado = 'inactivo';
-        $articulo->update();
+        $producto = Producto::findOrFail($id);
+        $data = $request->all();
+        $producto->fill($data)->save();
+
         return redirect()->route('productos.index');
     }
 
