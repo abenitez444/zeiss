@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Categoria;
 use App\Producto;
 use Maatwebsite\Excel\Concerns\{Importable, ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, WithCustomCsvSettings};
 
@@ -16,15 +17,19 @@ class ProductosImport implements ToModel, WithHeadingRow, WithChunkReading, With
     */
     public function model(array $row)
     {
-        return new Producto([
-            'categorias_id' => $row['categorias_id'],
-            'puntos' => $row['puntos'],
-            'codigo' => $row['codigo'],
-            'nombre' => $row['nombre'],
-            'stock' => $row['stock'],
-            'descripcion' => $row['descripcion'],
-            'estado' => $row['estado'],
-        ]);
+        $categoria = Categoria::where("nombre", $row['categorias'])->first();
+
+        if($categoria){
+            return new Producto([
+                'categorias_id' => $categoria->id,
+                'puntos' => $row['puntos'],
+                'codigo' => $row['codigo'],
+                'nombre' => $row['nombre'],
+                'stock' => $row['stock'],
+                'descripcion' => $row['descripcion'],
+                'estado' => $row['estado'],
+            ]);
+        }
     }
 
     public function chunkSize(): int
