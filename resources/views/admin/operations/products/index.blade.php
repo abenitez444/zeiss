@@ -203,38 +203,7 @@
 
 @section('js_user_page')
     <script>
-       $(document).ready( function () {
-
-            $('#pay_products').on('click', function (event) {
-                event.preventDefault();
-                var count = 0;
-                var count2 = 0;
-                var count3 = parseInt({{ $puntos_cant }});
-
-                $("input:checkbox:checked").each(function() {
-                    count ++;
-                    count2 += parseInt($(this).val());
-
-                    var data = $(this).attr('id');
-
-                    $('<input>', {
-                        type: 'hidden',
-                        value: data,
-                        name: 'ids[]'
-                    }).appendTo('#form');
-                });
-
-                if(count == 0)
-                    alert("No ha seleccionado ningun producto");
-                else if(count2 > count3){
-                    $("#count").html(0);
-                    alert("Ha seleccionado mas productos de los que puede canjear")
-                }
-                else
-                    $("#form").submit();
-            });
-
-            $('input[type=checkbox]').on('change', function() {
+        var carritoFuncionalidad = function(){
                 $(".product-widget").html("");
                 var count = parseInt({{ $puntos_cant }});
                 var amount = 0;
@@ -276,7 +245,40 @@
                 $("#points-total").html(amount);
                 $("#qty").html(items);
                 $("#count-item").html(items);
-                
+        }
+
+       $(document).ready( function () {
+            $('#pay_products').on('click', function (event) {
+                event.preventDefault();
+                var count = 0;
+                var count2 = 0;
+                var count3 = parseInt({{ $puntos_cant }});
+
+                $("input:checkbox:checked").each(function() {
+                    count ++;
+                    count2 += parseInt($(this).val());
+
+                    var data = $(this).attr('id');
+
+                    $('<input>', {
+                        type: 'hidden',
+                        value: data,
+                        name: 'ids[]'
+                    }).appendTo('#form');
+                });
+
+                if(count == 0)
+                    alert("No ha seleccionado ningun producto");
+                else if(count2 > count3){
+                    $("#count").html(0);
+                    alert("Ha seleccionado mas productos de los que puede canjear")
+                }
+                else
+                    $("#form").submit();
+            });
+
+            $('input[type=checkbox]').on('change', function() {
+                carritoFuncionalidad();          
             });
 
             $('.stock').on('keydown keyup change', function(e){
@@ -287,6 +289,8 @@
                     e.preventDefault();
                     $(this).val(parseInt($(this).attr('max')));
                 }
+
+                carritoFuncionalidad(); 
             });
         });
     </script>
