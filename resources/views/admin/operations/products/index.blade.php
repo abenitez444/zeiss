@@ -259,11 +259,18 @@
                     count2 += parseInt($(this).val());
 
                     var data = $(this).attr('id');
+                    var stock = $('.stock-'+data).val();
 
                     $('<input>', {
                         type: 'hidden',
                         value: data,
-                        name: 'ids[]'
+                        name: 'ids[]',
+                    }).appendTo('#form');
+
+                    $('<input>', {
+                        type: 'hidden',
+                        value: stock,
+                        name: 'stocks[]',
                     }).appendTo('#form');
                 });
 

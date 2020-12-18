@@ -31,6 +31,7 @@
                             <th>ID</th>
                             <th>Producto</th>
                             <th>Puntos</th>
+                            <th>Cantidad</th>
                             @canany(['isAdmin','isManager'])
                             <th>Cliente</th>
                             @endcanany
@@ -42,6 +43,7 @@
                             <th>ID</th>
                             <th>Producto</th>
                             <th>Puntos</th>
+                            <th>Cantidad</th>
                             @canany(['isAdmin','isManager'])
                             <th>Cliente</th>
                             @endcanany
@@ -54,6 +56,7 @@
                                 <td>{{ $operation->id }}</td>
                                 <td>{{ $operation->nombre }}</td>
                                 <td>{{ $operation->puntos }}</td>
+                                <td>{{ $operation->cantidad }}</td>
                                 @canany(['isAdmin','isManager'])
                                 <td>{{ $operation->name }}</td>
                                 @endcanany

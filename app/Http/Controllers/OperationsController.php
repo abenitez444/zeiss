@@ -130,11 +130,13 @@ class OperationsController extends Controller
 
     public function setPayment(Request $request)
     {
-        foreach ($request->ids as $id){
+        foreach ($request->ids as $key => $id){
             $product = Producto::findOrFail($id);
+            $cantidad = $request->stocks[$key];
 
             $operation = new Operation();
-            $operation->puntos = $product->puntos;
+            $operation->puntos = ($product->puntos * $cantidad);
+            $operation->cantidad = $cantidad;
             $operation->producto_id = $id;
             $operation->user_id = Auth::user()->id;
             $operation->save();
