@@ -164,7 +164,7 @@ class ProductosController extends Controller
 
             return redirect()->route('productos.index')->with('info', 'Archivo importado correctamente');
         } catch (\Exception $e) {
-            return redirect()->route('productos.index')->with('info', 'Ha ocurrido un error importando, revise que los codigo de productos sean diferentes, existan todos los datos para cada uno o que existan todas las categorias usadas');
+            return redirect()->route('productos.index')->with('info', 'Ha ocurrido un error importando, revise que los codigo de productos sean diferentes, existan todos los datos para cada uno o que existan todas las categorias usadas '.$e->getMessage());
         }
     }
 

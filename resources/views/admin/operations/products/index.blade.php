@@ -1,20 +1,152 @@
 @extends('admin.layouts.dashboard')
 
 @section('css_role_page')
-{{-- <link href="{{ asset('css/shop-homepage.css') }}" rel="stylesheet" type="text/css"> --}}
+<style>
+    #header {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .header-ctn>div {
+        display: inline-block;
+    }
+    .header-ctn>div+div {
+        margin-left: 15px;
+    }
+    .header-ctn>div>a {
+        display: block;
+        position: relative;
+        width: 90px;
+        text-align: center;
+        color:#4e73df;
+    }
+    .header-ctn>div>a>i {
+        display: block;
+        font-size: 18px;
+    }
+    .header-ctn>div>a>span {
+        font-size: 12px;
+    }
+    .header-ctn>div>a>.qty {
+        position: absolute;
+        right: 15px;
+        top: -10px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        border-radius: 50%;
+        font-size: 10px;
+        color: #FFF;
+        background-color: #D10024;
+    }
+    .header-ctn .menu-toggle {
+        display: none;
+    }
+     .cart-dropdown {
+        position: absolute;
+        width: 300px;
+        background: #FFF;
+        padding: 15px;
+        -webkit-box-shadow: 0px 0px 0px 2px #E4E7ED;
+        box-shadow: 0px 0px 0px 2px #E4E7ED;
+        z-index: 99;
+        right: 0;
+        opacity: 0;
+        visibility: hidden;
+    }
+    .dropdown.show>.cart-dropdown {
+        opacity: 1;
+        visibility: visible;
+    }
+    .cart-dropdown .cart-list {
+        max-height: 180px;
+        overflow-y: scroll;
+        margin-bottom: 15px;
+    }
+    .cart-dropdown .cart-list .product-widget {
+        padding: 0px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    .cart-dropdown .cart-list .product-widget:last-child {
+        margin-bottom: 0px;
+    }
+    .cart-dropdown .cart-list .product-widget .product-img {
+        left: 0px;
+        top: 0px;
+    }
+    .cart-dropdown .cart-list .product-widget .product-body .product-price {
+        color: #2B2D42;
+    }
+    .cart-dropdown .cart-btns {
+        margin: 0px -17px -17px;
+    }
+    .cart-dropdown .cart-btns>form>a {
+        display: inline-block;
+        width: 100%;
+        padding: 12px;
+        background-color: #4e73df;
+        color: #FFF;
+        text-align: center;
+        font-weight: 700;
+        -webkit-transition: 0.2s all;
+        transition: 0.2s all;
+    }
+    .cart-dropdown .cart-btns>form>a:hover {
+        opacity: 0.9;
+    }
+    .cart-dropdown .cart-summary {
+        border-top: 1px solid #E4E7ED;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+</style>
 @endsection
 
 @section('content')
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
         <!-- Page Content -->
         <div class="container">
 
           <div class="row">
-            <form action="{{ route('operations.payment') }}" method="post" id="form">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
-                <button class="btn btn-primary btn-md float-md-right" id="pay_products">Canjear</button>
-            </form>
+            <header>
+                <div id="header">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-3 clearfix">
+                                <div class="header-ctn">
+                                    <div class="nav-item dropdown no-arrow mx-1">
+                                        <a class="nav-link dropdown-toggle" href="#" id="cartDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-shopping-cart"></i>
+                                            <span>Tu Carrito</span>
+                                            <div class="qty" id="qty">0</div>
+                                        </a>
+                                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in cart-dropdown" aria-labelledby="cartDropdown">
+                                            <div class="cart-list">
+                                                <div class="product-widget">
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="cart-summary">
+                                                <small><span id="count-item">0</span> Item(s) selected</small>
+                                                <h5>PUNTOS: <span id="points-total">0</span></h5>
+                                            </div>
+                                            <div class="cart-btns">
+                                                <form action="{{ route('operations.payment') }}" method="post" id="form">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                                                    <a id="pay_products">Canjear  <i class="fa fa-arrow-circle-right"></i></a>
+                                                </form>    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
           </div>
 
           <div class="row">
@@ -34,48 +166,22 @@
 
             <div class="col-lg-9">
 
-              {{--  <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
-                <ol class="carousel-indicators">
-                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner" role="listbox">
-                  <div class="carousel-item active">
-                    <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="First slide">
-                  </div>
-                  <div class="carousel-item">
-                    <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Second slide">
-                  </div>
-                  <div class="carousel-item">
-                    <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Third slide">
-                  </div>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </div>  --}}
-
                 <div class="row">
 
                     @foreach ($productos as $product)
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="card h-100">
-                                <img class="card-img-top" src="{{ (isset($imagenes[$product->id])) ?  asset('imagenes/'.$imagenes[$product->id]) : "http://placehold.it/700x400"}}" alt="">
+                                <img class="card-img-top card-img-{{ $product->id }}" src="{{ (isset($imagenes[$product->id])) ?  asset('imagenes/'.$imagenes[$product->id]) : "http://placehold.it/700x400"}}" alt="">
                                 <div class="card-body">
                                 <h4 class="card-title">
-                                    <a href="#">{{ $product->nombre }}</a>
+                                    <a href="#" class="card-title-{{ $product->id }}">{{ $product->nombre }}</a>
                                 </h4>
-                                <h5>{{ $product->puntos }} puntos</h5>
+                                <h5><span class="mount-{{ $product->id }}">{{ $product->puntos }}</span> puntos</h5>
                                 <p class="card-text">{{ $product->descripcion }}</p>
                                 </div>
                                 <div class="card-footer">
-                                <small class="text-muted">Seleccionar: <input type="checkbox" id="{{ $product->id }}" value="{{ $product->puntos }}"></small>
+                                    <small class="text-muted">Seleccionar: <input type="checkbox" id="{{ $product->id }}" value="{{ $product->puntos }}"></small>
+                                    <small class="text-muted">Cantidad: <input type="number" class="stock-{{ $product->id }} stock" min="1" max="{{ $product->stock }}" value="1" required></small>
                                 </div>
                             </div>
                         </div>
@@ -129,19 +235,58 @@
             });
 
             $('input[type=checkbox]').on('change', function() {
+                $(".product-widget").html("");
                 var count = parseInt({{ $puntos_cant }});
                 var amount = 0;
+                var items = 0;
+                var stock_total = 0;
 
                 $("input:checkbox:checked").each(function() {
-                    amount += parseInt($(this).val());
-                });
+                    items += 1;
+                    var id = $(this).attr('id');
+
+                    var img = $('.card-img-'+id).attr('src');
+                    var title = $('.card-title-'+id).html();
+                    var mount = $('.mount-'+id).html();
+                    var stock = $('.stock-'+id).val();
+                    stock_total += stock;
+                    amount += (parseInt($(this).val()) * stock);
+
+                    // alert(mount);
+
+                    $('<a class="dropdown-item d-flex align-items-center" href="#">' +
+                            '<div class="dropdown-list-image mr-3">' +
+                                '<img class="rounded-circle" src="'+img+'" alt="" height="30" width="30">' +
+                            '</div>'+
+                            '<div class="font-weight-bold">'+
+                                '<div class="text-truncate">'+title+'</div>'+
+                                '<h4 class="product-price"><span class="qty" >'+stock+'</span>x<span class="mount">'+mount+'</span></h4>'+
+                            '</div>'+
+                        '</a>').appendTo( ".product-widget" );
+                }); 
 
                 if(amount > count){
                     $("#count").html(0);
-                    alert("Ha seleccionado mas productos de los que puede canjear")
+                    alert("Ha seleccionado mas productos de los que puede canjear");
                 }
-                else
+                else {
                     $("#count").html(count - amount);
+                }
+
+                $("#points-total").html(amount);
+                $("#qty").html(items);
+                $("#count-item").html(items);
+                
+            });
+
+            $('.stock').on('keydown keyup change', function(e){
+                if (parseInt($(this).val()) > parseInt($(this).attr('max'))
+                     && e.keyCode !== 46 // keycode for delete
+                     && e.keyCode !== 8 // keycode for backspace
+                ) {
+                    e.preventDefault();
+                    $(this).val(parseInt($(this).attr('max')));
+                }
             });
         });
     </script>
