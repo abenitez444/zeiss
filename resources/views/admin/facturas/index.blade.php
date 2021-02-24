@@ -64,25 +64,36 @@
                 <tr>
                     @can('isCliente')
                     <th></th>
+                    <th>Codigo Cliente</th>
+                    <th># Factura</th>
+                    <th>Archivo factura</th>
+                    <th>Importe</th>
+                    <th>Fecha de vencimiento</th>
+                    <th>Estado portal BBVA</th>
                     @endcan
+                    @can('isProveedor')
                     <th>Id</th>
                     <th># Factura</th>
                     <th>Nombre factura</th>
                     <th>Costo Total</th>
                     <th>Estado</th>
+                    <th>Fecha promesa de pago</th>
+                    <th>Fecha limite para enviar el complemento de pago</th>
+                    @endcan
+                    @canany(['isAdmin','isManager'])
+                    <th>Id</th>
+                    <th># Factura</th>
+                    <th>Nombre factura</th>
+                    <th>Costo Total</th>
+                    <th>Estado</th>
+                    <th>Usuario Asociado</th>
+                    @endcanany
                     @if (!$load_invoice)
                         @canany(['isAdmin','isManager'])
                         <th>Fecha promesa de pago</th>
                         <th>Fecha limite para enviar el complemento de pago</th>
                         @endcanany
                     @endif
-                    @can('isProveedor')
-                    <th>Fecha promesa de pago</th>
-                    <th>Fecha limite para enviar el complemento de pago</th>
-                    @endcan
-                    @canany(['isAdmin','isManager'])
-                    <th>Usuario Asociado</th>
-                    @endcanany
                     <th>Herramientas</th>
                 </tr>
                 </thead>
@@ -90,25 +101,36 @@
                 <tr>
                     @can('isCliente')
                     <th></th>
+                    <th>Codigo Cliente</th>
+                    <th># Factura</th>
+                    <th>Archivo factura</th>
+                    <th>Importe</th>
+                    <th>Fecha de vencimiento</th>
+                    <th>Estado portal BBVA</th>
                     @endcan
+                    @can('isProveedor')
                     <th>Id</th>
                     <th># Factura</th>
                     <th>Nombre factura</th>
                     <th>Costo Total</th>
                     <th>Estado</th>
+                    <th>Fecha promesa de pago</th>
+                    <th>Fecha limite para enviar el complemento de pago</th>
+                    @endcan
+                    @canany(['isAdmin','isManager'])
+                    <th>Id</th>
+                    <th># Factura</th>
+                    <th>Nombre factura</th>
+                    <th>Costo Total</th>
+                    <th>Estado</th>
+                    <th>Usuario Asociado</th>
+                    @endcanany
                     @if (!$load_invoice)
                         @canany(['isAdmin','isManager'])
                         <th>Fecha promesa de pago</th>
                         <th>Fecha limite para enviar el complemento de pago</th>
                         @endcanany
                     @endif
-                    @can('isProveedor')
-                    <th>Fecha promesa de pago</th>
-                    <th>Fecha limite para enviar el complemento de pago</th>
-                    @endcan
-                    @canany(['isAdmin','isManager'])
-                    <th>Usuario Asociado</th>
-                    @endcanany
                     <th>Herramientas</th>
                 </tr>
                 </tfoot>
@@ -117,25 +139,36 @@
                         <tr>
                             @can('isCliente')
                             <td><input type="checkbox" id="{{ $key }}"></td>
+                            <td>{{ $cat->cod_cliente }}</td>
+                            <td>{{ $cat->numero_factura }}</td>
+                            <td>{{ $cat->nombre_factura }}</td>
+                            <td>{{ $cat->total_cost }}</td>
+                            <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
+                            <td>{{ $cat->estado }}</td>
                             @endcan
+                            @can('isProveedor')
                             <td>{{ $cat->factura_id }}</td>
                             <td>{{ $cat->numero_factura }}</td>
                             <td>{{ $cat->nombre_factura }}</td>
                             <td>{{ $cat->total_cost }}</td>
                             <td>{{ $cat->estado }}</td>
+                            <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
+                            <td>{{ (!empty($cat->deadline_for_complement)) ? date('d/m/Y', strtotime($cat->deadline_for_complement)) : "No definido" }}</td>
+                            @endcan
+                            @canany(['isAdmin','isManager'])
+                            <td>{{ $cat->factura_id }}</td>
+                            <td>{{ $cat->numero_factura }}</td>
+                            <td>{{ $cat->nombre_factura }}</td>
+                            <td>{{ $cat->total_cost }}</td>
+                            <td>{{ $cat->estado }}</td>
+                            <td>{{ $cat->name }}</td>
+                            @endcanany
                             @if (!$load_invoice)
                                 @canany(['isAdmin','isManager'])
                                 <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
                                 <td>{{ (!empty($cat->deadline_for_complement)) ? date('d/m/Y', strtotime($cat->deadline_for_complement)) : "No definido" }}</td>
                                 @endcanany
                             @endif
-                            @can('isProveedor')
-                            <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
-                            <td>{{ (!empty($cat->deadline_for_complement)) ? date('d/m/Y', strtotime($cat->deadline_for_complement)) : "No definido" }}</td>
-                            @endcan
-                            @canany(['isAdmin','isManager'])
-                            <td>{{ $cat->name }}</td>
-                            @endcanany
                             <td>
 
 {{--                                <a href="{{ route('facturas.show', $cat->factura_id) }}" class="btn btn-info btn-circle btn-sm"><i class="fa fa-eye"></i></a>--}}

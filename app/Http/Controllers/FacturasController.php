@@ -39,6 +39,8 @@ class FacturasController extends Controller
 
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') )
             $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id order by facturas.id desc');
+        elseif(Auth::user()->hasRole('cliente') )
+            $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join clients on clients.user_id = _users_facturas.user_id where _users_facturas.user_id = '.$user->id.' order by facturas.id desc');
         else
             $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id where user_id = '.$user->id.' order by facturas.id desc');
 
