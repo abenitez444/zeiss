@@ -53,6 +53,14 @@
                         </form>
                     </div>
                 </div>
+                <hr>
+            </div>
+            <div class="col-md-7 offset-lg-5">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-primary btn-md float-md-right text-white" href="{{ url('/admin/facturas/status/'.Auth::user()->id) }}">Estado de Cuenta</a>
+                    </div>
+                </div>
             </div>
         @endif
     </div>

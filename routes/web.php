@@ -88,6 +88,8 @@ Route::group(['prefix' => 'admin'], function() {
 
     Route::post('/facturas/descargar-facturas', 'FacturasController@downloadInvoiceAll')->middleware('role:cliente')->name('facturas.download');
 
+    Route::get('/facturas/status/{id}', 'FacturasController@downloadStatus')->middleware('role:cliente');
+
     /* -------------------------------------------------------- */
 
     /* --------------------  Puntos  ----------------------- */

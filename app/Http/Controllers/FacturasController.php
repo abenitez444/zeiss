@@ -918,4 +918,31 @@ class FacturasController extends Controller
     public function download($path = null){
         return response()->download($path);
     }
+
+    public function downloadStatus($clientId){
+
+        try {
+            $msg = array();
+            $client = Client::with('user')->where('user_id', $clientId)->first();
+
+            if ($client){
+                $rfc = $client->rfc;
+                $cod_cliente = $client->cod_cliente;
+
+                if(Storage::disk('sftp-estados-de-cuentas')->exists($rfc.'-'.$cod_cliente.'.pdf')){
+                    Storage::disk('sftp-estados-de-cuentas')->download($rfc.'-'.$cod_cliente.'.pdf');
+                }
+                else {
+                    return redirect(URL::previous())->with('error', "No se encontró un archivo para este estado.");
+                }
+            }
+            else{
+                return redirect(URL::previous())->with('error', "No se encontró uel cliente.");
+            }
+
+        } catch (\Throwable $th) {
+            return redirect(URL::previous())->with('error', "Error descargando el estado, no se puede conectar a FTP o no existe su estado, contacte al administrador!!");
+        }
+
+    }
 }
