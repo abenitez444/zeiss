@@ -33,9 +33,23 @@
                         <p><b> Monto a Pagar: </b><span id="amount">0.00</span></p>
                     </div>
                     <div class="col-md-7">
-                    <form action="{{ route('facturas.payment') }}" method="post" id="form">
+                        <form action="{{ route('facturas.payment') }}" method="post" id="form">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
                             <button class="btn btn-primary btn-md float-md-right" id="pay_invoice">Pagar en linea</button>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="col-md-7 offset-lg-5">
+                <div class="row">
+                    <div class="col-md-5">
+                        <p><b> Cantidad de Facturas a descargar: </b><span id="count-facturas">0</span></p>
+                    </div>
+                    <div class="col-md-7">
+                        <form action="{{ route('facturas.download') }}" method="post" id="form2">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                            <button class="btn btn-primary btn-md float-md-right" id="download_invoice">Descargar Facturas</button>
                         </form>
                     </div>
                 </div>
@@ -52,6 +66,17 @@
         </div>
     @endif
 
+    @if ($message = Session::get('info'))
+        <div class="alert alert-info alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <ul>
+                @foreach ($message as $msg)
+                    <li><strong>{{ $msg }}</strong></li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div   class="card shadow mb-4">
         <div class="card-header py-3">
             <i class="fas fa-table"></i>
@@ -63,13 +88,15 @@
                 <thead>
                 <tr>
                     @can('isCliente')
-                    <th></th>
+                    <th>Seleccionar para pagar</th>
+                    <th>ID Factura</th>
                     <th>Codigo Cliente</th>
                     <th># Factura</th>
                     <th>Archivo factura</th>
                     <th>Importe</th>
                     <th>Fecha de vencimiento</th>
                     <th>Estado portal BBVA</th>
+                    <th>Descargar</th>
                     @endcan
                     @can('isProveedor')
                     <th>Id</th>
@@ -100,16 +127,18 @@
                 <tfoot>
                 <tr>
                     @can('isCliente')
-                    <th></th>
+                    <th>Seleccionar para pagar</th>
+                    <th>ID Factura</th>
                     <th>Codigo Cliente</th>
                     <th># Factura</th>
                     <th>Archivo factura</th>
                     <th>Importe</th>
                     <th>Fecha de vencimiento</th>
                     <th>Estado portal BBVA</th>
+                    <th>Descargar</th>
                     @endcan
                     @can('isProveedor')
-                    <th>Id</th>
+                    <th>ID Factura</th>
                     <th># Factura</th>
                     <th>Nombre factura</th>
                     <th>Costo Total</th>
@@ -118,7 +147,7 @@
                     <th>Fecha limite para enviar el complemento de pago</th>
                     @endcan
                     @canany(['isAdmin','isManager'])
-                    <th>Id</th>
+                    <th>ID Factura</th>
                     <th># Factura</th>
                     <th>Nombre factura</th>
                     <th>Costo Total</th>
@@ -138,13 +167,15 @@
                         @foreach($facturas as $key => $cat)
                         <tr>
                             @can('isCliente')
-                            <td><input type="checkbox" id="{{ $key }}"></td>
+                            <td><input type="checkbox" id="{{ $key }}" class="pay"></td>
+                            <td>{{ $cat->factura_id }}</td>
                             <td>{{ $cat->cod_cliente }}</td>
                             <td>{{ $cat->numero_factura }}</td>
                             <td>{{ $cat->nombre_factura }}</td>
                             <td>{{ $cat->total_cost }}</td>
                             <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
                             <td>{{ $cat->estado }}</td>
+                            <th><input type="checkbox" id="{{ $cat->factura_id }}" class="download"></th>
                             @endcan
                             @can('isProveedor')
                             <td>{{ $cat->factura_id }}</td>
@@ -229,7 +260,7 @@
                 event.preventDefault();
                 var count = 0;
 
-                $("input:checkbox:checked").each(function() {
+                $(".pay:checked").each(function() {
                     count ++;
 
                     var data = table.row($(this).attr('id')).data();
@@ -247,19 +278,49 @@
                     $("#form").submit();
             });
 
-            $('input[type=checkbox]').on('change', function() {
+            $('#download_invoice').on('click', function (event) {
+                event.preventDefault();
+                var count = 0;
+
+                $(".download:checked").each(function() {
+                    count ++;
+
+                    $('<input>', {
+                        type: 'hidden',
+                        value: $(this).attr('id'),
+                        name: 'ids[]'
+                    }).appendTo('#form2');
+                });
+
+                if(count == 0)
+                    alert("No ha seleccionado ninguna factura");
+                else
+                    $("#form2").submit();
+            });
+
+            $('.pay').on('change', function() {
                 var count = 0;
                 var amount = 0.00;
 
-                $("input:checkbox:checked").each(function() {
+                $(".pay:checked").each(function() {
                     count ++;
                     var data = table.row($(this).attr('id')).data();
 
-                    amount += parseFloat(data[4]);
+                    amount += parseFloat(data[5]);
                 });
 
                 $("#count").html(count);
                 $("#amount").html(amount.toFixed(2));
+            });
+
+            $('.download').on('change', function() {
+                var count = 0;
+
+                $(".download:checked").each(function() {
+                    count ++;
+                });
+
+                $("#count-facturas").html(count);
             });
         });
     </script>

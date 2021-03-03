@@ -272,7 +272,7 @@ class GetFilesS3 extends Command
                                 elseif($element['tag'] == 'coating')
                                     $order['coating'] = $element['value'];
                                 elseif($element['tag'] == 'Color')
-                                    $order['color'] = $element['value'];    
+                                    $order['color'] = $element['value'];
                                 else
                                     $xml_body = false;
                             }

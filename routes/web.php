@@ -86,6 +86,8 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('/complements/create', 'FacturasController@createComplement')->middleware('role:admin,manager,proveedor')->name('complementos.create');
     Route::post('/complements/store', 'FacturasController@storeComplement')->middleware('role:admin,manager,proveedor')->name('complementos.store');
 
+    Route::post('/facturas/descargar-facturas', 'FacturasController@downloadInvoiceAll')->middleware('role:cliente')->name('facturas.download');
+
     /* -------------------------------------------------------- */
 
     /* --------------------  Puntos  ----------------------- */

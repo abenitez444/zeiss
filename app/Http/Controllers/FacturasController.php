@@ -508,35 +508,39 @@ class FacturasController extends Controller
     }
 
     public function downloadDocument($facturaId, $ext){
-        $factura = Factura::find($facturaId);
-        $path = "";
+        try {
+            $factura = Factura::find($facturaId);
+            $path = "";
 
-        if ($factura){
-            $file_name = $factura->nombre_factura;
-            $name_file = pathinfo($file_name, PATHINFO_FILENAME);
+            if ($factura){
+                $file_name = $factura->nombre_factura;
+                $name_file = pathinfo($file_name, PATHINFO_FILENAME);
 
-            if (empty($file_name)){
-                return redirect(URL::previous())->with('error', "No se encontró un archivo para este tipo o factura.");
-            }
+                if (empty($file_name)){
+                    return redirect(URL::previous())->with('error', "No se encontró un archivo para este tipo o factura.");
+                }
 
-            if(file_exists(public_path('carpetafacturas/').$name_file.'.'.$ext))
-                $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
-            elseif (file_exists(public_path('carpetafacturas/').$name_file)) {
-                $path = public_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
-            }
-            elseif(Storage::disk('sftp-facturas')->exists($name_file.'.'.$ext)){
-                return Storage::disk('sftp-facturas')->download($name_file.'.'.$ext);
-            }
+                if(file_exists(public_path('carpetafacturas/').$name_file.'.'.$ext))
+                    $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
+                elseif (file_exists(public_path('carpetafacturas/').$name_file)) {
+                    $path = public_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
+                }
+                elseif(Storage::disk('sftp-facturas')->exists($name_file.'.'.$ext)){
+                    return Storage::disk('sftp-facturas')->download($name_file.'.'.$ext);
+                }
 
-            if(is_file($path)){
-                return response()->download($path);
+                if(is_file($path)){
+                    return response()->download($path);
+                }
+                else {
+                    return redirect(URL::previous())->with('error', "No se encontró un archivo para este tipo o factura.");
+                }
             }
-            else {
-                return redirect(URL::previous())->with('error', "No se encontró un archivo para este tipo o factura.");
+            else{
+                return redirect(response::back());
             }
-        }
-        else{
-            return redirect(response::back());
+        } catch (\Throwable $th) {
+            return redirect(URL::previous())->with('error', "Error conectandose al servidor FTP, contacte al administrador!");
         }
     }
 
@@ -621,9 +625,11 @@ class FacturasController extends Controller
         foreach ($request->ids as $id){
             $invoice = Factura::findOrFail($id);
 
-            $amount += number_format($invoice->total_cost,2,".",",");
+            $amount += $invoice->total_cost;
             $referencia .= "F".$id;
         }
+
+        $amount = number_format($amount,2,".","");
 
         $string = $referencia.$amount."1809";
 
@@ -859,5 +865,57 @@ class FacturasController extends Controller
         }
 
         return back()->with('info',$errormsg_file);
+    }
+
+    public function downloadInvoiceAll(Request $request)
+    {
+        try {
+
+            $msg = array();
+
+            foreach ($request->ids as $id){
+                $factura = Factura::find($id);
+
+                $path = "";
+                $ext = 'zip';
+
+                if ($factura){
+                    $file_name = $factura->nombre_factura;
+                    $name_file = pathinfo($file_name, PATHINFO_FILENAME);
+
+                    if (empty($file_name)){
+                        $msg[] = "No se encontró un archivo ZIP para factura ".$name_file;
+                    }
+
+                    if(file_exists(public_path('carpetafacturas/').$name_file.'.'.$ext))
+                        $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
+                    elseif (file_exists(public_path('carpetafacturas/').$name_file)) {
+                        $path = public_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
+                    }
+                    elseif(Storage::disk('sftp-facturas')->exists($name_file.'.'.$ext)){
+                        Storage::disk('sftp-facturas')->download($name_file.'.'.$ext);
+                    }
+
+                    if(is_file($path)){
+                        $this->download($path);
+                    }
+                    else {
+                        $msg[] = "No se encontró un archivo ZIP para factura ".$name_file;
+                    }
+                }
+                else{
+                    $msg[] = "No se encontró la factura con id ".$id;
+                }
+            }
+
+            return redirect(URL::previous())->with('info', $msg);
+
+        } catch (\Throwable $th) {
+            return redirect(URL::previous())->with('error', "Error descargando las facturas!!");
+        }
+    }
+
+    public function download($path = null){
+        return response()->download($path);
     }
 }
