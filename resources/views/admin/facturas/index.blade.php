@@ -104,6 +104,7 @@
                     <th>Importe</th>
                     <th>Fecha de vencimiento</th>
                     <th>Estado portal BBVA</th>
+                    <th>Pago otro Banco</th>
                     <th>Descargar</th>
                     @endcan
                     @can('isProveedor')
@@ -143,6 +144,7 @@
                     <th>Importe</th>
                     <th>Fecha de vencimiento</th>
                     <th>Estado portal BBVA</th>
+                    <th>Pago otro Banco</th>
                     <th>Descargar</th>
                     @endcan
                     @can('isProveedor')
@@ -182,7 +184,8 @@
                             <td>{{ $cat->nombre_factura }}</td>
                             <td>{{ $cat->total_cost }}</td>
                             <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
-                            <td>{{ $cat->estado }}</td>
+                            <td>{{ (!empty($cat->estadoOtro)) ? '' : $cat->estado }}</td>
+                            <td>{{ (!empty($cat->estadoOtro)) ? $cat->estadoOtro : '' }}</td>
                             <th><input type="checkbox" id="{{ $cat->factura_id }}" class="download"></th>
                             @endcan
                             @can('isProveedor')
@@ -190,7 +193,7 @@
                             <td>{{ $cat->numero_factura }}</td>
                             <td>{{ $cat->nombre_factura }}</td>
                             <td>{{ $cat->total_cost }}</td>
-                            <td>{{ $cat->estado }}</td>
+                            <td>{{ (!empty($cat->estadoOtro)) ? $cat->estadoOtro : $cat->estado }}</td>
                             <td>{{ (!empty($cat->payment_promise_date)) ? date('d/m/Y', strtotime($cat->payment_promise_date)) : "No definido" }}</td>
                             <td>{{ (!empty($cat->deadline_for_complement)) ? date('d/m/Y', strtotime($cat->deadline_for_complement)) : "No definido" }}</td>
                             @endcan
@@ -199,7 +202,7 @@
                             <td>{{ $cat->numero_factura }}</td>
                             <td>{{ $cat->nombre_factura }}</td>
                             <td>{{ $cat->total_cost }}</td>
-                            <td>{{ $cat->estado }}</td>
+                            <td>{{ (!empty($cat->estadoOtro)) ? $cat->estadoOtro : $cat->estado }}</td>
                             <td>{{ $cat->name }}</td>
                             @endcanany
                             @if (!$load_invoice)

@@ -100,6 +100,15 @@ return [
             'root' => '/home/ubuntu/s3-bucket1/estados_de_cuentas',
         ],
 
+        'sftp-pagos' => [
+            'driver' => 'sftp',
+            'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
+            'username' => 'ubuntu',
+            'port' => 22,
+            'privateKey' => base_path('cz_new.ppk'),
+            'root' => '/home/ubuntu/s3-bucket1/pagos',
+        ],
+
     ],
 
 ];
