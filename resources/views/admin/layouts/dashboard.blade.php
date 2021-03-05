@@ -66,85 +66,105 @@
 
       <!-- Sidebar -->
       @can('isAdmin')
+            @if(\Auth::user()->hasPermission('roles'))
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('roles.index') }}">
                 <i class="fa fa-unlock-alt"></i>
                 <span>Roles</span></a>
             </li>
+            @endif
+            @if(\Auth::user()->hasPermission('usuarios'))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Usuarios</span></a>
                 <div id="collapseUsers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('users.index') }}">Sistema</a>
-                        <a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>
-                        <a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>
+                        @if(\Auth::user()->hasPermission('usuarios-sistema'))<a class="collapse-item" href="{{ route('users.index') }}">Sistema</a>@endif
+                        @if(\Auth::user()->hasPermission('usuarios-clientes'))<a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>@endif
+                        @if(\Auth::user()->hasPermission('usuarios-proveedores'))<a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>@endif
                     </div>
                 </div>
             </li>
+            @endif
+            @if(\Auth::user()->hasPermission('facturas'))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseInvoice" aria-expanded="true" aria-controls="collapseInvoice">
                     <i class="fas fa-fw fa-credit-card"></i>
                     <span>Facturas</span></a>
                 <div id="collapseInvoice" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('facturas.clientes') }}">Clientes</a>
-                        <a class="collapse-item" href="{{ route('facturas.proveedores') }}">Proveedores</a>
+                        @if(\Auth::user()->hasPermission('facturas-clientes'))<a class="collapse-item" href="{{ route('facturas.clientes') }}">Clientes</a>@endif
+                        @if(\Auth::user()->hasPermission('facturas-proveedores'))<a class="collapse-item" href="{{ route('facturas.proveedores') }}">Proveedores</a>@endif
                     </div>
                 </div>
             </li>
+            @endif
       @endcan
       @canany(['isManager'])
+            @if(\Auth::user()->hasPermission('usuarios'))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Usuarios</span></a>
                 <div id="collapseUsers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>
-                        <a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>
+                        @if(\Auth::user()->hasPermission('usuarios-clientes'))<a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>@endif
+                        @if(\Auth::user()->hasPermission('usuarios-proveedores'))<a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>@endif
                     </div>
                 </div>
             </li>
+            @endif
+            @if(\Auth::user()->hasPermission('facturas'))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseInvoice" aria-expanded="true" aria-controls="collapseInvoice">
                     <i class="fas fa-fw fa-credit-card"></i>
                     <span>Facturas</span></a>
                 <div id="collapseInvoice" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('facturas.clientes') }}">Clientes</a>
-                        <a class="collapse-item" href="{{ route('facturas.proveedores') }}">Proveedores</a>
+                        @if(\Auth::user()->hasPermission('facturas-clientes'))<a class="collapse-item" href="{{ route('facturas.clientes') }}">Clientes</a>@endif
+                        @if(\Auth::user()->hasPermission('facturas-proveedores'))<a class="collapse-item" href="{{ route('facturas.proveedores') }}">Proveedores</a>@endif
                     </div>
                 </div>
             </li>
+            @endif
       @endcanany
       @canany(['isAdmin','isManager'])
+        @if(\Auth::user()->hasPermission('pagos'))
         <li class="nav-item">
             <a class="nav-link" href="{{ route('pagos.index') }}">
             <i class="fa fa-check"></i>
             <span>Pagos</span></a>
         </li>
+        @endif
+        @if(\Auth::user()->hasPermission('follow-the-lens'))
         <li class="nav-item">
             <a class="nav-link" href="{{ route('ordenes.index') }}">
               <i class="fas fa-fw fa-calendar-times"></i>
               <span>Follow the lens</span></a>
         </li>
+        @endif
+        @if(\Auth::user()->hasPermission('productos'))
         <li class="nav-item">
             <a class="nav-link" href="{{ route('productos.index') }}">
               <i class="fas fa-fw fa-tablet-alt"></i>
               <span>Productos</span></a>
         </li>
+        @endif
+        @if(\Auth::user()->hasPermission('categorias'))
         <li class="nav-item">
             <a class="nav-link" href="{{ route('categorias.index') }}">
               <i class="fas fa-fw fa-list"></i>
               <span>Categorias</span></a>
         </li>
+        @endif
+        @if(\Auth::user()->hasPermission('puntos'))
         <li class="nav-item">
             <a class="nav-link" href="{{ route('puntos.index') }}">
               <i class="fas fa-fw fa-project-diagram"></i>
               <span>Puntos</span></a>
         </li>
+        @endif
       @endcanany
 
       @canany(['isProveedor','isCliente'])

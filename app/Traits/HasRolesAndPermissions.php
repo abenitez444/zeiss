@@ -41,18 +41,44 @@ trait HasRolesAndPermissions
      * @return boolean
      */
     public function hasRole($role)
-    {        
+    {
         if( strpos($role, ',') !== false ){//check if this is an list of roles
 
             $listOfRoles = explode(',',$role);
 
-            foreach ($listOfRoles as $role) {                    
+            foreach ($listOfRoles as $role) {
                 if ($this->roles->contains('slug', $role)) {
                     return true;
                 }
             }
-        }else{                
+        }else{
             if ($this->roles->contains('slug', $role)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the user has Permission
+     *
+     * @param [type] $permission
+     * @return boolean
+     */
+    public function hasPermission($permission)
+    {
+        if( strpos($permission, ',') !== false ){//check if this is an list of roles
+
+            $listOfPermissions = explode(',',$permission);
+
+            foreach ($listOfPermissions as $permission) {
+                if ($this->permissions->contains('slug', $permission)) {
+                    return true;
+                }
+            }
+        }else{
+            if ($this->permissions->contains('slug', $permission)) {
                 return true;
             }
         }

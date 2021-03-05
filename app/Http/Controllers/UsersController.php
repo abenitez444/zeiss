@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Permission;
 use App\User;
 use App\Role;
 use DB;
@@ -47,17 +48,18 @@ class UsersController extends Controller
      */
     public function create(Request $request)
     {
-        if($request->ajax()){
-            $roles = Role::where('id', $request->role_id)->first();
-            $permissions = $roles->permissions;
+        //if($request->ajax()){
+            // $roles = Role::where('id', 1)->first();
+            // $permissions = $roles->permissions;
 
-            return $permissions;
-        }
+            // return $permissions;
+        //}
 
         //$roles = Role::all();
         $roles = Role::whereIn('id', [1,4])->get();
+        $permissions = Permission::get();
 
-        return view('admin.users.create', ['roles' => $roles]);
+        return view('admin.users.create', ['roles' => $roles, 'permissions' => $permissions]);
     }
 
     /**
@@ -87,12 +89,12 @@ class UsersController extends Controller
             $user->save();
         }
 
-        /*if($request->permissions != null){
+        if($request->permissions != null){
             foreach ($request->permissions as $permission) {
                 $user->permissions()->attach($permission);
                 $user->save();
             }
-        }*/
+        }
 
         return redirect()->route('users.index');
     }
@@ -119,20 +121,20 @@ class UsersController extends Controller
         //$roles = Role::get();
         $roles = Role::whereIn('id', [1,4])->get();;
         $userRole = $user->roles->first();
-        if($userRole != null){
-            $rolePermissions = $userRole->allRolePermissions;
-        }else{
-            $rolePermissions = null;
-        }
+        // if($userRole != null){
+        //     $rolePermissions = $userRole->allRolePermissions;
+        // }else{
+        //     $rolePermissions = null;
+        // }
         $userPermissions = $user->permissions;
 
-        // dd($rolePermission);
+        $permissions = Permission::get();
 
         return view('admin.users.edit', [
             'user'=>$user,
             'roles'=>$roles,
             'userRole'=>$userRole,
-            'rolePermissions'=>$rolePermissions,
+            'permissions'=>$permissions,
             'userPermissions'=>$userPermissions
             ]);
     }
