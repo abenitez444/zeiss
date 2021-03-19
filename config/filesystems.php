@@ -64,49 +64,74 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        // 'sftp-facturas' => [
+        //     'driver' => 'sftp',
+        //     'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
+        //     'username' => 'ubuntu',
+        //     'port' => 22,
+        //     'privateKey' => base_path('cz_new.ppk'),
+        //     'root' => '/home/ubuntu/s3-bucket1/facturas',
+        // ],
+
+        // 'sftp-complementos' => [
+        //     'driver' => 'sftp',
+        //     'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
+        //     'username' => 'ubuntu',
+        //     'port' => 22,
+        //     'privateKey' => base_path('cz_new.ppk'),
+        //     'root' => '/home/ubuntu/s3-bucket1/complementos',
+        // ],
+
+        // 'sftp-ordenes' => [
+        //     'driver' => 'sftp',
+        //     'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
+        //     'username' => 'ubuntu',
+        //     'port' => 22,
+        //     'privateKey' => base_path('cz_new.ppk'),
+        //     'root' => '/home/ubuntu/s3-bucket1/ordenes',
+        // ],
+
+        // 'sftp-estados-de-cuentas' => [
+        //     'driver' => 'sftp',
+        //     'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
+        //     'username' => 'ubuntu',
+        //     'port' => 22,
+        //     'privateKey' => base_path('cz_new.ppk'),
+        //     'root' => '/home/ubuntu/s3-bucket1/estados_de_cuentas',
+        // ],
+
+        // 'sftp-pagos' => [
+        //     'driver' => 'sftp',
+        //     'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
+        //     'username' => 'ubuntu',
+        //     'port' => 22,
+        //     'privateKey' => base_path('cz_new.ppk'),
+        //     'root' => '/home/ubuntu/s3-bucket1/pagos',
+        // ],
+
         'sftp-facturas' => [
-            'driver' => 'sftp',
-            'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
-            'username' => 'ubuntu',
-            'port' => 22,
-            'privateKey' => base_path('cz_new.ppk'),
-            'root' => '/home/ubuntu/s3-bucket1/facturas',
+            'driver' => 'local',
+            'root' => '../FTP/facturas',
         ],
 
         'sftp-complementos' => [
-            'driver' => 'sftp',
-            'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
-            'username' => 'ubuntu',
-            'port' => 22,
-            'privateKey' => base_path('cz_new.ppk'),
-            'root' => '/home/ubuntu/s3-bucket1/complementos',
+            'driver' => 'local',
+            'root' => '../FTP/complementos',
         ],
 
         'sftp-ordenes' => [
-            'driver' => 'sftp',
-            'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
-            'username' => 'ubuntu',
-            'port' => 22,
-            'privateKey' => base_path('cz_new.ppk'),
-            'root' => '/home/ubuntu/s3-bucket1/ordenes',
+            'driver' => 'local',
+            'root' => '../FTP/ordenes',
         ],
 
         'sftp-estados-de-cuentas' => [
-            'driver' => 'sftp',
-            'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
-            'username' => 'ubuntu',
-            'port' => 22,
-            'privateKey' => base_path('cz_new.ppk'),
-            'root' => '/home/ubuntu/s3-bucket1/estados_de_cuentas',
+            'driver' => 'local',
+            'root' => '../FTP/estados_de_cuentas',
         ],
 
         'sftp-pagos' => [
-            'driver' => 'sftp',
-            'host' => 'ec2-34-227-90-217.compute-1.amazonaws.com',
-            'username' => 'ubuntu',
-            'port' => 22,
-            'privateKey' => base_path('cz_new.ppk'),
-            'root' => '/home/ubuntu/s3-bucket1/pagos',
+            'driver' => 'local',
+            'root' => '../FTP/pagos',
         ],
 
     ],

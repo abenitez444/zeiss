@@ -9,7 +9,7 @@
             <h2>Listado de facturas</h2>
         </div>
 
-        @if( Auth::user()->hasRole('admin') || Auth::user()->hasRole('proveedor') || Auth::user()->hasRole('manager')  )
+        @if( Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager')  )
             @if ($load_invoice)
                 <div class="col-md-6">
                     <div class="row offset-lg-3">
@@ -18,6 +18,33 @@
                                 Cargar facturas</a>
                         </div>
                         <div class="col-md-6">
+                            <a href="{{ route('complementos.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                                Cargar Complementos</a>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endif
+        @if( Auth::user()->hasRole('proveedor')  )
+            @if ($load_invoice)
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="{{ url('/admin/facturas/create/xml') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                                Cargar facturas XML</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url('/admin/facturas/create/pdf') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                                Cargar facturas PDF</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url('/admin/facturas/create/zip') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                                Cargar facturas ZIP</a>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
                             <a href="{{ route('complementos.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
                                 Cargar Complementos</a>
                         </div>

@@ -3,16 +3,15 @@
 Auth::routes();
 
 Route::get('/', function () {
-    if( Auth::user() ) //se valida si esta logueado
-//        if( Auth::user()->role_id == 3 ) //se valida el tipo de usuario
-//            return redirect()->route('home.client');
-//        else
-            return redirect()->route('home');
+    if( Auth::user() )
+        return redirect()->route('home');
     else
-        return redirect('/login');
+        return redirect()->route('principal');
 });
 
 /* -------------------  FrontEnd Section --------------------- */
+
+Route::get('principal', 'HomeController@index')->name('principal');
 
 /* -------------------------------------------------------- */
 
@@ -89,6 +88,9 @@ Route::group(['prefix' => 'admin'], function() {
     Route::post('/facturas/descargar-facturas', 'FacturasController@downloadInvoiceAll')->middleware('role:cliente')->name('facturas.download');
 
     Route::get('/facturas/status/{id}', 'FacturasController@downloadStatus')->middleware('role:cliente');
+
+    Route::get('/facturas/create/{ext}', 'FacturasController@createInvoiceProvider')->middleware('role:proveedor')->name('facturas.create.provider');
+    Route::post('/facturas/store/provider', 'FacturasController@storeInvoiceProvider')->middleware('role:proveedor')->name('facturas.store.provider');
 
     /* -------------------------------------------------------- */
 

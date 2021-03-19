@@ -74,6 +74,16 @@ class FacturasController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createInvoiceProvider($ext)
+    {
+        return view('admin.facturas.create_provider', ['ext' => $ext]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -85,7 +95,7 @@ class FacturasController extends Controller
             'uploadfile' => 'required'
         ]);
 
-        $path = public_path($this->folder);
+        $path = storage_path($this->folder);
         if(!File::exists($path)) {
             File::makeDirectory($path);
         };
@@ -114,10 +124,10 @@ class FacturasController extends Controller
                     $xml_body = false;
                     $usr_exist = true;
                     $provider_not = false;
-                    $file->move('carpetafacturas', $name_file);
+                    $file->move(storage_path('carpetafacturas'), $name_file);
 
                     $unzipper  = new Unzip();
-                    $filenames = $unzipper->extract(public_path('carpetafacturas/').$name_file, public_path('carpetafacturas/'));
+                    $filenames = $unzipper->extract(storage_path('carpetafacturas/').$name_file, storage_path('carpetafacturas/'));
 
                     foreach ($filenames as $filename) {
 
@@ -125,7 +135,7 @@ class FacturasController extends Controller
                             if (strpos($filename, "xml")){
                                 $xml_type = true;
 
-                                $xmlFile = public_path()."/carpetafacturas/".$filename;
+                                $xmlFile = storage_path()."/carpetafacturas/".$filename;
 
                                 $xml = new \XMLReader();
                                 $xml->open($xmlFile);
@@ -231,9 +241,9 @@ class FacturasController extends Controller
                     $usr_exist = true;
                     $provider_not = false;
 
-                    $file->move('carpetafacturas', $name_file);
+                    $file->move(storage_path('carpetafacturas'), $name_file);
 
-                    $xmlFile = public_path()."/carpetafacturas/".$name_file;
+                    $xmlFile = storage_path()."/carpetafacturas/".$name_file;
 
                     $xml = new \XMLReader();
                     $xml->open($xmlFile);
@@ -308,11 +318,11 @@ class FacturasController extends Controller
 
                     if (!$xml_body){
                         $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
-                        unlink(public_path('carpetafacturas/').$name_file);
+                        unlink(storage_path('carpetafacturas/').$name_file);
                     }
                     elseif (!$usr_exist){
                         $errormsg_file[] = $name_file." - El cliente o proveedor asociado no se encuentra en el sistema";
-                        unlink(public_path('carpetafacturas/').$name_file);
+                        unlink(storage_path('carpetafacturas/').$name_file);
                     }
                     elseif ($provider_not){
                         $errormsg_file[] = $name_file." - El proveedor asociado a la factura no es el mismo que carga";
@@ -333,7 +343,7 @@ class FacturasController extends Controller
                     $factura['nombre_factura'] = $name_file;
                     $factura['estado'] = 2;
 
-                    $file->move('carpetafacturas', $name_file);
+                    $file->move(storage_path('carpetafacturas'), $name_file);
 
                     $errormsg_file[] = $name_file." - Cargado correctamente";
 
@@ -344,6 +354,285 @@ class FacturasController extends Controller
                 }
                 else {
                     $errormsg_file[] = $name_file." - El archivo debe ser de formato: pdf, xml  o zip";
+                }
+            }
+        }
+
+        return back()->with('info',$errormsg_file);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeInvoiceProvider(Request $request)
+    {
+        request()->validate([
+            'uploadfile' => 'required'
+        ]);
+
+        $path = storage_path($this->folder);
+        if(!File::exists($path)) {
+            File::makeDirectory($path);
+        };
+
+        $errormsg_file = array();
+
+        if($request->hasfile('uploadfile')) {
+            foreach($request->file('uploadfile') as $file)
+            {
+                $name_file = $file->getClientOriginalName();
+                $file_name = pathinfo($name_file, PATHINFO_FILENAME);
+                $extension_file = $file->getClientOriginalExtension();
+                $factura = $request->all();
+
+                unset($factura['ext']);
+
+                if(Auth::user()->hasRole('proveedor')){
+                    $user_id = Auth::user()->id;
+                    $provider = Provider::with('user')->where('user_id', $user_id)->first();
+                    $factura['payment_promise_date'] = date("Y-m-d", strtotime(date('Y-m-d')."+ ".$provider->credit_terms." days"));
+                    if(date('D', strtotime($factura['payment_promise_date'])) != 'Mon')
+                        $factura['payment_promise_date'] = date("Y-m-d", strtotime('next Monday '.$factura['payment_promise_date']));
+                }
+
+                if(in_array($extension_file,['zip']) && $request->ext == 'zip'){
+                    $xml_type = false;
+                    $xml_body = false;
+                    $usr_exist = true;
+                    $provider_not = false;
+                    $file->move(storage_path('carpetafacturas'), $name_file);
+
+                    $unzipper  = new Unzip();
+                    $filenames = $unzipper->extract(storage_path('carpetafacturas/').$name_file, storage_path('carpetafacturas/'));
+
+                    foreach ($filenames as $filename) {
+
+                        if(strpos($filename, "__MACOSX/") === false){
+                            if (strpos($filename, "xml")){
+                                $xml_type = true;
+
+                                $xmlFile = storage_path()."/carpetafacturas/".$filename;
+
+                                $xml = new \XMLReader();
+                                $xml->open($xmlFile);
+
+                                try {
+                                    $xml_body = true;
+                                    while ($xml->read()) {
+                                        if ($xml->nodeType == \XMLReader::ELEMENT) {
+                                            if ($xml->name == 'cfdi:Comprobante') {
+                                                if($xml->hasAttributes) {
+                                                    $factura['numero_factura'] = $xml->getAttribute( "Folio");
+                                                    $factura['total_cost'] = $xml->getAttribute( "Total");
+                                                    $factura['nombre_factura'] = $name_file;
+                                                    $factura['estado'] = 2;
+                                                }
+                                                else {
+                                                    $xml_body = false;
+                                                }
+                                            }
+                                            elseif($xml->name == 'tfd:TimbreFiscalDigital') {
+                                                if($xml->hasAttributes) {
+                                                    $factura['IdDocumento'] = $xml->getAttribute( "UUID");
+                                                }
+                                                else {
+                                                    $xml_body = false;
+                                                }
+                                            }
+                                            elseif (Auth::user()->hasRole('proveedor') && $xml->name == 'cfdi:Emisor'){
+                                                if($xml->hasAttributes) {
+                                                    $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                                    if(!empty($user)){
+                                                        if($xml->getAttribute( "Rfc") != $user->rfc){
+                                                            $provider_not = true;
+                                                        }
+                                                    }
+                                                    else
+                                                        $usr_exist = false;
+                                                }
+                                                else {
+                                                    $xml_body = false;
+                                                }
+                                            }
+                                            elseif (($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor') && !Auth::user()->hasRole('proveedor') ){
+                                                if($xml->hasAttributes) {
+                                                    if($xml->getAttribute( "Rfc") != 'CZV9204036N2'){
+                                                        if ($xml->name == 'cfdi:Emisor'){
+                                                            $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                                        }
+                                                        else {
+                                                            $user = Client::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                                        }
+
+                                                        if(!empty($user)){
+                                                            $user_id = $user->user->id;
+                                                        }
+                                                        else
+                                                            $usr_exist = false;
+                                                    }
+                                                }
+                                                else {
+                                                    $xml_body = false;
+                                                }
+                                            }
+                                        }
+                                    }
+                                } catch (\Exception $e) {
+                                    $xml_body = false;
+                                    $errormsg_file[] = $name_file." - ". $e->getMessage();
+                                }
+
+                                $xml->close();
+                            }
+                        }
+                    }
+
+                    if(!$xml_type){
+                        $errormsg_file[] = $name_file." - El comprimido debe contener el archivo xml";
+                        $this->deleteDocument($path, $file_name);
+                    }
+                    elseif (!$xml_body){
+                        $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
+                        $this->deleteDocument($path, $file_name);
+                    }
+                    elseif (!$usr_exist){
+                        $errormsg_file[] = $name_file." - El cliente o proveedor asociado no se encuentra en el sistema";
+                        $this->deleteDocument($path, $file_name);
+                    }
+                    elseif ($provider_not){
+                        $errormsg_file[] = $name_file." - El proveedor asociado a la factura no es el mismo que carga";
+                        $this->deleteDocument($path, $file_name);
+                    }
+                    else {
+                        $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                        $idFactura = Factura::create($factura);
+                        DB::table('_users_facturas')->insert(
+                            ['user_id' => $user_id, 'factura_id' => $idFactura->id, 'created_at' => NOW(), 'updated_at' => NOW()]
+                        );
+                    }
+                }
+                elseif ($extension_file == 'xml' && $request->ext == 'xml'){
+                    $xml_body = false;
+                    $usr_exist = true;
+                    $provider_not = false;
+
+                    $file->move(storage_path('carpetafacturas'), $name_file);
+
+                    $xmlFile = storage_path()."/carpetafacturas/".$name_file;
+
+                    $xml = new \XMLReader();
+                    $xml->open($xmlFile);
+
+                    try {
+                        $xml_body = true;
+                        while ($xml->read()) {
+                            if ($xml->nodeType == \XMLReader::ELEMENT) {
+                                if ($xml->name == 'cfdi:Comprobante') {
+                                    if($xml->hasAttributes) {
+                                        $factura['numero_factura'] = $xml->getAttribute( "Folio");
+                                        $factura['total_cost'] = $xml->getAttribute( "Total");
+                                        $factura['nombre_factura'] = $name_file;
+                                        $factura['estado'] = 2;
+                                    }
+                                    else {
+                                        $xml_body = false;
+                                    }
+                                }
+                                elseif($xml->name == 'tfd:TimbreFiscalDigital') {
+                                    if($xml->hasAttributes) {
+                                        $factura['IdDocumento'] = $xml->getAttribute( "UUID");
+                                    }
+                                    else {
+                                        $xml_body = false;
+                                    }
+                                }
+                                elseif (Auth::user()->hasRole('proveedor') && $xml->name == 'cfdi:Emisor'){
+                                    if($xml->hasAttributes) {
+                                        $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                        if(!empty($user)){
+                                            if($xml->getAttribute( "Rfc") != $user->rfc){
+                                                $provider_not = true;
+                                            }
+                                        }
+                                        else
+                                            $usr_exist = false;
+                                    }
+                                    else {
+                                        $xml_body = false;
+                                    }
+                                }
+                                elseif (($xml->name == 'cfdi:Emisor' || $xml->name == 'cfdi:Receptor') && !Auth::user()->hasRole('proveedor')){
+                                    if($xml->hasAttributes) {
+                                        if($xml->getAttribute( "Rfc") != 'CZV9204036N2'){
+                                            if ($xml->name == 'cfdi:Emisor'){
+                                                $user = Provider::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                            }
+                                            else {
+                                                $user = Client::with('user')->where('rfc', $xml->getAttribute( "Rfc"))->first();
+                                            }
+
+                                            if(!empty($user)){
+                                                $user_id = $user->user->id;
+                                            }
+                                            else
+                                                $usr_exist = false;
+                                        }
+                                    }
+                                    else {
+                                        $xml_body = false;
+                                    }
+                                }
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        $xml_body = false;
+                        $errormsg_file[] = $name_file." - ". $e->getMessage();
+                    }
+
+                    $xml->close();
+
+                    if (!$xml_body){
+                        $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
+                        unlink(storage_path('carpetafacturas/').$name_file);
+                    }
+                    elseif (!$usr_exist){
+                        $errormsg_file[] = $name_file." - El cliente o proveedor asociado no se encuentra en el sistema";
+                        unlink(storage_path('carpetafacturas/').$name_file);
+                    }
+                    elseif ($provider_not){
+                        $errormsg_file[] = $name_file." - El proveedor asociado a la factura no es el mismo que carga";
+                        $this->deleteDocument($path, $file_name);
+                    }
+                    else {
+                        $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                        $idFactura = Factura::create($factura);
+                        DB::table('_users_facturas')->insert(
+                            ['user_id' => $user_id, 'factura_id' => $idFactura->id, 'created_at' => NOW(), 'updated_at' => NOW()]
+                        );
+                    }
+                }
+                elseif ($extension_file == 'pdf' && $request->ext == 'pdf'){
+                    // $factura['numero_factura'] = 12;
+                    // $factura['total_cost'] = 2000;
+                    // $factura['nombre_factura'] = $name_file;
+                    // $factura['estado'] = 2;
+
+                    $file->move(storage_path('carpetafacturas'), $name_file);
+
+                    $errormsg_file[] = $name_file." - Cargado correctamente";
+
+                    // $idFactura = Factura::create($factura);
+                    // DB::table('_users_facturas')->insert(
+                    //     ['user_id' => $user_id, 'factura_id' => $idFactura->id, 'created_at' => NOW(), 'updated_at' => NOW()]
+                    // );
+                }
+                else {
+                    $errormsg_file[] = $name_file." - El archivo debe ser de formato: ".$request->ext;
                 }
             }
         }
@@ -454,7 +743,7 @@ class FacturasController extends Controller
             'uploadfile' => 'required'
         ]);
 
-        $path = public_path($this->folder);
+        $path = storage_path($this->folder);
         if(!File::exists($path)) {
             File::makeDirectory($path);
         };
@@ -469,7 +758,7 @@ class FacturasController extends Controller
                 $complement = $request->all();
 
                 if(in_array($extension_file,['zip'])){
-                    $file->move('carpetafacturas', $name_file);
+                    $file->move(storage_path('carpetafacturas'), $name_file);
 
                     $complement['name'] = $name_file;
                     $complement['factura_id'] = $facturaId;
@@ -479,7 +768,7 @@ class FacturasController extends Controller
                     Complement::create($complement);
                 }
                 elseif ($extension_file == 'xml'){
-                    $file->move('carpetafacturas', $name_file);
+                    $file->move(storage_path('carpetafacturas'), $name_file);
 
                     $complement['name'] = $name_file;
                     $complement['factura_id'] = $facturaId;
@@ -489,7 +778,7 @@ class FacturasController extends Controller
                     Complement::create($complement);
                 }
                 elseif ($extension_file == 'pdf'){
-                    $file->move('carpetafacturas', $name_file);
+                    $file->move(storage_path('carpetafacturas'), $name_file);
 
                     $complement['name'] = $name_file;
                     $complement['factura_id'] = $facturaId;
@@ -520,10 +809,10 @@ class FacturasController extends Controller
                     return redirect(URL::previous())->with('error', "No se encontró un archivo para este tipo o factura.");
                 }
 
-                if(file_exists(public_path('carpetafacturas/').$name_file.'.'.$ext))
-                    $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
-                elseif (file_exists(public_path('carpetafacturas/').$name_file)) {
-                    $path = public_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
+                if(file_exists(storage_path('carpetafacturas/').$name_file.'.'.$ext))
+                    $path = storage_path('carpetafacturas/').$name_file.'.'.$ext;
+                elseif (file_exists(storage_path('carpetafacturas/').$name_file)) {
+                    $path = storage_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
                 }
                 elseif(Storage::disk('sftp-facturas')->exists($name_file.'.'.$ext)){
                     return Storage::disk('sftp-facturas')->download($name_file.'.'.$ext);
@@ -569,7 +858,7 @@ class FacturasController extends Controller
                 return redirect(URL::previous())->with('error', "No se encontró un archivo para este complemento.");
             }
 
-            $path = public_path('carpetafacturas/').$file_name;
+            $path = storage_path('carpetafacturas/').$file_name;
 
             if(is_file($path)){
                 return response()->download($path);
@@ -587,8 +876,8 @@ class FacturasController extends Controller
     {
         $complement = Complement::findOrFail($id);
 
-        if (file_exists(public_path('carpetafacturas/').$complement->name))
-            unlink(public_path('carpetafacturas/').$complement->name);
+        if (file_exists(storage_path('carpetafacturas/').$complement->name))
+            unlink(storage_path('carpetafacturas/').$complement->name);
 
         $complement->delete();
 
@@ -596,24 +885,24 @@ class FacturasController extends Controller
     }
 
     public function deleteDocument($path, $file_name){
-        if(file_exists(public_path('carpetafacturas/').$file_name.'.xml'))
-            unlink(public_path('carpetafacturas/').$file_name.'.xml');
-        elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
-            unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.xml');
+        if(file_exists(storage_path('carpetafacturas/').$file_name.'.xml'))
+            unlink(storage_path('carpetafacturas/').$file_name.'.xml');
+        elseif (file_exists(storage_path('carpetafacturas/').$file_name)) {
+            unlink(storage_path('carpetafacturas/').$file_name.'/'.$file_name.'.xml');
         }
-        if(file_exists(public_path('carpetafacturas/').$file_name.'.pdf'))
-            unlink(public_path('carpetafacturas/').$file_name.'.pdf');
-        elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
-            unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.pdf');
+        if(file_exists(storage_path('carpetafacturas/').$file_name.'.pdf'))
+            unlink(storage_path('carpetafacturas/').$file_name.'.pdf');
+        elseif (file_exists(storage_path('carpetafacturas/').$file_name)) {
+            unlink(storage_path('carpetafacturas/').$file_name.'/'.$file_name.'.pdf');
         }
-        if(file_exists(public_path('carpetafacturas/').$file_name.'.zip'))
-            unlink(public_path('carpetafacturas/').$file_name.'.zip');
-        elseif (file_exists(public_path('carpetafacturas/').$file_name)) {
-            unlink(public_path('carpetafacturas/').$file_name.'/'.$file_name.'.zip');
+        if(file_exists(storage_path('carpetafacturas/').$file_name.'.zip'))
+            unlink(storage_path('carpetafacturas/').$file_name.'.zip');
+        elseif (file_exists(storage_path('carpetafacturas/').$file_name)) {
+            unlink(storage_path('carpetafacturas/').$file_name.'/'.$file_name.'.zip');
         }
 
-        if (file_exists(public_path('carpetafacturas/').$file_name))
-            rmdir(public_path('carpetafacturas/').$file_name);
+        if (file_exists(storage_path('carpetafacturas/').$file_name))
+            rmdir(storage_path('carpetafacturas/').$file_name);
     }
 
     public function setPaymentInvoice(Request $request)
@@ -710,7 +999,7 @@ class FacturasController extends Controller
             'uploadfile' => 'required'
         ]);
 
-        $path = public_path($this->folder);
+        $path = storage_path($this->folder);
         if(!File::exists($path)) {
             File::makeDirectory($path);
         };
@@ -730,17 +1019,17 @@ class FacturasController extends Controller
                     $xml_type = false;
                     $xml_body = false;
                     $invoice_exist = true;
-                    $file->move('carpetafacturas', $name_file);
+                    $file->move(storage_path('carpetafacturas'), $name_file);
 
                     $unzipper  = new Unzip();
-                    $filenames = $unzipper->extract(public_path('carpetafacturas/').$name_file, public_path('carpetafacturas/'));
+                    $filenames = $unzipper->extract(storage_path('carpetafacturas/').$name_file, storage_path('carpetafacturas/'));
 
                     foreach ($filenames as $filename) {
                         if(strpos($filename, "__MACOSX/") === false){
                             if (strpos($filename, "xml")){
                                 $xml_type = true;
 
-                                $xmlFile = public_path()."/carpetafacturas/".$filename;
+                                $xmlFile = storage_path()."/carpetafacturas/".$filename;
 
                                 $xml = new \XMLReader();
                                 $xml->open($xmlFile);
@@ -767,14 +1056,14 @@ class FacturasController extends Controller
                                                         $invoice_exist = false;
 
                                                         $errormsg_file[] = $name_file." - La factura asociada #". $xml->getAttribute("IdDocumento")." no se encuentra en el sistema";
-                                                        unlink(public_path('carpetafacturas/').$name_file);
+                                                        unlink(storage_path('carpetafacturas/').$name_file);
                                                     }
                                                 }
                                                 else {
                                                     $xml_body = false;
 
                                                     $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
-                                                    unlink(public_path('carpetafacturas/').$name_file);
+                                                    unlink(storage_path('carpetafacturas/').$name_file);
                                                 }
                                             }
                                         }
@@ -798,9 +1087,9 @@ class FacturasController extends Controller
                     $xml_body = false;
                     $invoice_exist = true;
 
-                    $file->move('carpetafacturas', $name_file);
+                    $file->move(storage_path('carpetafacturas'), $name_file);
 
-                    $xmlFile = public_path()."/carpetafacturas/".$name_file;
+                    $xmlFile = storage_path()."/carpetafacturas/".$name_file;
 
                     $xml = new \XMLReader();
                     $xml->open($xmlFile);
@@ -823,7 +1112,7 @@ class FacturasController extends Controller
                                             $factura->NumParcialidad = $xml->getAttribute("NumParcialidad");
                                             $factura->save();
 
-                                            if(file_exists(public_path('carpetafacturas/').$file_name.'.pdf')){
+                                            if(file_exists(storage_path('carpetafacturas/').$file_name.'.pdf')){
                                                 $complemento['name'] = $file_name.'.pdf';
                                                 $complemento['factura_id'] = $factura->id;
 
@@ -836,14 +1125,14 @@ class FacturasController extends Controller
                                             $invoice_exist = false;
 
                                             $errormsg_file[] = $name_file." - La factura asociada #". $xml->getAttribute("IdDocumento")." no se encuentra en el sistema";
-                                            unlink(public_path('carpetafacturas/').$name_file);
+                                            unlink(storage_path('carpetafacturas/').$name_file);
                                         }
                                     }
                                     else {
                                         $xml_body = false;
 
                                         $errormsg_file[] = $name_file." - Error leyendo el xml o error en la estructura del xml";
-                                        unlink(public_path('carpetafacturas/').$name_file);
+                                        unlink(storage_path('carpetafacturas/').$name_file);
                                     }
                                 }
                             }
@@ -856,7 +1145,7 @@ class FacturasController extends Controller
                     $xml->close();
                 }
                 elseif ($extension_file == 'pdf'){
-                    $file->move('carpetafacturas', $name_file);
+                    $file->move(storage_path('carpetafacturas'), $name_file);
                 }
                 else {
                     $errormsg_file[] = $name_file." - El archivo debe ser de formato: pdf, xml  o zip";
@@ -887,10 +1176,10 @@ class FacturasController extends Controller
                         $msg[] = "No se encontró un archivo ZIP para factura ".$name_file;
                     }
 
-                    if(file_exists(public_path('carpetafacturas/').$name_file.'.'.$ext))
-                        $path = public_path('carpetafacturas/').$name_file.'.'.$ext;
-                    elseif (file_exists(public_path('carpetafacturas/').$name_file)) {
-                        $path = public_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
+                    if(file_exists(storage_path('carpetafacturas/').$name_file.'.'.$ext))
+                        $path = storage_path('carpetafacturas/').$name_file.'.'.$ext;
+                    elseif (file_exists(storage_path('carpetafacturas/').$name_file)) {
+                        $path = storage_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
                     }
                     elseif(Storage::disk('sftp-facturas')->exists($name_file.'.'.$ext)){
                         Storage::disk('sftp-facturas')->download($name_file.'.'.$ext);
@@ -930,15 +1219,17 @@ class FacturasController extends Controller
                 $cod_cliente = $client->cod_cliente;
 
                 if(Storage::disk('sftp-estados-de-cuentas')->exists($rfc.'-'.$cod_cliente.'.pdf')){
-                    Storage::disk('sftp-estados-de-cuentas')->download($rfc.'-'.$cod_cliente.'.pdf');
+                    return Storage::disk('sftp-estados-de-cuentas')->download($rfc.'-'.$cod_cliente.'.pdf');
                 }
                 else {
-                    return redirect(URL::previous())->with('error', "No se encontró un archivo para este estado.");
+                    $msg = "No se encontró un archivo para este estado.";
                 }
             }
             else{
-                return redirect(URL::previous())->with('error', "No se encontró uel cliente.");
+                $msg = "No se encontró el cliente.";
             }
+
+            return redirect(URL::previous())->with('error', $msg);
 
         } catch (\Throwable $th) {
             return redirect(URL::previous())->with('error', "Error descargando el estado, no se puede conectar a FTP o no existe su estado, contacte al administrador!!");

@@ -177,7 +177,7 @@ class ProductosController extends Controller
             'uploadfile' => 'required'
         ]);
 
-        $path = public_path($this->folder);
+        $path = storage_path($this->folder);
         if(!File::exists($path)) {
             File::makeDirectory($path);
         };
@@ -194,7 +194,7 @@ class ProductosController extends Controller
                         ['name' => $name_file, 'created_at' => NOW(), 'updated_at' => NOW()]
                     );
 
-                    $file->move('imagenes', $name_file);
+                    $file->move(storage_path('imagenes'), $name_file);
 
                     $errormsg_file[] = $name_file." - Cargado correctamente";
 

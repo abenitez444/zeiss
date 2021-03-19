@@ -22,6 +22,7 @@
                             <th>Referencia</th>
                             <th>Orden de Venta</th>
                             <th>Estatus</th>
+                            <th>Estado Orden</th>
                             <th>Cliente</th>
                             <th>Fecha</th>
                             <th>Codigo Producto</th>
@@ -35,6 +36,7 @@
                             <th>Referencia</th>
                             <th>Orden de Venta</th>
                             <th>Estatus</th>
+                            <th>Estado Orden</th>
                             <th>Cliente</th>
                             <th>Fecha</th>
                             <th>Codigo Producto</th>
@@ -49,6 +51,7 @@
                                 <td>{{ $order->reference }}</td>
                                 <td>{{ $order->order }}</td>
                                 <td>{{ $order->status }}</td>
+                                <td>{{ $order->EstadoOrden }}</td>
                                 <td>{{ $order->client }}</td>
                                 <td>{{ $order->dateTime }}</td>
                                 <td>{{ $order->code }}</td>

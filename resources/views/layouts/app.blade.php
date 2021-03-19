@@ -26,25 +26,39 @@
   <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-
-
 </head>
 
 <body>
+  @include('partial.navbar')
 
-  @if(!\Request::is('login') && !\Request::is('register') && !\Request::is('password/reset'))
-    @include('partial.navbar')
-  @endif
+  <!-- Main Content -->
+  <div class="container my-5">
+    <div class="col-md-12">
+      <div class="row">
+          <div class="col-md-12">
+            <img width="100%" src="{{ asset('banner.jpg') }}" alt="post_image">
+          </div>
+          <hr>
+      </div>
+    </div>
+    <hr>
+    <div class="col-md-12">
+      <div class="row">
+        @include('flash-message')
+        {{ Session::get('success') }}
+        @if (session('success'))
+            <div class="alert alert-success alert-block">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>{{ session('success') }}</strong>
+            </div>
+        @endif
+        @yield('content')
+      </div>
+    </div>
+  </div>
+  <hr>
 
-  @include('flash-message')
-
-
-  @yield('content')
-
-
-  @if(!\Request::is('login') && !\Request::is('register') && !\Request::is('password/reset'))
-    @include('partial.footer')
-  @endif
+  @include('partial.footer')
 
 
     <!-- Bootstrap core JavaScript-->
@@ -56,15 +70,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="/vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="/js/chart-area-demo.js"></script>
-    <script src="/js/chart-pie-demo.js"></script>
-
-
 
 </body>
 

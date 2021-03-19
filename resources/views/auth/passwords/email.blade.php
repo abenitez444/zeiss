@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<body class="bg-gradient-primary">
+<body>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-6 col-lg-6 col-md-6">

@@ -129,7 +129,7 @@ class GetFilesS3 extends Command
                         Log::error('error in Commands@CurrentBalance-LastBalance: '.$errormsg_file);
                     }
                     elseif (!$usr_exist){
-                        $errormsg_file[] = $file." - El cliente o proveedor asociado no se encuentra en el sistema";
+                        $errormsg_file = $file." - El cliente o proveedor asociado no se encuentra en el sistema";
                         Log::error('error in Commands@CurrentBalance-LastBalance: '.$errormsg_file);
                     }
                     else {
@@ -234,7 +234,7 @@ class GetFilesS3 extends Command
 
         foreach ($files_s3 as $file){
 
-            if(strpos($file,"xml")){
+            if(strpos($file,"xml") || strpos($file,"XML")){
 
                 $exists = Order::where('name_file', $file)->first();
 
@@ -255,14 +255,16 @@ class GetFilesS3 extends Command
                         if(isset($assoc[0]['tag']) && $assoc[0]['tag'] == 'tracking'){
                             $xml_body = true;
                             foreach ($assoc[0]['value'] as $element){
-                                if($element['tag'] == 'OrderNo')
+                                if(in_array($element['tag'],['OrderNo', 'Order']))
                                     $order['order'] = $element['value'];
-                                elseif($element['tag'] == 'referenceNo')
+                                elseif(in_array($element['tag'],['referenceNo', 'reference']))
                                     $order['reference'] = $element['value'];
                                 elseif($element['tag'] == 'dateTime')
                                     $order['dateTime'] = $element['value'];
                                 elseif($element['tag'] == 'Status')
                                     $order['status'] = $element['value'];
+                                elseif($element['tag'] == 'EstadoOrden')
+                                    $order['EstadoOrden'] = ($element['value'] != 'Cerrada') ? 'Abierta' : 'Cerrada';
                                 elseif($element['tag'] == 'Client')
                                     $order['client'] = $element['value'];
                                 elseif($element['tag'] == 'Code')
@@ -292,7 +294,7 @@ class GetFilesS3 extends Command
                         Log::error('error in Commands@GetOrders: '.$errormsg_file);
                     }
                     elseif (!$usr_exist){
-                        $errormsg_file[] = $file." - El cliente o proveedor asociado no se encuentra en el sistema";
+                        $errormsg_file = $file." - El cliente o proveedor asociado no se encuentra en el sistema";
                         Log::error('error in Commands@GetOrders: '.$errormsg_file);
                     }
                     else {
@@ -305,6 +307,7 @@ class GetFilesS3 extends Command
                      }
 
                     unlink($xmlFile);
+
                 }
             }
         }

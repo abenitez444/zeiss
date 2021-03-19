@@ -2,7 +2,7 @@
 
 @section('content')
 
-<body class="bg-gradient-primary">
+<body>
   <div class="container">
     <!-- Outer Row -->
     <div class="row justify-content-center">
