@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>GD16284 </Factura>
+      <Cliente>24858   </Cliente>
+      <Referencia>09595-2-1082 DANIELA NGG-               </Referencia>
+      <Orden>S1326174</Orden>
+      <Fecha>11/28/20</Fecha>
+      <Vencimiento>12/05/20</Vencimiento>
+      <Fpago>05/31/21</Fpago>
+      <Fregistro>06/01/21</Fregistro>
+      <RefQAD>1156354 </RefQAD>
+</payment>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<payment>
+      <Factura>CN101827</Factura>
+      <Cliente>30338</Cliente>
+      <Referencia>""</Referencia>
+      <Orden>S1184510</Orden>
+      <Fecha>05/29/19</Fecha>
+      <Vencimiento>06/05/19</Vencimiento>
+      <Fpago>09/15/21</Fpago>
+      <Fregistro>09/15/21</Fregistro>
+      <RefQAD>1164293</RefQAD>
+      <Importe>1067.2</Importe>
+</payment>

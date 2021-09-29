@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>GD17232 </Factura>
+      <Cliente>30386   </Cliente>
+      <Referencia>01010-VAZQUEZ GDL 30386-MXRX            </Referencia>
+      <Orden>S1327679</Orden>
+      <Fecha>01/05/21</Fecha>
+      <Vencimiento>01/12/21</Vencimiento>
+      <Fpago>05/25/21</Fpago>
+      <Fregistro>06/02/21</Fregistro>
+      <RefQAD>1156737 </RefQAD>
+</payment>

@@ -12,8 +12,8 @@
 				</div>
 				<div class="modal-body">
                     <select class="form-control" id="estado" name="estado">
-                        <option value="1">Pagado</option>
-                        <option value="2">Pendiente</option>
+					{{--<option value="1">Pagado</option>
+                        <option value="2">Pendiente</option>--}}
                         <option value="3">Cancelado</option>
                         <option value="4">Validado</option>
                     </select>

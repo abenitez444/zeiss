@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>CN114850</Factura>
+      <Cliente>24687   </Cliente>
+      <Referencia>250362 hp                               </Referencia>
+      <Orden>S1260299</Orden>
+      <Fecha>03/10/20</Fecha>
+      <Vencimiento>03/17/20</Vencimiento>
+      <Fpago>06/05/21</Fpago>
+      <Fregistro>06/04/21</Fregistro>
+      <RefQAD>1156766 </RefQAD>
+</payment>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<payment>
+      <Factura>GD15998</Factura>
+      <Cliente>30005   </Cliente>
+      <Referencia></Referencia>
+      <Orden>S1320040</Orden>
+      <Fecha>11/19/20</Fecha>
+      <Vencimiento>11/26/20</Vencimiento>
+      <Fpago>07/19/21</Fpago>
+      <Fregistro>07/19/21</Fregistro>
+      <RefQAD>1159590 </RefQAD>
+</payment>

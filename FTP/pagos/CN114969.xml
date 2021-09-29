@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>CN114969</Factura>
+      <Cliente>24687   </Cliente>
+      <Referencia>02262-7174 SILVIA STEFANY-MXRX          </Referencia>
+      <Orden>S1258906</Orden>
+      <Fecha>03/12/20</Fecha>
+      <Vencimiento>03/19/20</Vencimiento>
+      <Fpago>06/29/21</Fpago>
+      <Fregistro>07/02/21</Fregistro>
+      <RefQAD>1158747 </RefQAD>
+</payment>

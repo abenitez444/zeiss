@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>CN115544</Factura>
+      <Cliente>24687   </Cliente>
+      <Referencia>06307-7420HORACIO UNMX-MXRX             </Referencia>
+      <Orden>S1264329</Orden>
+      <Fecha>03/27/20</Fecha>
+      <Vencimiento>04/03/20</Vencimiento>
+      <Fpago>06/29/21</Fpago>
+      <Fregistro>07/02/21</Fregistro>
+      <RefQAD>1158747 </RefQAD>
+</payment>

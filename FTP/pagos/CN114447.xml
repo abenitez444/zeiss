@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>CN114447</Factura>
+      <Cliente>24687   </Cliente>
+      <Referencia>08950-7256 ILDA GUAD. UNMX-MXRX         </Referencia>
+      <Orden>S1254614</Orden>
+      <Fecha>02/26/20</Fecha>
+      <Vencimiento>03/04/20</Vencimiento>
+      <Fpago>06/05/21</Fpago>
+      <Fregistro>06/04/21</Fregistro>
+      <RefQAD>1156766 </RefQAD>
+</payment>

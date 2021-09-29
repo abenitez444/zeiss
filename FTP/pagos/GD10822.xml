@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>GD10822</Factura>
+      <Cliente>30988   </Cliente>
+      <Referencia>09665-241440-MXRX                       </Referencia>
+      <Orden>S1255665</Orden>
+      <Fecha>02/27/20</Fecha>
+      <Vencimiento>03/05/20</Vencimiento>
+      <Fpago>06/29/21</Fpago>
+      <Fregistro>06/30/21</Fregistro>
+      <RefQAD>1158471 </RefQAD>
+</payment>

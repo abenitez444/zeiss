@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>GD17508 </Factura>
+      <Cliente>30693   </Cliente>
+      <Referencia>09509-Ledesma Gabriela-MXRX             </Referencia>
+      <Orden>S1336629</Orden>
+      <Fecha>01/12/21</Fecha>
+      <Vencimiento>01/27/21</Vencimiento>
+      <Fpago>05/31/21</Fpago>
+      <Fregistro>06/01/21</Fregistro>
+      <RefQAD>1156411 </RefQAD>
+</payment>

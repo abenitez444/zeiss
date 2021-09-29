@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>CN114574</Factura>
+      <Cliente>24687   </Cliente>
+      <Referencia>09571-7245ERNESTO UNMX-MXRX             </Referencia>
+      <Orden>S1255538</Orden>
+      <Fecha>02/28/20</Fecha>
+      <Vencimiento>03/06/20</Vencimiento>
+      <Fpago>06/05/21</Fpago>
+      <Fregistro>06/04/21</Fregistro>
+      <RefQAD>1156766 </RefQAD>
+</payment>

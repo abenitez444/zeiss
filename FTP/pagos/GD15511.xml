@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>GD15511 </Factura>
+      <Cliente>25293   </Cliente>
+      <Referencia></Referencia>
+      <Orden>S1310969</Orden>
+      <Fecha>10/30/20</Fecha>
+      <Vencimiento>11/06/20</Vencimiento>
+      <Fpago>05/18/21</Fpago>
+      <Fregistro>05/29/21</Fregistro>
+      <RefQAD>1156003 </RefQAD>
+</payment>

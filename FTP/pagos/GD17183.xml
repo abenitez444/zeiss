@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>GD17183 </Factura>
+      <Cliente>22367   </Cliente>
+      <Referencia>07641-879-                              </Referencia>
+      <Orden>S1334655</Orden>
+      <Fecha>01/04/21</Fecha>
+      <Vencimiento>02/03/21</Vencimiento>
+      <Fpago>05/31/21</Fpago>
+      <Fregistro>06/01/21</Fregistro>
+      <RefQAD>1156307 </RefQAD>
+</payment>

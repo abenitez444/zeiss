@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>CN114866</Factura>
+      <Cliente>24687   </Cliente>
+      <Referencia>03229-7321 ELIZA CRUZ-                  </Referencia>
+      <Orden>S1260109</Orden>
+      <Fecha>03/10/20</Fecha>
+      <Vencimiento>03/17/20</Vencimiento>
+      <Fpago>06/29/21</Fpago>
+      <Fregistro>07/02/21</Fregistro>
+      <RefQAD>1158747 </RefQAD>
+</payment>

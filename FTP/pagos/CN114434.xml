@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<payment>
+      <Factura>CN114434</Factura>
+      <Cliente>24687   </Cliente>
+      <Referencia>09041-7239 KARLA DAN. UNMX-MXRX         </Referencia>
+      <Orden>S1254746</Orden>
+      <Fecha>02/25/20</Fecha>
+      <Vencimiento>03/03/20</Vencimiento>
+      <Fpago>06/05/21</Fpago>
+      <Fregistro>06/04/21</Fregistro>
+      <RefQAD>1156766 </RefQAD>
+</payment>
