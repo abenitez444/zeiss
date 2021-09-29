@@ -6,6 +6,7 @@ use App\Factura;
 use App\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 use DB;
 
 class PagosController extends Controller
@@ -22,14 +23,113 @@ class PagosController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') )
-            $pagos = DB::select('select payments.*, users.name from payments left join payments_facturas on payment_id = payments.id left join _users_facturas on _users_facturas.factura_id = payments_facturas.factura_id left join users on users.id = _users_facturas.user_id order by payments.created_at desc');
-        else
+        // if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') )
+        //     $pagos = DB::select('select payments.*, users.name from payments left join payments_facturas on payment_id = payments.id left join _users_facturas on _users_facturas.factura_id = payments_facturas.factura_id left join users on users.id = _users_facturas.user_id order by payments.created_at desc');
+        // else
+        //     $pagos = DB::select('select payments.* from payments left join payments_facturas on payment_id = payments.id left join _users_facturas on _users_facturas.factura_id = payments_facturas.factura_id where user_id = '.$user->id.' order by payments.created_at desc');
+
+        // return view('admin.pagos.index', ['pagos'=>$pagos]);
+        
+        //return view('admin.pagos.index');
+    }
+
+    public function getPagosAdmin(Request $request) {
+
+        if ($request->ajax()) {
+
+            //$pagos = DB::select('select payments.*, clients.cod_cliente, facturas.id as facturas_id, facturas.nombre_factura, facturas.estado, facturas.estadoOtro from payments left join payments_facturas on payment_id = payments.id left join facturas on facturas.id = payments_facturas.factura_id left join _users_facturas on _users_facturas.factura_id = payments_facturas.factura_id left join clients on clients.user_id = _users_facturas.user_id order by payments.created_at desc');
+
+            $pagos = Payment::with('factura');
+            
+            return DataTables::of($pagos)
+            ->addColumn('action', function ($row) {
+
+                $btn = '<a href="'.url('/admin/pagos/facturas/'.$row->id).'" class="btn btn-warning btn-circle btn-sm" title="Ver Facturas"><i class="fas fa-eye"></i> </a>';
+                    
+                $btn .= '<a href="javascript: void(0);" onclick="openModalChange('.$row->id.');" title="Validar Pago" class="btn btn-primary btn-circle btn-sm modal-open" ><i class="fas fa-check-square"></i></a>';
+
+                $btn .= '<a href="javascript: void(0);" onclick="openModalDelete('.$row->id.');" title="Eliminar" class="btn btn-danger btn-circle btn-sm modal-open" ><i class="fas fa-trash-alt"></i></a>';
+
+                return $btn;
+            })
+            ->addColumn('created_at', function($row){
+                return $row->created_at;
+            })
+            ->addColumn('nombre_factura', function (Payment $payment) {
+                return $payment->factura[0]->nombre_factura;
+            })
+            ->addColumn('name_file', function($row){
+                return $row->name_file;
+            })
+            ->addColumn('importe', function($row){
+                return number_format($row->importe, 2, '.', ',');
+            })
+            ->addColumn('estado', function (Payment $payment) {
+                return (!empty($payment->factura[0]->name_file)) ? '' : 'Pagado';
+            })
+            ->addColumn('estadoOtro', function (Payment $payment) {
+                return (!empty($payment->factura[0]->name_file)) ? 'Pagado' : '';
+            })
+            // ->addColumn('cod_cliente', function($row){
+            //     return $row->cod_cliente;
+            // })
+            ->addColumn('cod_cliente', function (Payment $payment) {
+                //return $payment->factura[0];
+                return "-";
+            })
+            ->addColumn('RefQAD', function($row){
+                return $row->RefQAD;
+            })
+            // ->addColumn('facturas_id', function($row){
+            //     return $row->facturas_id;
+            // })
+            ->addColumn('facturas_id', function (Payment $payment) {
+                return $payment->factura[0]->id;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+
+        return view('admin.pagos.index', ['load_invoice'=>true]);
+
+    }
+
+    public function getPagosOther(Request $request) {
+
+        if ($request->ajax()) {
+            $user = Auth::user();
+
             $pagos = DB::select('select payments.* from payments left join payments_facturas on payment_id = payments.id left join _users_facturas on _users_facturas.factura_id = payments_facturas.factura_id where user_id = '.$user->id.' order by payments.created_at desc');
 
-        return view('admin.pagos.index', ['pagos'=>$pagos]);
+            return DataTables::of($pagos)
+            ->addColumn('action', function ($row) {
+                    
+                $btn = '<a href="'.url('/admin/pagos/facturas/'.$row->id).'" class="btn btn-warning btn-circle btn-sm" title="Ver Facturas"><i class="fas fa-eye"></i> </a>';
+            
+                return $btn;
+            })
+            ->addColumn('created_at', function($row){
+                return $row->created_at;
+            })
+            ->addColumn('mediopago', function($row){
+                return $row->mediopago;
+            })
+            ->addColumn('referencia', function($row){
+                return $row->referencia;
+            })
+            ->addColumn('importe', function($row){
+                return number_format($row->importe, 2, '.', ',');
+            })
+            ->addColumn('mensaje', function($row){
+                return $row->mensaje;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+
+        return view('admin.pagos.index', ['load_invoice'=>false]);
     }
 
     /**

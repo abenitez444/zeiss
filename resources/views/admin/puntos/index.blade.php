@@ -90,12 +90,12 @@
                             <td>{{ $cat->puntos }}</td>
                             <td>{{ $cat->estado }}</td>
                             @canany(['isAdmin','isManager'])
-                            <td>{{ $cat->user[0]->name }}</td>
+                            <td>{{ (isset($cat->user[0])) ? $cat->user[0]->name : 'Error, no tiene usuario'}}</td>
                             @endcanany
                             @can('isCliente')
                             <td>{{ (!empty($cat->created_at)) ? date('d/m/Y', strtotime($cat->created_at."+ 1 year") ) : "No definido" }}</td>
                             @endcan
-                            <td>{{ $cat->factura[0]->numero_factura }}</td>
+                            <td>{{ (isset($cat->user[0])) ? $cat->factura[0]->numero_factura : 'Error, no tiene factura'}}</td>
                             <td>
                                 @can('isAdmin')
                                 <a href="{{ route('puntos.edit', $cat->id) }}" class="btn btn-warning btn-circle btn-sm"><i class="fa fa-edit"></i>

@@ -46,20 +46,7 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach($orders as $key => $order)
-                            <tr>
-                                <td>{{ $order->reference }}</td>
-                                <td>{{ $order->order }}</td>
-                                <td>{{ $order->status }}</td>
-                                <td>{{ $order->EstadoOrden }}</td>
-                                <td>{{ $order->client }}</td>
-                                <td>{{ $order->dateTime }}</td>
-                                <td>{{ $order->code }}</td>
-                                <td>{{ $order->coating }}</td>
-                                <td>{{ $order->color }}</td>
-                                <td>{{ $order->montage }}</td>
-                            </tr>
-                        @endforeach
+                        
                     </tbody>
                 </table>
             </div>
@@ -71,12 +58,35 @@
 @section('js_user_page')
     <script>
         $(document).ready( function () {
+            route = "{{ route('orders.ajax') }}";
+
             var table = $('#listOrder').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': route,
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                },
+                columns: [
+                    {data: 'reference', name: 'reference'},
+                    {data: 'order', name: 'order'},
+                    {data: 'status', name: 'status'},
+                    {data: 'EstadoOrden', name: 'EstadoOrden'},
+                    {data: 'client', name: 'client'},
+                    {data: 'dateTime', name: 'dateTime'},
+                    {data: 'code', name: 'code'},
+                    {data: 'coating', name: 'coating'},
+                    {data: 'color', name: 'color'},
+                    {data: 'montage', name: 'montage'},
+                ],
                 language: {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
                 responsive: true,
-                'order': [[0, 'desc']]
+                "bSort" : false
             });
         });
     </script>

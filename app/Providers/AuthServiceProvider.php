@@ -41,9 +41,13 @@ class AuthServiceProvider extends ServiceProvider
             return $user->roles->first()->slug == 'cliente';
         });
 
+        Gate::define('isVendedor', function ($user) {
+            return $user->roles->first()->slug == 'vendedor';
+        });
+
         Gate::define('isContentEditor', function ($user) {
             return $user->roles->first()->slug == 'content-editor';
         });
-        
+
     }
 }

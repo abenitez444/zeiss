@@ -134,6 +134,11 @@ return [
             'root' => '../FTP/pagos',
         ],
 
+        'sftp-pagos-proveedores' => [
+            'driver' => 'local',
+            'root' => '../FTP/pagos-proveedores',
+        ],
+
     ],
 
 ];

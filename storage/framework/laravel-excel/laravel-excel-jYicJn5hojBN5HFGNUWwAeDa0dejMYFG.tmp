@@ -1,0 +1,3 @@
+categorias_id,puntos,codigo,nombre,stock,descripcion,estado
+Hogar,200,lav-xyz,Lavadora de prueba,74,Lavadora super poderosa para lavado de ropa con diferentes ciclos y funciones apra todo tipo de materiales.,activo
+Hogar,100,licu-xyz,Licuadora Oster,69,Licuadora de varias velocidades,activo

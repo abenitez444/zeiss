@@ -6,14 +6,30 @@
     <div class="container-fluid">
 
         <div class="row py-lg-4">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <h2>Gestión de proveedores</h2>
             </div>
-            <div class="col-md-6">
-                <a href="{{ route('providers.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">Crear nuevo proveedor</a>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-7">
+                        <a href="{{ route('providers.create') }}" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">Crear nuevo proveedor</a>
+                    </div>
+                    <div class="col-md-5">
+                        <a href="{{ route('providers.load') }}"" class="btn btn-primary btn-md float-md-right" role="button" aria-pressed="true">
+                            Cargar Archivo</a>
+                    </div>
+                </div>
             </div>
         </div>
 
+        @if (session('info'))
+            <div class="alert alert-info alert-block">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <ul>
+                    <li><strong>{{ session('info') }}</strong></li>
+                </ul>
+            </div>
+        @endif
 
         <!-- DataTables Example -->
         <div class="card mb-3">
@@ -26,6 +42,7 @@
                         <thead>
                         <tr>
                             <th>Id</th>
+                            <th>Proveedor</th>
                             <th>Nombre</th>
                             <th>Correo</th>
                             <th>Rol</th>
@@ -35,6 +52,7 @@
                         <tfoot>
                         <tr>
                             <th>Id</th>
+                            <th>Proveedor</th>
                             <th>Nombre</th>
                             <th>Correo</th>
                             <th>Rol</th>
@@ -45,6 +63,7 @@
                         @foreach ($providers as $user)
                             <tr>
                                 <td>{{$user->idd}}</td>
+                                <td>{{$user->cod_proveedor}}</td>
                                 <td>{{$user->nombreuser}}</td>
                                 <td>{{$user->correo}}</td>
                                 <td>{{$user->nombrerol}}</td>

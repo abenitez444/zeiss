@@ -121,6 +121,15 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="cod_proveedor">Numero de Proveedor</label>
+                        <input type="text" name="cod_proveedor" autocomplete="off" class="form-control" id="cod_proveedor" placeholder="Numero de Proveedor..." value="{{ old('cod_proveedor') }}" required>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group pt-2">
                 <input class="btn btn-primary" type="submit" value="Guardar">
                 <a href="{{ route('providers.index') }}" class="btn btn-danger" >Cancelar</a>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 
 class OrdersController extends Controller
 {
@@ -21,16 +22,95 @@ class OrdersController extends Controller
         $this->middleware(['auth']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') )
-            $orders = Order::all();
-        else
+            return view('admin.orders.index');
+        else{
             $orders = DB::select('select orders.* from orders left join clients on client = clients.cod_cliente where clients.user_id = '.Auth::user()->id.' order by orders.id desc');
 
-        return view('admin.orders.index', ['orders'=>$orders]);
+            $order_new = array();
+            foreach ($orders as $order){
+                //$clave = array_search($order->name_file, $posiciones);
+                $clave = $this->getPosicion($order->name_file);
+                $order_new[$order->order][$clave] = $this->array_map_key($order->order, $order->reference, $order->status, $order->EstadoOrden, $order->client, $order->dateTime, $order->code, $order->coating, $order->color, $order->montage);
+            }
+
+            return view('admin.orders.index2', ['orders'=>$order_new]);
+        }
     }
 
+    public function getOrdersAjax(Request $request)
+    {
+        if ($request->ajax()) {
+            if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') )
+                $orders = Order::orderBy('id', 'desc');
+            else
+                $orders = DB::select('select orders.* from orders left join clients on client = clients.cod_cliente where clients.user_id = '.Auth::user()->id.' order by orders.id desc');
+
+            return DataTables::of($orders)
+            ->addColumn('reference', function($row){
+                return $row->reference;
+            })
+            ->addColumn('order', function($row){
+                return $row->order;
+            })
+            ->addColumn('status', function($row){
+                return $row->status;
+            })
+            ->addColumn('EstadoOrden', function($row){
+                return $row->status;
+            })
+            ->addColumn('client', function($row){
+                return $row->client;
+            })
+            ->addColumn('dateTime', function($row){
+                return $row->dateTime;
+            })
+            ->addColumn('code', function($row){
+                return $row->code;
+            })
+            ->addColumn('coating', function($row){
+                return $row->coating;
+            })
+            ->addColumn('color', function($row){
+                return $row->color;
+            })
+            ->addColumn('montage', function($row){
+                return $row->montage;
+            })
+            ->make(true);
+
+        }
+
+        
+    }
+
+    function getPosicion($name_file){
+        $posiciones = array('DE', 'TJ', 'AL', 'MATCH1', 'MATCH2', 'BF', 'FAC', 'GUIA', 'REDO', 'SCRAP');
+
+        foreach ($posiciones as $key => $posicion){
+            if( (strpos($name_file, $posicion)))
+                return $key + 1;
+        }
+
+        return 0;
+    }
+
+    function array_map_key($order ,$reference, $status, $EstadoOrden, $client, $dateTime, $code, $coating, $color, $montage){
+        $tmp_array['order']  = $order;
+        $tmp_array['reference']  = $reference;
+        $tmp_array['status']  = $status;
+        $tmp_array['EstadoOrden'] = $EstadoOrden;
+        $tmp_array['client']     = $client;
+        $tmp_array['dateTime']  = $dateTime;
+        $tmp_array['code']  = $code;
+        $tmp_array['coating']  = $coating;
+        $tmp_array['color']  = $color;
+        $tmp_array['montage']  = $montage;
+        return $tmp_array;
+     }
+ 
     /**
      * Show the form for creating a new resource.
      *

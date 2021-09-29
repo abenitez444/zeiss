@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cfdi:Comprobante xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd" Version="3.3" Serie="J" Folio="50556" Fecha="2021-08-18T15:56:55" Sello="hh7gAUaHg90slouuhHaSXVYheXr5m1Ync0cnrntBCSVXxNOrI1yCDnVl3u3hfpRSo362YJupkMoAQgpbfVQZbNqjg7zjWziVYKGYbSv8kUMz5FrdJeVcfexcEmzbV8ZZT9WTBigA3Gct8wBgw4LMa74Z8uRkbjrWac2CdVm3LB3SFjgsOVrAEHTD6oznBzctiWmQiGGkoQA9jl9XRdZd4Ecqii0c5Om/eFsmVRiM0lNqZN6pAIOBS5WfmKrL7iMJkOt5khVZl6cYk8L8m332M/b43XHa6Kj1+4rsbQMDDrHm6us3a+CSlXEZxkdJPM+h9Rh8sucVCtbW4NuNlHko/g==" FormaPago="01" NoCertificado="00001000000508446069" Certificado="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" SubTotal="1241.39" Moneda="MXN" Total="1440.01" TipoDeComprobante="I" MetodoPago="PUE" LugarExpedicion="06000" xmlns:cfdi="http://www.sat.gob.mx/cfd/3">
+  <cfdi:Emisor Rfc="ISV1208104H3" Nombre="INTEGRACIONES PARA LA SALUD VISUAL, S.A. DE C.V." RegimenFiscal="601" />
+  <cfdi:Receptor Rfc="CZV9204036N2" Nombre="CARL ZEISS VISION MEXICO S DE RL DE CV" UsoCFDI="G01" />
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="31241501" NoIdentificacion="FLETE 4" Cantidad="1" ClaveUnidad="H87" Unidad="PIEZA" Descripcion="ENTREGA EN TIENDA" ValorUnitario="0.01" Importe="0.010000">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="0.010000" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="0.00" />
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="31241501" NoIdentificacion="tornillo 75" Cantidad="18" ClaveUnidad="H87" Unidad="PIEZA" Descripcion="ACC TORNILLO 80" ValorUnitario="68.96552" Importe="1241.379360">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="1241.379360" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="198.62" />
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="198.62">
+    <cfdi:Traslados>
+      <cfdi:Traslado Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="198.62" />
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd" Version="1.1" FechaTimbrado="2021-08-18T15:57:00" SelloCFD="hh7gAUaHg90slouuhHaSXVYheXr5m1Ync0cnrntBCSVXxNOrI1yCDnVl3u3hfpRSo362YJupkMoAQgpbfVQZbNqjg7zjWziVYKGYbSv8kUMz5FrdJeVcfexcEmzbV8ZZT9WTBigA3Gct8wBgw4LMa74Z8uRkbjrWac2CdVm3LB3SFjgsOVrAEHTD6oznBzctiWmQiGGkoQA9jl9XRdZd4Ecqii0c5Om/eFsmVRiM0lNqZN6pAIOBS5WfmKrL7iMJkOt5khVZl6cYk8L8m332M/b43XHa6Kj1+4rsbQMDDrHm6us3a+CSlXEZxkdJPM+h9Rh8sucVCtbW4NuNlHko/g==" UUID="D54E4031-C7AE-47A2-9B14-4C0D939E6777" NoCertificadoSAT="00001000000503727538" RfcProvCertif="SAD110722MQA" SelloSAT="SsQfXpyCOdUR6fnKyuOPOQJZXZ/xbtqLV2Kex0BB42Feu0XCifQgZBx6Fx3cKYN1XzYP1J25P13G3hoI5/5FQp2Ul3jwd7Lr0Oyka2Geys0jHT8ohSLO/MRRcjApH4l7e9fA6xTyV6Aczvv5Y5s/CjkqMYtrF+j5DJ8clzcDAb9VHgjCH7pW7ABvAk18zQHBgUHSDln9P4Kugu+YB60fBwBdbEZ6V9ur6ixIkdl/02LNmjJpP/FyV2VZEvf47alwtlZlr0/4PdiAPfYje3SBdF0y8V7bVVKJ1OcKzuO1kpGmtQYcchdGUbBaxZyTMNWxmzrynRL3GsHvXGm75tgdxA==" />
+  </cfdi:Complemento>
+  <cfdi:Addenda>
+    <dircliente>
+      <calle>PROTON</calle>
+      <numext>12</numext>
+      <numint>
+      </numint>
+      <colonia>PARQUE INDUSTRIAL NAUCALAPAN</colonia>
+      <pobla>NAUCALAPAN</pobla>
+      <ciudad>edo de mexico</ciudad>
+      <estado>EDO. DE MEXICO</estado>
+      <cp>53486</cp>
+    </dircliente>
+  </cfdi:Addenda>
+</cfdi:Comprobante>

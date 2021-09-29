@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>{{ config('app.name', 'Carl-Zeiss') }}</title>
+  <title>Vision ZEISS</title>
 
     <!-- Custom styles for this template-->
   <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
@@ -27,23 +27,28 @@
 
   @yield('css_role_page')
 
+  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+
 </head>
 
 <body id="page-top">
 
+    <div class="widget-wrapper" style="visibility:hidden; display: none;">
+        <div class="spinner"><h2 style="color: #0808b8">Espere mientras se procesa..</h2></div>
+    </div>
 
     <!-- Page Wrapper -->
   <div id="wrapper">
 
      <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav sidebar sidebar-dark accordion" style="background-color: #0808b8; color: #fff" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/" style="background-color: #fff;">
         <div class="sidebar-brand-icon rotate-n-15">
           <!--i class="fas fa-laugh-wink"></i-->
         </div>
-        <div class="sidebar-brand-text mx-3">{{ config('app.name', 'Carl-Zeiss') }}<!--sup>2</sup--></div>
+        <div class="sidebar-brand-text mx-3"><img src="{{ asset('logo1.png') }}" alt="logo_image"><!--sup>2</sup--></div>
       </a>
 
       <!-- Divider -->
@@ -53,7 +58,7 @@
       <li class="nav-item active">
         <a class="nav-link" href="/">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
+          <span>Menú Principal</span></a>
       </li>
 
       <!-- Divider -->
@@ -83,6 +88,7 @@
                         @if(\Auth::user()->hasPermission('usuarios-sistema'))<a class="collapse-item" href="{{ route('users.index') }}">Sistema</a>@endif
                         @if(\Auth::user()->hasPermission('usuarios-clientes'))<a class="collapse-item" href="{{ route('clients.index') }}">Clientes</a>@endif
                         @if(\Auth::user()->hasPermission('usuarios-proveedores'))<a class="collapse-item" href="{{ route('providers.index') }}">Proveedores</a>@endif
+                        @if(\Auth::user()->hasPermission('usuarios-vendedores'))<a class="collapse-item" href="{{ route('sellers.index') }}">Vendedores</a>@endif
                     </div>
                 </div>
             </li>
@@ -132,7 +138,7 @@
       @canany(['isAdmin','isManager'])
         @if(\Auth::user()->hasPermission('pagos'))
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('pagos.index') }}">
+            <a class="nav-link" href="{{ route('pagos.admin') }}">
             <i class="fa fa-check"></i>
             <span>Pagos</span></a>
         </li>
@@ -176,17 +182,17 @@
       @endcanany
 
       @canany(['isCliente'])
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link" href="{{ route('puntos.index') }}">
             <i class="fas fa-fw fa-project-diagram"></i>
             <span>Puntos</span></a>
-        </li>
+        </li> --}}
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('pagos.index') }}">
+            <a class="nav-link" href="{{ route('pagos.other') }}">
             <i class="fa fa-check"></i>
             <span>Pagos</span></a>
         </li>
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link" href="{{ route('operations.index') }}">
             <i class="fa fa-barcode"></i>
             <span>Productos Canjeados</span></a>
@@ -195,7 +201,7 @@
             <a class="nav-link" href="{{ route('operations.products', 0) }}">
             <i class="fa fa-vr-cardboard"></i>
             <span>Lista de Productos</span></a>
-        </li>
+        </li> --}}
         <li class="nav-item">
             <a class="nav-link" href="{{ route('ordenes.index') }}">
               <i class="fas fa-fw fa-calendar-times"></i>
@@ -203,13 +209,61 @@
         </li>
       @endcanany
 
+      @can('isVendedor')
+            @if(\Auth::user()->hasPermission('usuarios'))
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Usuarios</span></a>
+                <div id="collapseUsers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        @if(\Auth::user()->hasPermission('usuarios-vendedores'))<a class="collapse-item" href="{{ route('sellers.index') }}">Vendedores</a>@endif
+                    </div>
+                </div>
+            </li>
+            @endif
+            @if(\Auth::user()->hasPermission('puntos'))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('puntos.index') }}">
+                    <i class="fas fa-fw fa-project-diagram"></i>
+                    <span>Puntos</span></a>
+                </li>
+            @endif
+            @if(\Auth::user()->hasPermission('pagos'))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('pagos.other') }}">
+                    <i class="fa fa-check"></i>
+                    <span>Pagos</span></a>
+                </li>
+            @endif
+            @if(\Auth::user()->hasPermission('productos'))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('operations.index') }}">
+                    <i class="fa fa-barcode"></i>
+                    <span>Productos Canjeados</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('operations.products', 0) }}">
+                    <i class="fa fa-vr-cardboard"></i>
+                    <span>Lista de Productos</span></a>
+                </li>
+            @endif
+            @if(\Auth::user()->hasPermission('follow-the-lens'))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('ordenes.index') }}">
+                    <i class="fas fa-fw fa-calendar-times"></i>
+                    <span>Follow the lens</span></a>
+                </li>
+            @endif
+      @endcan
+
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
       <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
+      {{-- <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
+      </div> --}}
 
     </ul>
     <!-- End of Sidebar -->
@@ -224,12 +278,12 @@
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
           <!-- Sidebar Toggle (Topbar) -->
-          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" data-toggle="collapse" data-target="#accordionSidebar" aria-controls="accordionSidebar" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fa fa-bars"></i>
           </button>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          {{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
               <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
@@ -238,13 +292,13 @@
                 </button>
               </div>
             </div>
-          </form>
+          </form> --}}
 
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-            <li class="nav-item dropdown no-arrow d-sm-none">
+            {{-- <li class="nav-item dropdown no-arrow d-sm-none">
               <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-search fa-fw"></i>
               </a>
@@ -261,10 +315,10 @@
                   </div>
                 </form>
               </div>
-            </li>
+            </li> --}}
 
             <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
+            {{-- <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
@@ -288,10 +342,10 @@
                 </a>
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
               </div>
-            </li>
+            </li> --}}
 
             <!-- Nav Item - Messages -->
-            <li class="nav-item dropdown no-arrow mx-1">
+            {{-- <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
                 <!-- Counter - Messages -->
@@ -314,7 +368,7 @@
                 </a>
                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
               </div>
-            </li>
+            </li> --}}
 
             <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -330,13 +384,13 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                  @can('isProveedor')
+                  {{-- @can('isProveedor')
                       <a class="dropdown-item" href="{{ route('providers.edit', Auth::user()->id) }}">
                           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                           Perfil
                       </a>
                       <div class="dropdown-divider"></div>
-                  @endcan
+                  @endcan --}}
 {{--                <a class="dropdown-item" href="#">--}}
 {{--                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>--}}
 {{--                  Configuración--}}

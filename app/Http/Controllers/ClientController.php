@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Exports\FacturasClientesExport;
+use App\Factura;
+use App\Imports\ClientsImport;
 use App\Role;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientController extends Controller
 {
@@ -29,12 +33,13 @@ class ClientController extends Controller
     public function index()
     {
 
-        $clientes = DB::table('users as a')
-            ->join('users_roles as d', 'a.id', '=', 'd.user_id')
-            ->join('roles as c', 'c.id', '=', 'd.role_id')
-            ->select('a.id as idd', 'a.name as nombreuser', 'a.email as correo', 'c.name as nombrerol', 'c.slug as enlace')
-            ->where('c.id','=',3)
-            ->orderBy('a.id', 'DESC')
+        $clientes = DB::table('users as u')
+            ->join('clients as c', 'u.id', '=', 'c.user_id')
+            ->join('users_roles as ur', 'u.id', '=', 'ur.user_id')
+            ->join('roles as r', 'r.id', '=', 'ur.role_id')
+            ->select('u.id as idd', 'u.name as nombreuser', 'u.email as correo', 'r.name as nombrerol', 'r.slug as enlace', 'c.cod_cliente as codigo')
+            ->where('r.id','=',3)
+            ->orderBy('u.id', 'DESC')
             ->paginate(10000);
 
         //echo json_encode($clientes);
@@ -102,6 +107,7 @@ class ClientController extends Controller
         $client->cfdi = $request->cfdi;
         $client->status = $request->status;
         $client->cod_cliente = $request->cod_cliente;
+        $client->participa = ($request->participa == 'on' ? 1 : 0);
         $client->user_id = $user->id;
 
         $client->save();
@@ -149,7 +155,7 @@ class ClientController extends Controller
         //validate the fields
         $request->validate([
             'name' => 'required|string|max:191',
-            'email' => 'required|email|max:191',
+            'email' => 'required|email|max:191|unique:users,email,'.$id,
             'rfc' => 'required|max:191',
             'phone' => 'required',
             'credit_days' => 'required',
@@ -186,6 +192,7 @@ class ClientController extends Controller
                 'cfdi' => $request->cfdi,
                 'status' => $request->status,
                 'cod_cliente' => $request->cod_cliente,
+                'participa' => ($request->participa == 'on' ? 1 : 0),
                 ]
         );
 
@@ -207,5 +214,50 @@ class ClientController extends Controller
         $client->delete();
 
         return redirect()->route('clients.index');
+    }
+
+    public function getLoad(){
+        return view('admin.clientes.load');
+    }
+
+    public function setLoad(){
+        try {
+            (new ClientsImport)->import(request()->file('uploadfile'));
+
+            return redirect()->route('clients.index')->with('info', 'Archivo importado correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('clients.index')->with('info', 'Ha ocurrido un error importando. Error: '.$e->getMessage());
+        }
+    }
+
+    public function exportFactura(Request $request){
+
+        $sql = "SELECT factura_id, cod_cliente, numero_factura, nombre_factura, total_cost, estado, name
+                FROM facturas left join _users_facturas on factura_id = facturas.id
+                left join users on users.id = _users_facturas.user_id
+                left join clients on clients.user_id = users.id
+                left join users_roles on users_roles.user_id = users.id
+                where users_roles.role_id = 3";
+
+        if(!empty($request->estado))
+            $sql .= " AND estado = '".$request->estado."'";
+
+        if(!empty($request->client))
+            $sql .= " AND cod_cliente like '%".$request->client."%'";
+
+        if(!empty($request->start) && !empty($request->end))
+            $sql .= " AND facturas.created_at BETWEEN '".$request->start."' AND '".$request->end."'";
+        elseif(!empty($request->start) && empty($request->end))
+            $sql .= " AND MONTH(facturas.created_at) = MONTH('".$request->start."') AND YEAR(facturas.created_at) = YEAR('".$request->start."')";
+        elseif(empty($request->start) && !empty($request->end))
+            $sql .= " AND MONTH(facturas.created_at) = MONTH('".$request->end."') AND YEAR(facturas.created_at) = YEAR('".$request->end."')";
+
+        $sql .= " order by facturas.id desc";
+
+        $facturas_array = DB::select($sql);
+
+        $facturas = new FacturasClientesExport($facturas_array);
+        //dd($facturas);
+        return Excel::download($facturas, 'facturas_clientes.xlsx');
     }
 }

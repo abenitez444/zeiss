@@ -14,7 +14,7 @@ class Client extends Model
      * @var array
      */
     protected $fillable = [
-        'rfc', 'phone', 'credit_days', 'payment_method', 'way_to_pay', 'cfdi', 'status', 'cod_cliente', 'user_id'
+        'rfc', 'phone', 'credit_days', 'payment_method', 'way_to_pay', 'cfdi', 'status', 'cod_cliente', 'user_id', 'participa'
     ];
 
     /**

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd" Version="3.3" Serie="A" Folio="27030" Fecha="2020-09-01T10:27:07" FormaPago="03" NoCertificado="00001000000504554225" Certificado="MIIF0zCCA7ugAwIBAgIUMDAwMDEwMDAwMDA1MDQ1NTQyMjUwDQYJKoZIhvcNAQELBQAwggGEMSAwHgYDVQQDDBdBVVRPUklEQUQgQ0VSVElGSUNBRE9SQTEuMCwGA1UECgwlU0VSVklDSU8gREUgQURNSU5JU1RSQUNJT04gVFJJQlVUQVJJQTEaMBgGA1UECwwRU0FULUlFUyBBdXRob3JpdHkxKjAoBgkqhkiG9w0BCQEWG2NvbnRhY3RvLnRlY25pY29Ac2F0LmdvYi5teDEmMCQGA1UECQwdQVYuIEhJREFMR08gNzcsIENPTC4gR1VFUlJFUk8xDjAMBgNVBBEMBTA2MzAwMQswCQYDVQQGEwJNWDEZMBcGA1UECAwQQ0lVREFEIERFIE1FWElDTzETMBEGA1UEBwwKQ1VBVUhURU1PQzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMVwwWgYJKoZIhvcNAQkCE01yZXNwb25zYWJsZTogQURNSU5JU1RSQUNJT04gQ0VOVFJBTCBERSBTRVJWSUNJT1MgVFJJQlVUQVJJT1MgQUwgQ09OVFJJQlVZRU5URTAeFw0yMDA3MjIxNjQ3MTJaFw0yNDA3MjIxNjQ3MTJaMIGhMRkwFwYDVQQDExBTQVVMIExVTkEgT1JURUdBMRkwFwYDVQQpExBTQVVMIExVTkEgT1JURUdBMRkwFwYDVQQKExBTQVVMIExVTkEgT1JURUdBMRYwFAYDVQQtEw1MVU9TNjIwMzI5OU00MRswGQYDVQQFExJMVU9TNjIwMzI5SERGTlJMMDkxGTAXBgNVBAsTEFNBVUwgTFVOQSBPUlRFR0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCcdf4OGptoa9Yv7d2S+oXVbHI8omlBVJfqftf6Tv1IDZ0/eEi2spXbCcE7MZBSh5jd5q0Og05591NZobOWMggBWjFSTPcyikKGfgqYc2jWuAFamduve2dopxot5SHkNFmx9ceSuRKUT9/XYRqN0/vIlCig/BT4GZyia5DtajEFhYPkvV42OcUnHRjcA+09+onzmrXv3oNxNK/wJ2hgrpE6AL92YmHpc2CHEA1HFOoPh7tnkIoj0BSLJkF1rZBDPbAfSg035TcdOgCq4fka8Ro95paPYxu78bKBl9WH9zfSdA4q/lVQfEiOddk5M6AJkR79+0fkut2X4sG+g4l4vB5xAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQCaJIi1UeFFQZVuVr5c9RzgAFHh+VD9uv/bmhSCMj8MdBKG7AnIXDaOCiW2VAbsEfJp4fkoJgxxhIz4OIVIPrzMtNc7wZWFxMMJqE9SRugtbGJIkh8wlW1fr7n9dWCZIwEjOgxzmnqWOUKVT3abURecGJosd3nYsDRQDQH+Nsq6Zk6NKwdISxz2giifTgqQcDox+PHvhK64Raqp9nV78FatB8NxkZ3DjiaGLVQ4LsK7/qkFJ0Ny7igTOeuHp8m7xg2in4getkD8UgjFmHPBJ27ZXdfw226Aom2LRKW/T2/2nhIx3yxw0mUM61lG2KUPC+5IqeFVY4yC3ddlaKer43VCqFyMn4iDxeAu7rhYKqBZnaUzCK/E91taJojqun2+pcAhFRalw3/GdqeiffHdqYojW8IH15DYGcg5SOjYHaY9arFSFO43vbN7mln1StrxN+9bvrgu1VklsQ9tvx2gfn8tcElOlr6sKTY1TfN54lmAjCoxFDu7Jdnk6jZae0oPz5Ucpbp0on9+FRr6JgUa8N5UBlIKnbRdM4+xDMHa6ABlZ9QuEPxfmuXOCr+uOAa7SIQBB30cIJ/BY4gPaikL3rBgNdImhoaGHns5yiag6Q7paFgfj1gfIUjRECtJwvzD2V2VPwUgYVmK/kyRXcQj6IUInWZJo+reW+FmdNZZmbHR4A==" SubTotal="15779.00" Moneda="MXN" Total="18303.64" TipoDeComprobante="I" MetodoPago="PUE" LugarExpedicion="53560" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Sello="kFD+oRlB9ofR/iWiHwM+1sTWj6Np3nptw57bbUfUhWnEtBsGGWKo3mf48AO/y4DTd+5AjzQdJa7LYr4yvZyR35+uzQt7BM5o4vD0sVJAQH5ACZoltlGrP7ChtwPr89BsK2LIgz/RkPUBLOaUThqqL+5UcRQbvnCNQfzMXPduSIEvqSaVVEITBKi9YHse0A6V11Cef3yxW/bWBCByzsXf8M1UcnTwihmzkQ0fzgdjfM/ZTbgXklJPeb+0OAv6CBq2vl8ULvcSFrm6aTTKfByFRUEmncUn15JcUe8hKopqJl5j7BtlK8tvR/svGWBrdyroo4VJHPcnTfXIeBTpJl61zw=="><cfdi:Emisor Rfc="LUOS6203299M4" Nombre="SAUL LUNA ORTEGA" RegimenFiscal="612"></cfdi:Emisor><cfdi:Receptor Rfc="CZV9204036N2" Nombre="CARL ZEISS VISION MEXICO, S. DE R.L. DE C.V." UsoCFDI="G03"></cfdi:Receptor><cfdi:Conceptos><cfdi:Concepto ClaveProdServ="31162404" Cantidad="3" ClaveUnidad="XBX" Unidad="CAJA" Descripcion="CAJA GRAPA ESTÁNDAR PILOT C/5000" ValorUnitario="27.00" Importe="81.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="81.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="81.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="12.96"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto><cfdi:Concepto ClaveProdServ="31201500" Cantidad="4" ClaveUnidad="H87" Unidad="PZA" Descripcion="CINTA DIUREX DE 24X65" ValorUnitario="12.50" Importe="50.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="50.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="50.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="8.00"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto><cfdi:Concepto ClaveProdServ="44121700" Cantidad="24" ClaveUnidad="H87" Unidad="PIEZA" Descripcion="MARCADOR P/FINO  SHARPIE" ValorUnitario="11.00" Importe="264.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="264.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="264.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="42.24"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto><cfdi:Concepto ClaveProdServ="44121701" Cantidad="12" ClaveUnidad="H87" Unidad="pz" Descripcion="BOLIGRAFO BIC P/MEDIANO NEGRO" ValorUnitario="2.50" Importe="30.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="30.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="30.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="4.80"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto><cfdi:Concepto ClaveProdServ="31201500" Cantidad="1" ClaveUnidad="H87" Unidad="PZA" Descripcion="CINTA DIUREX DE 18X33 JANEL" ValorUnitario="6.00" Importe="6.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="6.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="6.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="0.96"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto><cfdi:Concepto ClaveProdServ="14111514" Cantidad="3" ClaveUnidad="H87" Unidad="PZA" Descripcion="CUADERNO PROFESIONAL SCRIBE 100 HJS RAYA" ValorUnitario="16.00" Importe="48.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="48.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="48.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="7.68"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto><cfdi:Concepto ClaveProdServ="14111500" Cantidad="4" ClaveUnidad="XBX" Unidad="CAJA" Descripcion="CAJA PAPEL FACIA BOND  T/CARTA  C/5000" ValorUnitario="550.00" Importe="2200.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="2200.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="2200.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="352.00"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto><cfdi:Concepto ClaveProdServ="14111500" Cantidad="4" ClaveUnidad="XBX" Unidad="CAJA" Descripcion="CAJA PAPEL FACIA BOND  T/CARTA  C/5000" ValorUnitario="550.00" Importe="2200.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="2200.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="2200.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="352.00"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto><cfdi:Concepto ClaveProdServ="44103103" Cantidad="4" ClaveUnidad="H87" Unidad="PZA" Descripcion="TONER HP LASER JET 26-A" ValorUnitario="2150.00" Importe="8600.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="8600.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="8600.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1376.00"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto><cfdi:Concepto ClaveProdServ="44103105" Cantidad="2" ClaveUnidad="H87" Unidad="PZA" Descripcion="CARTUCHO DE TONER     (83-A)" ValorUnitario="1150.00" Importe="2300.00"><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado Base="2300.00" Impuesto="002" TipoFactor="Exento"></cfdi:Traslado><cfdi:Traslado Base="2300.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="368.00"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos></cfdi:Concepto></cfdi:Conceptos><cfdi:Impuestos TotalImpuestosTrasladados="2524.64"><cfdi:Traslados><cfdi:Traslado Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="2524.64"></cfdi:Traslado></cfdi:Traslados></cfdi:Impuestos><cfdi:Complemento><tfd:TimbreFiscalDigital RfcProvCertif="TSP080724QW6" Version="1.1" UUID="E2474115-5069-4AD2-ACDD-B709B6D12412" FechaTimbrado="2020-09-01T10:27:07" SelloCFD="kFD+oRlB9ofR/iWiHwM+1sTWj6Np3nptw57bbUfUhWnEtBsGGWKo3mf48AO/y4DTd+5AjzQdJa7LYr4yvZyR35+uzQt7BM5o4vD0sVJAQH5ACZoltlGrP7ChtwPr89BsK2LIgz/RkPUBLOaUThqqL+5UcRQbvnCNQfzMXPduSIEvqSaVVEITBKi9YHse0A6V11Cef3yxW/bWBCByzsXf8M1UcnTwihmzkQ0fzgdjfM/ZTbgXklJPeb+0OAv6CBq2vl8ULvcSFrm6aTTKfByFRUEmncUn15JcUe8hKopqJl5j7BtlK8tvR/svGWBrdyroo4VJHPcnTfXIeBTpJl61zw==" NoCertificadoSAT="00001000000501960426" SelloSAT="O4/QK24mIhCa0ITrphhqkAfX6WHsNoII9EdS4h1pYS/foZWMjhIGYYA8rnzLGYroUjhEesgC8QTy2o4r9gJDEAdrMnTiqlmRyhQ95xM7CTYpCRdrQk8CZ1Sw60kbr+vBtXOPe4vKE/0h2K+ZsW5wZwdgw0Gg9ipENNxW3ZlHDvkFVuhUgU7szApn2ED21jJedAXO53el/jHUHcYPrwcN6/9GsYJh024zSN2SHCyFb21gnknixpxfmZ8s0zG0MK6wIS+X+/O/vtphHzOd5RvtteBsJqFWARjeStrPmVrdHDDFn372Gwazdig3yBMywTLET81H9Dmcz3efQxhzVsdRmw==" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/timbrefiscaldigital/TimbreFiscalDigitalv11.xsd" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/></cfdi:Complemento>
+<cfdi:Addenda>
+	<requestForPayment type="SimpleInvoiceType" contentVersion="1.3.1" documentStructureVersion="AMC7.1" documentStatus="ORIGINAL" DeliveryDate="2020-09-01">
+		<requestForPaymentIdentification>
+			<entityType>INVOICE</entityType>
+			<uniqueCreatorIdentification>A27030</uniqueCreatorIdentification>
+		</requestForPaymentIdentification>
+		<specialInstruction code="AAB">
+			<text>PAGO A 30 DIAS</text>
+		</specialInstruction>
+		<specialInstruction code="PUR">
+			<text>PRONTO PAGO GENERA DESCUENTO</text>
+		</specialInstruction>
+		<specialInstruction code="ZZZ">
+			<text>DIECIOCHO MIL TRESCIENTOS TRES Pesos 64/100 M.N.</text>
+		</specialInstruction>
+		<AdditionalInformation>
+			<referenceIdentification type="IV">27030</referenceIdentification>
+			<referenceIdentification type="ATZ">0</referenceIdentification>
+		</AdditionalInformation>
+		<seller>
+			<alternatePartyIdentification type="SELLER_ASSIGNED_IDENTIFIER_FOR_A_PARTY">85987</alternatePartyIdentification>
+		</seller>
+		<InvoiceCreator>
+			<alternatePartyIdentification type="VA">LUOS6203299M4</alternatePartyIdentification> 
+     				<nameAndAddress>
+				<name>SAUL LUNA ORTEGA</name>
+				<streetAddressOne>HIDALGO 22  LAZARO CARDENAS</streetAddressOne>
+				<city>ESTADO DE MEXICO</city>
+				<postalCode>53560</postalCode>
+			</nameAndAddress>
+		</InvoiceCreator>
+		<currency currencyISOCode="MXN">
+			<currencyFunction>BILLING_CURRENCY</currencyFunction>
+			<rateOfChange>1.000000</rateOfChange>
+		</currency>
+		<paymentTerms paymentTermsEvent="DATE_OF_INVOICE" PaymentTermsRelationTime="REFERENCE_AFTER">
+			<netPayment netPaymentTermsType="BASIC_NET">
+				<paymentTimePeriod>
+					<timePeriodDue timePeriod="DAYS">
+						<value>30</value>
+					</timePeriodDue>
+				</paymentTimePeriod>
+			</netPayment>
+		</paymentTerms>
+		<allowanceCharge settlementType="BILL_BACK" allowanceChargeType="ALLOWANCE_GLOBAL">
+		    <specialServicesType>AJ</specialServicesType>
+		    <monetaryAmountOrPercentage>
+			<rate base="INVOICE_VALUE">
+				<percentage>0.00</percentage>
+			</rate>
+		    </monetaryAmountOrPercentage>
+		</allowanceCharge>
+		<lineItem type="SimpleInvoiceLineItemType" number="1">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>CAJA GRAPA ESTÁNDAR PILOT C/5000</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">3</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">3</aditionalQuantity>
+			<grossPrice>
+				<Amount>27.00</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>93.96</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>12.96</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>81.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>93.96</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<lineItem type="SimpleInvoiceLineItemType" number="2">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>CINTA DIUREX DE 24X65</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">4</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">4</aditionalQuantity>
+			<grossPrice>
+				<Amount>12.50</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>58.00</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>8.00</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>50.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>58.00</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<lineItem type="SimpleInvoiceLineItemType" number="3">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>MARCADOR P/FINO SHARPIE</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">24</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">24</aditionalQuantity>
+			<grossPrice>
+				<Amount>11.00</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>306.24</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>42.24</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>264.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>306.24</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<lineItem type="SimpleInvoiceLineItemType" number="4">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>BOLIGRAFO BIC P/MEDIANO NEGRO</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">12</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">12</aditionalQuantity>
+			<grossPrice>
+				<Amount>2.50</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>34.80</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>4.80</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>30.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>34.80</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<lineItem type="SimpleInvoiceLineItemType" number="5">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>CINTA DIUREX DE 18X33 JANEL</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">1</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">1</aditionalQuantity>
+			<grossPrice>
+				<Amount>6.00</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>6.96</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>0.96</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>6.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>6.96</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<lineItem type="SimpleInvoiceLineItemType" number="6">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>CUADERNO PROFESIONAL SCRIBE 100 HJS RAYA</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">3</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">3</aditionalQuantity>
+			<grossPrice>
+				<Amount>16.00</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>55.68</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>7.68</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>48.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>55.68</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<lineItem type="SimpleInvoiceLineItemType" number="7">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>CAJA PAPEL FACIA BOND T/CARTA C/5000</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">4</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">4</aditionalQuantity>
+			<grossPrice>
+				<Amount>550.00</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>2552.00</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>352.00</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>2200.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>2552.00</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<lineItem type="SimpleInvoiceLineItemType" number="8">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>CAJA PAPEL FACIA BOND T/CARTA C/5000</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">4</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">4</aditionalQuantity>
+			<grossPrice>
+				<Amount>550.00</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>2552.00</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>352.00</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>2200.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>2552.00</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<lineItem type="SimpleInvoiceLineItemType" number="9">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>TONER HP LASER JET 26-A</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">4</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">4</aditionalQuantity>
+			<grossPrice>
+				<Amount>2150.00</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>9976.00</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>1376.00</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>8600.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>9976.00</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<lineItem type="SimpleInvoiceLineItemType" number="10">
+			<tradeItemIdentification>
+				<gtin></gtin>
+			</tradeItemIdentification>
+			<tradeItemDescriptionInformation language="ES">
+				<longText>CARTUCHO DE TONER (83-A)</longText>
+			</tradeItemDescriptionInformation>
+			<invoicedQuantity unitOfMeasure="CA">2</invoicedQuantity> 
+			<aditionalQuantity QuantityType="NUM_CONSUMER_UNITS">2</aditionalQuantity>
+			<grossPrice>
+				<Amount>1150.00</Amount>
+			</grossPrice>
+			<netPrice>
+				<Amount>2668.00</Amount>
+			</netPrice>
+			<AdditionalInformation>
+				<referenceIdentification type="ON"></referenceIdentification>
+			</AdditionalInformation>
+			<tradeItemTaxInformation>
+				<taxTypeDescription>VAT</taxTypeDescription> 
+				<tradeItemTaxAmount>
+					<taxPercentage>16.00</taxPercentage>
+					<taxAmount>368.00</taxAmount>
+				</tradeItemTaxAmount>
+				</tradeItemTaxInformation>
+			<totalLineAmount>
+				<grossAmount>
+					<Amount>2300.00</Amount>
+				</grossAmount>
+				<netAmount>
+					<Amount>2668.00</Amount>
+				</netAmount>
+			</totalLineAmount>
+		</lineItem>
+		<totalAmount>
+			<Amount>15779.00</Amount>
+		</totalAmount>
+		<baseAmount>
+			<Amount>15779.00</Amount>
+		</baseAmount>
+		<tax type="GST"> 
+			<taxPercentage>0.00</taxPercentage>
+			<taxAmount>0.00</taxAmount>
+			<taxCategory>TRANSFERIDO</taxCategory>
+		</tax>
+		<tax type="VAT"> 
+			<taxPercentage>16.00</taxPercentage>
+			<taxAmount>2524.64</taxAmount>
+			<taxCategory>TRANSFERIDO</taxCategory>
+		</tax>
+		<payableAmount>
+			<Amount>18303.64</Amount>
+		</payableAmount>
+	</requestForPayment>
+</cfdi:Addenda>
+</cfdi:Comprobante>

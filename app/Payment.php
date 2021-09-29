@@ -8,7 +8,7 @@ class Payment extends Model
 {
     protected $fillable = [
         'codigo', 'mensaje', 'autorizacion', 'referencia', 'importe', 'mediopago', 'financiado', 'plazos',
-        's_transm', 'hash', 'tarjetahabiente', 'cveTipoPago', 'signature'
+        's_transm', 'hash', 'tarjetahabiente', 'cveTipoPago', 'signature', 'name_file', 'RefQAD', 'Fpago'
     ];
 
     public function factura()

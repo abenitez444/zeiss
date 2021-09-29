@@ -8,6 +8,7 @@ use App\Factura;
 use App\Payment;
 use App\Provider;
 use App\User;
+use ZipArchive;
 
 use File;
 use Croppa;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Storage;
 use DB;
 use Illuminate\Support\Facades\URL;
 use VIPSoft\Unzip\Unzip;
+use Yajra\DataTables\DataTables;
+
 
 class FacturasController extends Controller
 {
@@ -40,26 +43,145 @@ class FacturasController extends Controller
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('manager') )
             $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id order by facturas.id desc');
         elseif(Auth::user()->hasRole('cliente') )
-            $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join clients on clients.user_id = _users_facturas.user_id where _users_facturas.user_id = '.$user->id.' order by facturas.id desc');
+            $facturas = DB::select('select *, facturas.created_at as fecha_sistema from facturas left join _users_facturas on factura_id = facturas.id left join clients on clients.user_id = _users_facturas.user_id where _users_facturas.user_id = '.$user->id.' order by facturas.id desc');
         else
-            $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id where user_id = '.$user->id.' order by facturas.id desc');
+            $facturas = DB::select('select *, facturas.created_at as fecha_sistema, facturas.fecha as fecha_factura, payments_providers.FechaPago as fecha_pago 
+            from facturas left join payments_providers on payments_providers.Factura = facturas.id 
+            left join _users_facturas on factura_id = facturas.id where user_id = '.$user->id.' order by facturas.id desc');
 
         return view('admin.facturas.index', ['facturas'=>$facturas,'load_invoice'=>true]);
 
     }
 
-    public function getInvoicesClients()
+    public function getInvoicesClients(Request $request)
     {
-        $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id left join users_roles on users_roles.user_id = users.id where users_roles.role_id = 3 order by facturas.id desc');
+        if ($request->ajax()) {
+            $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id left join users_roles on users_roles.user_id = users.id left join clients on clients.user_id = users.id where users_roles.role_id = 3 order by facturas.id desc');
 
-        return view('admin.facturas.index', ['facturas'=>$facturas,'load_invoice'=>true]);
+            return DataTables::of($facturas)
+            ->addColumn('action', function ($row) {
+
+                $btn = '<a href="'.url('/admin/facturas/complemento-pago/'.$row->factura_id).'" class="btn btn-warning btn-circle btn-sm" title="Subir Complemento de Pago"><i class="fas fa-upload"></i> </a>';
+
+                $btn .= '<a href="javascript: void(0);" onclick="openModalChange('.$row->factura_id.');" title="Cambiar Estatus" class="btn btn-primary btn-circle btn-sm modal-open" ><i class="fas fa-cogs"></i></a>';
+
+                $btn .= '<a href="javascript: void(0);" onclick="openModalDelete('.$row->factura_id.');" title="Eliminar" class="btn btn-danger btn-circle btn-sm modal-open" ><i class="fas fa-trash-alt"></i></a>';
+
+                $btn .= '<a href="'.url('/admin/facturas/imprimir/'.$row->factura_id.'/pdf').'" class="btn btn-info btn-circle btn-sm" title="Descargar Factura PDF"><i class="fas fa-file-pdf"></i> </a>';
+
+                $btn .= '<a href="'.url('/admin/facturas/imprimir/'.$row->factura_id.'/xml').'" class="btn btn-primary btn-circle btn-sm" title="Descargar factura XML"><i class="fas fa-file-code"></i> </a>';
+
+                // $btn .= '<a href="'.url('/admin/facturas/imprimir/'.$row->factura_id.'/zip').'" class="btn btn-success btn-circle btn-sm" title="Descargar ZIP"><i class="fas fa-file-contract"></i> </a>';
+
+                $btn .= '<a href="'.url('/admin/facturas/complementos-pago/'.$row->factura_id).'" class="btn btn-warning btn-circle btn-sm" title="Ver Complementos de Pago"><i class="fas fa-download"></i> </a>';
+
+                return $btn;
+            })
+            ->addColumn('factura_id', function($row){
+                return $row->factura_id;
+            })
+            ->addColumn('cod_cliente', function($row){
+                return $row->cod_cliente;
+            })
+            ->addColumn('numero_factura', function($row){
+                return $row->numero_factura;
+            })
+            ->addColumn('nombre_factura', function($row){
+                return $row->nombre_factura;
+            })
+            ->addColumn('total_cost', function($row){
+                return number_format($row->total_cost, 2, '.', ',');
+            })
+            ->addColumn('estado', function($row){
+                return (!empty($row->estadoOtro)) ? $row->estadoOtro : $row->estado;
+            })
+            ->addColumn('name', function($row){
+                return $row->name;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+
+        return view('admin.facturas.index2', ['load_invoice'=>true]);
     }
 
-    public function getInvoicesProviders()
+    public function getInvoicesProviders(Request $request)
     {
-        $facturas = DB::select('select * from facturas left join _users_facturas on factura_id = facturas.id left join users on users.id = _users_facturas.user_id left join users_roles on users_roles.user_id = users.id where users_roles.role_id = 2 order by facturas.id desc');
+        if ($request->ajax()) {
+            $facturas = DB::select('select *, facturas.created_at as fecha_sistema, payments_providers.FechaPago from facturas 
+            left join payments_providers on payments_providers.Factura = facturas.id
+            left join _users_facturas on factura_id = facturas.id 
+            left join users on users.id = _users_facturas.user_id 
+            left join users_roles on users_roles.user_id = users.id 
+            left join providers on providers.user_id = users.id 
+            where users_roles.role_id = 2 order by facturas.id desc');
 
-        return view('admin.facturas.index', ['facturas'=>$facturas,'load_invoice'=>false]);
+            return DataTables::of($facturas)
+            ->addColumn('action', function ($row) {
+
+                $btn = '<a href="'.url('/admin/facturas/complemento-pago/'.$row->factura_id).'" class="btn btn-warning btn-circle btn-sm" title="Subir Complemento de Pago"><i class="fas fa-upload"></i> </a>';
+
+                $btn .= '<a href="javascript: void(0);" onclick="openModalChange('.$row->factura_id.');" title="Cambiar Estatus" class="btn btn-primary btn-circle btn-sm modal-open" ><i class="fas fa-cogs"></i></a>';
+
+                $btn .= '<a href="javascript: void(0);" onclick="openModalDelete('.$row->factura_id.');" title="Eliminar" class="btn btn-danger btn-circle btn-sm modal-open" ><i class="fas fa-trash-alt"></i></a>';
+
+                $btn .= '<a href="'.url('/admin/facturas/imprimir/'.$row->factura_id.'/pdf').'" class="btn btn-info btn-circle btn-sm" title="Descargar Factura PDF"><i class="fas fa-file-pdf"></i> </a>';
+
+                $btn .= '<a href="'.url('/admin/facturas/imprimir/'.$row->factura_id.'/xml').'" class="btn btn-primary btn-circle btn-sm" title="Descargar factura XML"><i class="fas fa-file-code"></i> </a>';
+
+                // $btn .= '<a href="'.url('/admin/facturas/imprimir/'.$row->factura_id.'/zip').'" class="btn btn-success btn-circle btn-sm" title="Descargar ZIP"><i class="fas fa-file-contract"></i> </a>';
+
+                $btn .= '<a href="'.url('/admin/facturas/complementos-pago/'.$row->factura_id).'" class="btn btn-warning btn-circle btn-sm" title="Ver Complementos de Pago"><i class="fas fa-download"></i> </a>';
+
+                return $btn;
+            })
+            ->addColumn('fecha_sistema', function($row){
+                return $row->fecha_sistema;
+            })
+            ->addColumn('fecha', function($row){
+                return $row->fecha;
+            })
+            ->addColumn('factura_id', function($row){
+                return $row->factura_id;
+            })
+            ->addColumn('cod_proveedor', function($row){
+                return $row->cod_proveedor;
+            })
+            ->addColumn('numero_factura', function($row){
+                return $row->numero_factura;
+            })
+            ->addColumn('nombre_factura', function($row){
+                return $row->nombre_factura;
+            })
+            ->addColumn('total_cost', function($row){
+                return number_format($row->total_cost, 2, '.', ',');
+            })
+            ->addColumn('moneda', function($row){
+                return $row->moneda;
+            })
+            ->addColumn('estado', function($row){
+                return (!empty($row->estadoOtro)) ? $row->estadoOtro : $row->estado;
+            })
+            ->addColumn('name', function($row){
+                return $row->name;
+            })
+            ->addColumn('payment_promise_date', function($row){
+                return (!empty($row->payment_promise_date)) ? date('d/m/Y', strtotime($row->payment_promise_date)) : "No definido";
+            })
+            ->addColumn('deadline_for_complement', function($row){
+                return (!empty($row->deadline_for_complement)) ? date('d/m/Y', strtotime($row->deadline_for_complement)) : "";
+            })
+            ->addColumn('FechaPago', function($row){
+                return (!empty($row->FechaPago)) ? date('d/m/Y', strtotime($row->FechaPago)) : "";
+            })
+            ->addColumn('check', function($row){
+                return '<input type="checkbox" id="'.$row->factura_id.'" class="download" onchange="descargar(this)">';
+            })
+            ->rawColumns(['action','check'])
+            ->make(true);
+        }
+
+        return view('admin.facturas.index2', ['load_invoice'=>false]);
     }
 
     /**
@@ -113,8 +235,8 @@ class FacturasController extends Controller
                     $user_id = Auth::user()->id;
                     $provider = Provider::with('user')->where('user_id', $user_id)->first();
                     $factura['payment_promise_date'] = date("Y-m-d", strtotime(date('Y-m-d')."+ ".$provider->credit_terms." days"));
-                    if(date('D', strtotime($factura['payment_promise_date'])) != 'Mon')
-                        $factura['payment_promise_date'] = date("Y-m-d", strtotime('next Monday '.$factura['payment_promise_date']));
+                    // if(date('D', strtotime($factura['payment_promise_date'])) != 'Mon')
+                    //     $factura['payment_promise_date'] = date("Y-m-d", strtotime('next Monday '.$factura['payment_promise_date']));
                 }
                 else
                     $user_id = $request->user_id;
@@ -148,6 +270,7 @@ class FacturasController extends Controller
                                                 if($xml->hasAttributes) {
                                                     $factura['numero_factura'] = $xml->getAttribute( "Folio");
                                                     $factura['total_cost'] = $xml->getAttribute( "Total");
+                                                    $factura['fecha'] = $xml->getAttribute("Fecha");
                                                     $factura['nombre_factura'] = $name_file;
                                                     $factura['estado'] = 2;
                                                 }
@@ -256,6 +379,7 @@ class FacturasController extends Controller
                                     if($xml->hasAttributes) {
                                         $factura['numero_factura'] = $xml->getAttribute( "Folio");
                                         $factura['total_cost'] = $xml->getAttribute( "Total");
+                                        $factura['fecha'] = $xml->getAttribute("Fecha");
                                         $factura['nombre_factura'] = $name_file;
                                         $factura['estado'] = 2;
                                     }
@@ -340,6 +464,7 @@ class FacturasController extends Controller
                 elseif ($extension_file == 'pdf'){
                     $factura['numero_factura'] = 12;
                     $factura['total_cost'] = 2000;
+                    $factura['fecha'] = date("Y-m-d");
                     $factura['nombre_factura'] = $name_file;
                     $factura['estado'] = 2;
 
@@ -394,8 +519,8 @@ class FacturasController extends Controller
                     $user_id = Auth::user()->id;
                     $provider = Provider::with('user')->where('user_id', $user_id)->first();
                     $factura['payment_promise_date'] = date("Y-m-d", strtotime(date('Y-m-d')."+ ".$provider->credit_terms." days"));
-                    if(date('D', strtotime($factura['payment_promise_date'])) != 'Mon')
-                        $factura['payment_promise_date'] = date("Y-m-d", strtotime('next Monday '.$factura['payment_promise_date']));
+                    // if(date('D', strtotime($factura['payment_promise_date'])) != 'Mon')
+                    //     $factura['payment_promise_date'] = date("Y-m-d", strtotime('next Monday '.$factura['payment_promise_date']));
                 }
 
                 if(in_array($extension_file,['zip']) && $request->ext == 'zip'){
@@ -427,6 +552,9 @@ class FacturasController extends Controller
                                                 if($xml->hasAttributes) {
                                                     $factura['numero_factura'] = $xml->getAttribute( "Folio");
                                                     $factura['total_cost'] = $xml->getAttribute( "Total");
+                                                    $factura['moneda'] = $xml->getAttribute("Moneda");
+                                                    $factura['MetodoPago'] = $xml->getAttribute("MetodoPago");
+                                                    $factura['fecha'] = $xml->getAttribute("Fecha");
                                                     $factura['nombre_factura'] = $name_file;
                                                     $factura['estado'] = 2;
                                                 }
@@ -533,8 +661,11 @@ class FacturasController extends Controller
                             if ($xml->nodeType == \XMLReader::ELEMENT) {
                                 if ($xml->name == 'cfdi:Comprobante') {
                                     if($xml->hasAttributes) {
-                                        $factura['numero_factura'] = $xml->getAttribute( "Folio");
-                                        $factura['total_cost'] = $xml->getAttribute( "Total");
+                                        $factura['numero_factura'] = $xml->getAttribute("Folio");
+                                        $factura['total_cost'] = $xml->getAttribute("Total");
+                                        $factura['moneda'] = $xml->getAttribute("Moneda");
+                                        $factura['MetodoPago'] = $xml->getAttribute("MetodoPago");
+                                        $factura['fecha'] = $xml->getAttribute("Fecha");
                                         $factura['nombre_factura'] = $name_file;
                                         $factura['estado'] = 2;
                                     }
@@ -699,7 +830,7 @@ class FacturasController extends Controller
 
         $factura->delete();
 
-        return redirect()->route('facturas.index');
+        return redirect(URL::previous());
     }
 
     /**
@@ -849,26 +980,34 @@ class FacturasController extends Controller
     }
 
     public function downloadComplement($complementId){
-        $complement = Complement::find($complementId);
+        try {
+            $complement = Complement::find($complementId);
+            $path = "";
 
-        if ($complement){
-            $file_name = $complement->name;
+            if ($complement){
+                $file_name = $complement->name;
 
-            if (empty($file_name)){
-                return redirect(URL::previous())->with('error', "No se encontró un archivo para este complemento.");
+                if (empty($file_name)){
+                    return redirect(URL::previous())->with('error', "No se encontró un archivo para este complemento.");
+                }
+
+                $path = storage_path('carpetafacturas/').$file_name;
+
+                if(is_file($path)){
+                    return response()->download($path);
+                }
+                elseif(Storage::disk('sftp-complementos')->exists($file_name)){
+                    return Storage::disk('sftp-complementos')->download($file_name);
+                }
+                else {
+                    return redirect(URL::previous())->with('error', "No se encontró un archivo para este complemento.");
+                }
             }
-
-            $path = storage_path('carpetafacturas/').$file_name;
-
-            if(is_file($path)){
-                return response()->download($path);
+            else{
+                return redirect(response::back());
             }
-            else {
-                return redirect(URL::previous())->with('error', "No se encontró un archivo para este complemento.");
-            }
-        }
-        else{
-            return redirect(response::back());
+        } catch (\Throwable $th) {
+            return redirect(URL::previous())->with('error', "Error conectandose al servidor FTP, contacte al administrador!");
         }
     }
 
@@ -960,7 +1099,7 @@ class FacturasController extends Controller
 
                     $factura = Factura::findOrFail($idFactura);
 
-                    $factura->estado = 1;
+                    $factura->estado = 'pagado';
 
                     $factura->save();
                 }
@@ -1156,56 +1295,118 @@ class FacturasController extends Controller
         return back()->with('info',$errormsg_file);
     }
 
-    public function downloadInvoiceAll(Request $request)
+    public function downloadInvoiceAll(Request $request, $ext)
     {
         try {
+            if (count($request->ids) > 1) {
+                $public_dir = storage_path();
+                $zipFileName = 'facturas-usuario#'.Auth::user()->id.'.zip';
+                if(is_file($zipFileName))
+                    unlink($zipFileName);
+                $this->createZipFile($request->ids, $ext, $public_dir, $zipFileName);
+                return response()->download(storage_path($zipFileName));
+            } else {
+                foreach ($request->ids as $id){
+                    $factura = Factura::find($id);
+        
+                    $path = "";
+        
+                    if ($factura){
+                        $file_name = $factura->nombre_factura;
+                        $name_file = pathinfo($file_name, PATHINFO_FILENAME);
+        
+                        if (empty($file_name)){
+                            $msg[] = "La factura ".$name_file." no tiene nombre de archivo";
+                        }
+        
+                        if(file_exists(storage_path('carpetafacturas/').$name_file.'.'.$ext))
+                            $path = storage_path('carpetafacturas/').$name_file.'.'.$ext;
+                        elseif (file_exists(storage_path('carpetafacturas/').$name_file)) {
+                            $path = storage_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
+                        }
+        
+                        if(is_file($path)){
+                            return response()->download($path);
+                        }
+                        elseif(Storage::disk('sftp-facturas')->exists($name_file.'.'.$ext)){
+                            return Storage::disk('sftp-facturas')->download($path);
+                        }
+                        else {
+                            $msg[] = "No se encontró un archivo ".$ext." para factura ".$name_file;
+                        }
+                    }
+                    else{
+                        $msg[] = "No se encontró la factura con id ".$id;
+                    }
+                }
+        
+                //die();
+                return redirect(URL::previous())->with('info', $msg);
+            }
+        } catch (\Throwable $th) {
+            return redirect(URL::previous())->with('error', "Error descargando las facturas!!");
+        }
+    }
 
-            $msg = array();
+    public function createZipFile($files = null, $ext = null, $public_dir = null, $zipFileName = null) {
+        $msg = array();
+        $zip = new ZipArchive;
 
-            foreach ($request->ids as $id){
+        if ($zip->open($public_dir . '/' . $zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            foreach ($files as $id){
                 $factura = Factura::find($id);
 
-                $path = "";
-                $ext = 'zip';
-
+                $path = ""; $path2 = ""; $name = "";
+ 
                 if ($factura){
                     $file_name = $factura->nombre_factura;
                     $name_file = pathinfo($file_name, PATHINFO_FILENAME);
 
                     if (empty($file_name)){
-                        $msg[] = "No se encontró un archivo ZIP para factura ".$name_file;
+                        $msg[] = "La factura ".$name_file." no tiene nombre de archivo";
                     }
 
-                    if(file_exists(storage_path('carpetafacturas/').$name_file.'.'.$ext))
-                        $path = storage_path('carpetafacturas/').$name_file.'.'.$ext;
-                    elseif (file_exists(storage_path('carpetafacturas/').$name_file)) {
-                        $path = storage_path('carpetafacturas/').$name_file.'/'.$name_file.'.'.$ext;
+                    if(file_exists(storage_path('carpetafacturas\\').$name_file.'.'.$ext)){
+                        $path = storage_path('carpetafacturas\\').$name_file.'.'.$ext;
                     }
-                    elseif(Storage::disk('sftp-facturas')->exists($name_file.'.'.$ext)){
-                        Storage::disk('sftp-facturas')->download($name_file.'.'.$ext);
+                    elseif (file_exists(storage_path('carpetafacturas\\').$name_file)) {
+                        $path = storage_path('carpetafacturas\\').$name_file.'\\'.$name_file.'.'.$ext;
                     }
 
                     if(is_file($path)){
-                        $this->download($path);
+                        $zip->addFromString(basename($path),  file_get_contents($path));
+                    }
+                    elseif(Storage::disk('sftp-facturas')->exists($name_file.'.'.$ext)){
+                        $file = $name_file.'.'.$ext;
+                        $string = Storage::disk('sftp-facturas')->get($file);
+                        Storage::disk('local')->put($file,$string);
+                        $path = storage_path('app')."/".$file;
+                        $zip->addFromString(basename($path),  file_get_contents($path));
                     }
                     else {
-                        $msg[] = "No se encontró un archivo ZIP para factura ".$name_file;
+                        $msg[] = "No se encontró un archivo ".$ext." para factura ".$name_file;
                     }
                 }
                 else{
                     $msg[] = "No se encontró la factura con id ".$id;
                 }
             }
-
-            return redirect(URL::previous())->with('info', $msg);
-
-        } catch (\Throwable $th) {
-            return redirect(URL::previous())->with('error', "Error descargando las facturas!!");
+            $zip->close();
+            if(is_dir(storage_path('app')))
+                $this->rmDir_rf(storage_path('app'));
         }
     }
 
-    public function download($path = null){
-        return response()->download($path);
+    function rmDir_rf($carpeta)
+    {
+        foreach(glob($carpeta . "/*") as $archivos_carpeta){             
+            if (is_dir($archivos_carpeta)){
+                $this->rmDir_rf($archivos_carpeta);
+            } else {
+                unlink($archivos_carpeta);
+            }
+        }
+        rmdir($carpeta);
     }
 
     public function downloadStatus($clientId){

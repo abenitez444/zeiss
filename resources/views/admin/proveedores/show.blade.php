@@ -38,6 +38,9 @@
                         <p class="card-text">
                             Uso de CFDi - {{ $user[0]->cfdi }}
                         </p>
+                        <p class="card-text">
+                            Numero de Proveedor - {{ $user[0]->cod_proveedor }}
+                        </p>
                     </div>
                 </div>
                 <br>

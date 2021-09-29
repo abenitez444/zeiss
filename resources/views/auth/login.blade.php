@@ -3,10 +3,10 @@
 @section('content')
 
 <body>
-  <div class="container">
+  <div>
     <!-- Outer Row -->
     <div class="row justify-content-center">
-      <div class="col-xl-6 col-lg-6 col-md-6">
+      <div class="col-xl-6 col-lg-6 col-md-6 part2">
         <div class="card o-hidden border-0 shadow-lg my-5">
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
@@ -44,7 +44,7 @@
                         <label class="custom-control-label" for="customCheck1">Recordar Contraseña</label>
                       </div>
                     </div>
-                    <button class="btn btn-primary btn-user btn-block" type="submit">Acceder</button>
+                    <button class="btn btn-user btn-block" style="background-color: #0808b8; color: #fff" type="submit">Acceder</button>
                   </form>
                   <hr>
                   <div class="text-center">

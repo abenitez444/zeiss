@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Exports\FacturasProveedoresExport;
+use App\Imports\ProvidersImport;
 use App\Provider;
 use App\Role;
 use App\User;
@@ -10,6 +12,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProviderController extends Controller
 {
@@ -31,12 +34,13 @@ class ProviderController extends Controller
     public function index()
     {
 
-        $providers = DB::table('users as a')
-            ->join('users_roles as d', 'a.id', '=', 'd.user_id')
-            ->join('roles as c', 'c.id', '=', 'd.role_id')
-            ->select('a.id as idd', 'a.name as nombreuser', 'a.email as correo', 'c.name as nombrerol', 'c.slug as enlace')
-            ->where('c.id','=',2)
-            ->orderBy('a.id', 'DESC')
+        $providers = DB::table('users as u')
+            ->join('providers as p', 'u.id', '=', 'p.user_id')
+            ->join('users_roles as ur', 'u.id', '=', 'ur.user_id')
+            ->join('roles as r', 'r.id', '=', 'ur.role_id')
+            ->select('u.id as idd', 'u.name as nombreuser', 'u.email as correo', 'r.name as nombrerol', 'r.slug as enlace', 'p.cod_proveedor as cod_proveedor')
+            ->where('r.id','=',2)
+            ->orderBy('u.id', 'DESC')
             ->paginate(10000);
 
         //echo json_encode($clientes);
@@ -101,6 +105,7 @@ class ProviderController extends Controller
         $provider->credit_terms = $request->credit_terms;
         $provider->cfdi = $request->cfdi;
         $provider->user_id = $user->id;
+        $provider->cod_proveedor = $request->cod_proveedor;
 
         $provider->save();
 
@@ -147,7 +152,7 @@ class ProviderController extends Controller
         //validate the fields
         $request->validate([
             'name' => 'required|string|max:191',
-            'email' => 'required|email|max:191',
+            'email' => 'required|email|max:191|unique:users,email,'.$id,
             'rfc' => 'required|max:191',
             'phone' => 'required',
             'contact' => 'required|string|max:191',
@@ -180,6 +185,7 @@ class ProviderController extends Controller
                 'contact' => $request->contact,
                 'credit_terms' => $request->credit_terms,
                 'cfdi' => $request->cfdi,
+                'cod_proveedor' => $request->cod_proveedor,
             ]
         );
 
@@ -204,5 +210,50 @@ class ProviderController extends Controller
         $provider->delete();
 
         return redirect()->route('providers.index');
+    }
+
+    public function getLoad(){
+        return view('admin.proveedores.load');
+    }
+
+    public function setLoad(){
+        try {
+            (new ProvidersImport)->import(request()->file('uploadfile'));
+
+            return redirect()->route('providers.index')->with('info', 'Archivo importado correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('providers.index')->with('info', 'Ha ocurrido un error importando. Error: '.$e->getMessage());
+        }
+    }
+
+    public function exportFactura(Request $request){
+
+        $sql = "SELECT factura_id, cod_proveedor, numero_factura, nombre_factura, total_cost, estado, name
+                FROM facturas left join _users_facturas on factura_id = facturas.id
+                left join users on users.id = _users_facturas.user_id
+                left join providers on providers.user_id = users.id
+                left join users_roles on users_roles.user_id = users.id
+                where users_roles.role_id = 2";
+
+        if(!empty($request->estado))
+            $sql .= " AND estado = '".$request->estado."'";
+
+        if(!empty($request->provider))
+            $sql .= " AND cod_proveedor like '%".$request->provider."%'";
+
+        if(!empty($request->start) && !empty($request->end))
+            $sql .= " AND facturas.created_at BETWEEN '".$request->start."' AND '".$request->end."'";
+        elseif(!empty($request->start) && empty($request->end))
+            $sql .= " AND MONTH(facturas.created_at) = MONTH('".$request->start."') AND YEAR(facturas.created_at) = YEAR('".$request->start."')";
+        elseif(empty($request->start) && !empty($request->end))
+            $sql .= " AND MONTH(facturas.created_at) = MONTH('".$request->end."') AND YEAR(facturas.created_at) = YEAR('".$request->end."')";
+
+        $sql .= " order by facturas.id desc";
+
+        $facturas_array = DB::select($sql);
+
+        $facturas = new FacturasProveedoresExport($facturas_array);
+        //dd($facturas);
+        return Excel::download($facturas, 'facturas_proveedores.xlsx');
     }
 }

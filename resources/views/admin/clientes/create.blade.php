@@ -110,6 +110,12 @@
                 <input type="text" name="cod_cliente" class="form-control" id="cod_cliente" placeholder="Codigo Cliente...">
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="participa">Participa en puntos</label>
+                <input type="checkbox" name="participa" class="form-control" id="participa">
+            </div>
+        </div>
     </div>
 
     <div class="row">

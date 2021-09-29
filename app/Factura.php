@@ -9,7 +9,8 @@ class Factura extends Model
 
 	//
     protected $fillable = [
-        'numero_factura', 'nombre_factura', 'total_cost', 'estado', 'estadoOtro', 'IdDocumento', 'NumParcialidad', 'payment_promise_date', 'deadline_for_complement',
+        'numero_factura', 'nombre_factura', 'total_cost', 'estado', 'estadoOtro', 'IdDocumento', 'NumParcialidad', 'payment_promise_date', 'deadline_for_complement', 'fecha',
+        'moneda', 'MetodoPago'
     ];
 
     //
@@ -21,5 +22,10 @@ class Factura extends Model
     public function complements()
     {
         return $this->belongsToMany(Complement::class, 'complements');
+    }
+
+    public function payment()
+    {
+        return $this->belongsToMany(PaymentsProvider::class, 'payments_providers');
     }
 }

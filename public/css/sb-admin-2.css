@@ -10996,3 +10996,53 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    #mainNav {
+      left: 0 !important;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    #mainNav {
+      left: 0 !important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #image-login {
+        width: 92vw !important;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    #mainNav {
+      left: 0 !important;
+    }
+
+    #image-login {
+        width: 50vw !important;
+    }
+
+    .part2 {
+        flex: 0 0 83.333333% !important;
+        max-width: 83.333333% !important;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    #mainNav {
+      left: 65% !important
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    #mainNav {
+      left: 75% !important;
+    }
+}
