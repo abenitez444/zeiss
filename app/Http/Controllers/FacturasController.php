@@ -122,8 +122,10 @@ class FacturasController extends Controller
                 $btn = '<a href="'.url('/admin/facturas/complemento-pago/'.$row->factura_id).'" class="btn btn-warning btn-circle btn-sm" title="Subir Complemento de Pago"><i class="fas fa-upload"></i> </a>';
 
                 $btn .= '<a href="javascript: void(0);" onclick="openModalChange('.$row->factura_id.');" title="Cambiar Estatus" class="btn btn-primary btn-circle btn-sm modal-open" ><i class="fas fa-cogs"></i></a>';
-
-                $btn .= '<a href="javascript: void(0);" onclick="openModalDelete('.$row->factura_id.');" title="Eliminar" class="btn btn-danger btn-circle btn-sm modal-open" ><i class="fas fa-trash-alt"></i></a>';
+                
+                if($row->estadoOtro != 'Pagado'){
+                  $btn .= '<a href="javascript: void(0);" onclick="openModalDelete('.$row->factura_id.');" title="Eliminar" class="btn btn-danger btn-circle btn-sm modal-open" ><i class="fas fa-trash-alt"></i></a>';
+                }  
 
                 $btn .= '<a href="'.url('/admin/facturas/imprimir/'.$row->factura_id.'/pdf').'" class="btn btn-info btn-circle btn-sm" title="Descargar Factura PDF"><i class="fas fa-file-pdf"></i> </a>';
 
