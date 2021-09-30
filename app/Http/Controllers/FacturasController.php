@@ -52,6 +52,7 @@ class FacturasController extends Controller
         return view('admin.facturas.index', ['facturas'=>$facturas,'load_invoice'=>true]);
 
     }
+
     public function getInvoicesClients(Request $request)
     {
         if ($request->ajax()) {
@@ -159,7 +160,19 @@ class FacturasController extends Controller
                 return $row->moneda;
             })
             ->addColumn('estado', function($row){
-                return $row->estadoOtro > 3 ? 'Programado' : 'Rechazado';
+                if($row->estadoOtro){
+                    return $row->estadoOtro;
+                }else{
+                    if($row->estado == 'validado')
+                    {
+                      return 'programado';
+                    }elseif($row->estado == 'pendiente')
+                    {
+                      return 'pendiente';
+                    }else{
+                      return 'rechazado';
+                    }
+                }
             })
             ->addColumn('name', function($row){
                 return $row->name;
